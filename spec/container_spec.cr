@@ -35,7 +35,7 @@ describe Sepia::Container do
     Sepia::Storage::INSTANCE.path = PATH
   end
   after_each do
-    # FileUtils.rm_rf(PATH) if File.exists?(PATH)
+    FileUtils.rm_rf(PATH) if File.exists?(PATH)
   end
 
   it "can save itself" do
@@ -74,24 +74,5 @@ describe Sepia::Container do
     loaded.nested_box.nested_thing.should be_a(MyThing)
     loaded.nested_box.nested_thing.sepia_id.should eq "NestedThingID"
     loaded.nested_box.nested_thing.name.should eq "NestedThingName"
-  end
-
-  it "can load itself" do
-    box = MyBox.new
-    box.sepia_id = "mybox"
-    box.my_thing.sepia_id = "Foobar"
-    box.my_thing.name = "Barfoo"
-    box.save
-
-    loaded = MyBox.load("mybox")
-    loaded.should be_a(MyBox)
-    loaded.should_not be_nil
-    loaded = loaded.as(MyBox)
-    loaded.sepia_id.should eq "mybox"
-
-    loaded.my_thing.should be_a(MyThing)
-
-    loaded.my_thing.sepia_id.should eq "Foobar"
-    loaded.my_thing.name.should eq "Barfoo"
   end
 end

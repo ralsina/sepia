@@ -36,7 +36,7 @@ module Sepia
             obj.save
             # Create a symlink to the saved object
             symlink_path = File.join(path, {{ivar.name.stringify}})
-            obj_path = File.join(Sepia::Storage::INSTANCE.path, typeof(obj).to_s, obj.sepia_id)
+            obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
             FileUtils.ln_s(obj_path, symlink_path)
           end
         {% end %}
