@@ -8,15 +8,11 @@ module Sepia
     # and `self.from_sepia` methods for the class.
     macro included
       def to_sepia() : String
-        {% begin %}
         raise "to_sepia must be implemented by the class including Sepia::Serializable"
-        {% end %}
       end
 
       def self.from_sepia(sepia_string : String)
-        {% begin %}
         raise "self.from_sepia must be implemented by the class including Sepia::Serializable"
-        {% end %}
       end
 
       # Sepia-serializable classes MUST have a sepia_id property which defaults to a lazy UUID

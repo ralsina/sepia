@@ -21,17 +21,34 @@ module Sepia
       File.write(object_path, object.to_sepia)
     end
 
+    # Saves the container object to the canonical path as a folder of references
+    def save(object : Container)
+      type_name = typeof(object).to_s
+      object_dir = File.join(@path, type_name.to_s)
+      object_path = File.join(object_dir, "#{object.sepia_id}")
+      FileUtils.mkdir_p(object_path) # Create a directory for the container
+    end
+
     # Load the object from the canonical path in sepia format.
     def load(object_class, id : String)
-      type_name = object_class.to_s
-      object_path = File.join(@path, type_name, id)
-      if File.exists?(object_path)
-        object_class.from_sepia(File.read(object_path))
-      else
-        raise "Object with ID #{id} not found in storage."
+      if object_class < Serializable && object_class.responds_to?(:from_sepia)
+        type_name = object_class.to_s
+        object_path = File.join(@path, type_name, id)
+        if File.exists?(object_path)
+          object_class.from_sepia(File.read(object_path))
+        else
+          raise "Object with ID #{id} not found in storage."
+        end
+      elsif object_class < Container
+        type_name = object_class.to_s
+        object_path = File.join(@path, type_name, id)
+        if File.exists?(object_path)
+          # Here we would load the container's contents, but for now we just return a new instance
+          obj = object_class.new
+          obj.sepia_id = id
+          obj
+        end
       end
     end
   end
 end
-
-require "./sepia/*"
