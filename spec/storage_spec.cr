@@ -3,7 +3,6 @@ require "file_utils"
 require "./sepia_spec"
 
 describe Sepia::Storage do
-
   it "roundtrips an object to the storage" do
     storage = Sepia::Storage.new
     storage.path = PATH

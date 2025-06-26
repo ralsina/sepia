@@ -27,7 +27,7 @@ module Sepia
     def save_references(path : String)
       {% for ivar in @type.instance_vars %}
         # For each instance variable, check if it's a Serializable or a Container
-        if {{ ivar.name }}.is_a? Sepia::Serializable
+        {% if ivar.type < Sepia::Serializable %}
           obj = {{ ivar.name }}.as(Sepia::Serializable)
           # Save the serializable object
           obj.save
@@ -35,7 +35,20 @@ module Sepia
           symlink_path = File.join(path, {{ivar.name.stringify}})
           obj_path = File.join(Sepia::Storage::INSTANCE.path, typeof({{ ivar.name }}).to_s, obj.sepia_id)
           FileUtils.ln_s(obj_path, symlink_path)
-        end
+        {% end %}
+      {% end %}
+    end
+
+    def load_references(path : String)
+      {% for ivar in @type.instance_vars %}
+        # For each instance variable, check if it's a Serializable
+        {% if ivar.type < Sepia::Serializable %}
+          # See where the symlink points to and get the object ID
+          symlink_path = File.join(path, {{ivar.name.stringify}})
+          obj_path = File.readlink(symlink_path)
+          obj_id = File.basename(obj_path)
+          @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{ivar.type}}, obj_id).as({{ ivar.type }})
+        {% end %}
       {% end %}
     end
   end

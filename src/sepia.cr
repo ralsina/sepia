@@ -38,19 +38,25 @@ module Sepia
         type_name = object_class.to_s
         object_path = File.join(@path, type_name, id)
         if File.exists?(object_path)
-          object_class.from_sepia(File.read(object_path))
+          obj = object_class.from_sepia(File.read(object_path))
+          obj.sepia_id = id
+          obj
+        else
+          raise "Object with ID #{id} not found in storage."
+        end
+      elsif object_class < Container # Sepia::Container
+        type_name = object_class.to_s
+        object_path = File.join(@path, type_name, id)
+        if File.exists?(object_path)
+          obj = object_class.new
+          obj.sepia_id = id
+          obj.as(Container).load_references(object_path)
+          obj
         else
           raise "Object with ID #{id} not found in storage."
         end
       else
-        type_name = object_class.to_s
-        object_path = File.join(@path, type_name, id)
-        if File.exists?(object_path)
-          # Here we would load the container's contents, but for now we just return a new instance
-          obj = object_class.new
-          obj.sepia_id = id
-          obj
-        end
+        nil
       end
     end
   end
