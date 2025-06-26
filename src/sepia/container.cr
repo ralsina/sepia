@@ -53,14 +53,14 @@ module Sepia
             obj_path = File.readlink(symlink_path)
             obj_id = File.basename(obj_path)
             @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{ivar.type}}, obj_id).as({{ ivar.type }})
-          elsif {{ ivar.type.union? && ivar.type.union_types.any?(&.nilable?) }}
-            {% if ivar.type.nilable? %}
-            # If the symlink doesn't exist and the ivar is nilable, set to nil
-            @{{ ivar.name }} = nil if {{ ivar.type }}.nilable?
-            {% end %}
           else
-            # If the symlink doesn't exist and the ivar is NOT nilable, it's an error
-            raise "Missing required reference for '#{symlink_path}' for non-nilable property '{{ivar.name}}'"
+            {% if ivar.type.nilable? %}
+              # If the symlink doesn't exist and the ivar is nilable, set to nil.
+              @{{ ivar.name }} = nil
+            {% else %}
+              # If the symlink doesn't exist and the ivar is NOT nilable, it's an error.
+              raise "Missing required reference for '#{symlink_path}' for non-nilable property '{{ivar.name}}'"
+            {% end %}
           end
         {% end %}
       {% end %}

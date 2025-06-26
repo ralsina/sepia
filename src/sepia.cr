@@ -16,8 +16,8 @@ module Sepia
 
     # Save the object to the canonical path in sepia format.
     def save(object : Serializable)
-      type_name = typeof(object).to_s
-      object_dir = File.join(@path, type_name.to_s)
+      type_name = object.class.name
+      object_dir = File.join(@path, type_name)
       FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
       object_path = File.join(object_dir, "#{object.sepia_id}")
       File.write(object_path, object.to_sepia)
@@ -25,8 +25,8 @@ module Sepia
 
     # Saves the container object to the canonical path as a folder of references
     def save(object : Container)
-      type_name = typeof(object).to_s
-      object_dir = File.join(@path, type_name.to_s)
+      type_name = object.class.name
+      object_dir = File.join(@path, type_name)
       object_path = File.join(object_dir, "#{object.sepia_id}")
       FileUtils.mkdir_p(object_path) # Create a directory for the container
       object.save_references(object_path)
