@@ -45,7 +45,7 @@ module Sepia
         obj = object_class.from_sepia(File.read(object_path_base))
         obj.sepia_id = id
         obj
-      elsif object_class < Container # This implies it's a Container
+      elsif object_class < Container             # This implies it's a Container
         unless File.directory?(object_path_base) # Containers are directories
           raise "Object with ID #{id} not found in storage for type #{type_name} (directory missing)."
         end

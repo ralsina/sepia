@@ -26,6 +26,8 @@ class MyBox
 
   property my_thing : MyThing = MyThing.new
   property nested_box : MyNestedBox = MyNestedBox.new
+  property my_things : Array(MyThing) = [MyThing.new]
+  property not_things : Array(String) = ["foo"] of String
 end
 
 describe Sepia::Container do
@@ -35,20 +37,10 @@ describe Sepia::Container do
     Sepia::Storage::INSTANCE.path = PATH
   end
   after_each do
-    FileUtils.rm_rf(PATH) if File.exists?(PATH)
+    # FileUtils.rm_rf(PATH) if File.exists?(PATH)
   end
 
-  it "can save itself" do
-    box = MyBox.new
-    box.sepia_id = "mybox"
-    box.save
-
-    loaded = MyBox.load("mybox")
-    loaded.should be_a(MyBox)
-    loaded.as(MyBox).sepia_id.should eq "mybox"
-  end
-
-  it "can load itself with nested container" do
+  it "can load itself with all features" do
     box = MyBox.new
     box.sepia_id = "mybox"
     box.my_thing.sepia_id = "Foobar"

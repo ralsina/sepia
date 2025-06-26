@@ -39,7 +39,13 @@ module Sepia
             obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
             FileUtils.ln_s(obj_path, symlink_path)
           end
+          {% elsif ivar.type < Array && ivar.type.type_vars.first < Serializable %}
+            # If it's an array of Serializable or Container, save each item
+            save_array_of_references(path, {{ ivar.name }}, {{ ivar.name.stringify }})
+          {% else %}
+            # If it's not a Serializable or Container, we don't need to do anything.
         {% end %}
+        {{debug}}
       {% end %}
     end
 
@@ -64,6 +70,27 @@ module Sepia
           end
         {% end %}
       {% end %}
+    end
+
+    # Saves a collection of Serializable objects as a directory of references.
+    #
+    # It creates a subdirectory named `name` inside the container's `path`.
+    # For each object in the `array`, it saves the object and then creates a
+    # symlink inside the subdirectory, pointing to the saved object's canonical location.
+    def save_array_of_references(path : String, array : Enumerable(Serializable), name : String)
+      array_dir = File.join(path, name)
+      FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
+      FileUtils.mkdir_p(array_dir)
+
+      array.each_with_index do |obj, index|
+        # Save the object to its canonical location
+        obj.save
+
+        # Create a symlink inside the container's array-property directory
+        symlink_path = File.join(array_dir, index.to_s)
+        obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
+        FileUtils.ln_s(obj_path, symlink_path)
+      end
     end
   end
 end
