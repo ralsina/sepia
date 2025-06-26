@@ -16,10 +16,16 @@ class MyThing
   end
 end
 
+class MyNestedBox
+  include Sepia::Container
+  property nested_thing : MyThing = MyThing.new
+end
+
 class MyBox
   include Sepia::Container
 
   property my_thing : MyThing = MyThing.new
+  property nested_box : MyNestedBox = MyNestedBox.new
 end
 
 describe Sepia::Container do
@@ -40,6 +46,34 @@ describe Sepia::Container do
     loaded = MyBox.load("mybox")
     loaded.should be_a(MyBox)
     loaded.as(MyBox).sepia_id.should eq "mybox"
+  end
+
+  it "can load itself with nested container" do
+    box = MyBox.new
+    box.sepia_id = "mybox"
+    box.my_thing.sepia_id = "Foobar"
+    box.my_thing.name = "Barfoo"
+
+    box.nested_box.sepia_id = "NestedBoxID"
+    box.nested_box.nested_thing.sepia_id = "NestedThingID"
+    box.nested_box.nested_thing.name = "NestedThingName"
+
+    box.save
+
+    loaded = MyBox.load("mybox").as(MyBox)
+
+    loaded.should be_a(MyBox)
+    loaded.sepia_id.should eq "mybox"
+
+    loaded.my_thing.should be_a(MyThing)
+    loaded.my_thing.sepia_id.should eq "Foobar"
+    loaded.my_thing.name.should eq "Barfoo"
+
+    loaded.nested_box.should be_a(MyNestedBox)
+    loaded.nested_box.sepia_id.should eq "NestedBoxID"
+    loaded.nested_box.nested_thing.should be_a(MyThing)
+    loaded.nested_box.nested_thing.sepia_id.should eq "NestedThingID"
+    loaded.nested_box.nested_thing.name.should eq "NestedThingName"
   end
 
   it "can load itself" do

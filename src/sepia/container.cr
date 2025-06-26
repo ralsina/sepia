@@ -26,28 +26,42 @@ module Sepia
 
     def save_references(path : String)
       {% for ivar in @type.instance_vars %}
-        # For each instance variable, check if it's a Serializable or a Container
-        {% if ivar.type < Sepia::Serializable %}
-          obj = {{ ivar.name }}.as(Sepia::Serializable)
-          # Save the serializable object
-          obj.save
-          # Create a symlink to the saved object
-          symlink_path = File.join(path, {{ivar.name.stringify}})
-          obj_path = File.join(Sepia::Storage::INSTANCE.path, typeof({{ ivar.name }}).to_s, obj.sepia_id)
-          FileUtils.ln_s(obj_path, symlink_path)
+        # For each instance variable, check if it's a Serializable or a Container.
+        # We need to ensure the object is not nil before attempting to save it.
+        {% if ivar.type < Sepia::Serializable || ivar.type < Sepia::Container %}
+          obj = {{ ivar.name }}
+          # Only save if the object is not nil (for nilable properties)
+          if obj
+            # Save the referenced object (which could be Serializable or Container)
+            obj.save
+            # Create a symlink to the saved object
+            symlink_path = File.join(path, {{ivar.name.stringify}})
+            obj_path = File.join(Sepia::Storage::INSTANCE.path, typeof(obj).to_s, obj.sepia_id)
+            FileUtils.ln_s(obj_path, symlink_path)
+          end
         {% end %}
       {% end %}
     end
 
     def load_references(path : String)
       {% for ivar in @type.instance_vars %}
-        # For each instance variable, check if it's a Serializable
-        {% if ivar.type < Sepia::Serializable %}
-          # See where the symlink points to and get the object ID
+        # For each instance variable, check if it's a Serializable or a Container.
+        {% if ivar.type < Sepia::Serializable || ivar.type < Sepia::Container %}
           symlink_path = File.join(path, {{ivar.name.stringify}})
-          obj_path = File.readlink(symlink_path)
-          obj_id = File.basename(obj_path)
-          @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{ivar.type}}, obj_id).as({{ ivar.type }})
+          if File.symlink?(symlink_path)
+            # See where the symlink points to and get the object ID
+            obj_path = File.readlink(symlink_path)
+            obj_id = File.basename(obj_path)
+            @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{ivar.type}}, obj_id).as({{ ivar.type }})
+          elsif {{ ivar.type.union? && ivar.type.union_types.any?(&.nilable?) }}
+            {% if ivar.type.nilable? %}
+            # If the symlink doesn't exist and the ivar is nilable, set to nil
+            @{{ ivar.name }} = nil if {{ ivar.type }}.nilable?
+            {% end %}
+          else
+            # If the symlink doesn't exist and the ivar is NOT nilable, it's an error
+            raise "Missing required reference for '#{symlink_path}' for non-nilable property '{{ivar.name}}'"
+          end
         {% end %}
       {% end %}
     end
