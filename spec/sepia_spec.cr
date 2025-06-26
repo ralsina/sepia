@@ -1,5 +1,7 @@
 require "./spec_helper"
 
+PATH = File.join(Dir.tempdir, "sepia_storage_test")
+
 class Broken
   include Sepia::Serializable
 
@@ -16,7 +18,7 @@ class TestUser
   property email : String
   property city : String?
 
-  def initialize(@name="Joe", @age=32, @email="joe@example.com", @city = "Unknown")
+  def initialize(@name = "Joe", @age = 32, @email = "joe@example.com", @city = "Unknown")
   end
 
   def to_sepia : String
@@ -34,6 +36,14 @@ class TestUser
 end
 
 describe Sepia do
+  before_each do
+    FileUtils.rm_rf(PATH) if File.exists?(PATH)
+    FileUtils.mkdir_p(PATH)
+    Sepia::Storage::INSTANCE.path = PATH
+  end
+  after_each do
+    FileUtils.rm_rf(PATH) if File.exists?(PATH)
+  end
 
   it "won't serialize unless the class does it" do
     expect_raises Exception, "to_sepia must be implemented by the class including Sepia::Serializable" do

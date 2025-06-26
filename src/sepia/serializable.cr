@@ -7,7 +7,7 @@ module Sepia
     # When Sepia::Serializable is included, define the `to_sepia`
     # and `self.from_sepia` methods for the class.
     macro included
-      def to_sepia() : String
+      def to_sepia : String
         raise "to_sepia must be implemented by the class including Sepia::Serializable"
       end
 
@@ -17,6 +17,7 @@ module Sepia
 
       # Sepia-serializable classes MUST have a sepia_id property which defaults to a lazy UUID
       getter sepia_id : String = UUID.random.to_s
+
       def sepia_id=(id : String)
         @sepia_id = id
       end

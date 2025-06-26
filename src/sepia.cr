@@ -1,3 +1,5 @@
+require "file_utils"
+
 module Sepia
   VERSION = "0.1.0"
 
@@ -27,11 +29,12 @@ module Sepia
       object_dir = File.join(@path, type_name.to_s)
       object_path = File.join(object_dir, "#{object.sepia_id}")
       FileUtils.mkdir_p(object_path) # Create a directory for the container
+      object.save_references(object_path)
     end
 
     # Load the object from the canonical path in sepia format.
     def load(object_class, id : String)
-      if object_class < Serializable && object_class.responds_to?(:from_sepia)
+      if object_class.responds_to?(:from_sepia)
         type_name = object_class.to_s
         object_path = File.join(@path, type_name, id)
         if File.exists?(object_path)
@@ -39,7 +42,7 @@ module Sepia
         else
           raise "Object with ID #{id} not found in storage."
         end
-      elsif object_class < Container
+      else
         type_name = object_class.to_s
         object_path = File.join(@path, type_name, id)
         if File.exists?(object_path)
