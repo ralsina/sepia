@@ -109,9 +109,9 @@ After running the code above, the `_data` directory will have the following stru
 │       ├── boards
 │       │   └── project_x
 │       │       └── postits
-│       │           └── 0 -> ./_data/Postit/code_review_postit
+│       │           └── 0000_code_review_postit -> ./_data/Postit/code_review_postit
 │       └── postits
-│           └── 0 -> ./_data/Postit/report_postit
+│           └── 0000_report_postit -> ./_data/Postit/report_postit
 └── Postit
     ├── code_review_postit
     └── report_postit
