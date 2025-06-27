@@ -10,6 +10,10 @@ Sepia is a simple, file-system-based serialization library for Crystal. It provi
   - Nested `Serializable` objects are stored as symlinks to their canonical file.
   - Nested `Container` objects are stored as subdirectories, creating a nested on-disk structure that mirrors the object hierarchy.
 
+## Documentation
+
+API documentation can be found at [crystaldoc.info/github/ralsina/sepia/](https://crystaldoc.info/github/ralsina/sepia/)
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
