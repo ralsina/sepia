@@ -89,9 +89,7 @@ module Sepia
         obj.save
 
         # Create a symlink inside the container's array-property directory
-        symlink_path = File.join(array_dir, index.to_s)
-        obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
-        FileUtils.ln_s(obj_path, symlink_path)
+        FileUtils.ln_s(File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id), File.join(array_dir, index.to_s))
       end
     end
 
