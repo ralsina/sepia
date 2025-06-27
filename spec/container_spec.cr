@@ -125,10 +125,10 @@ describe Sepia::Container do
       box.save
       loaded = MyBox.load(box.sepia_id).as(MyBox)
       loaded.nested_boxes.size.should eq 2
-      loaded.nested_boxes[0].sepia_id.should eq "0"
+      loaded.nested_boxes[0].sepia_id.should eq nested_box1.sepia_id
       loaded.nested_boxes[0].nested_thing.name.should eq "NestedInBox1"
       loaded.nested_boxes[0].nested_thing.sepia_id.should eq "nested_in_box1_id"
-      loaded.nested_boxes[1].sepia_id.should eq "1"
+      loaded.nested_boxes[1].sepia_id.should eq nested_box2.sepia_id
       loaded.nested_boxes[1].nested_thing.name.should eq "NestedInBox2"
       loaded.nested_boxes[1].nested_thing.sepia_id.should eq "nested_in_box2_id"
     end

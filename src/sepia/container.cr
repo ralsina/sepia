@@ -74,7 +74,7 @@ module Sepia
         FileUtils.mkdir_p(array_dir)
 
         array.each_with_index do |obj, index|
-          save_value(array_dir, obj, index.to_s)
+          save_value(array_dir, obj, "#{index.to_s.rjust(4, '0')}_#{obj.sepia_id}")
         end
       end
     end
@@ -90,7 +90,7 @@ module Sepia
         FileUtils.mkdir_p(array_dir)
 
         array.each_with_index do |container, index|
-          save_value(array_dir, container, index.to_s)
+          save_value(array_dir, container, "#{index.to_s.rjust(4, '0')}_#{container.sepia_id}")
         end
       end
     end
@@ -216,7 +216,7 @@ module Sepia
       array_dir = File.join(path, name)
       loaded_collection = T.new
       if Dir.exists?(array_dir)
-        symlinks = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort_by(&.to_i)
+        symlinks = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort
         symlinks.each do |entry|
           symlink_path = File.join(array_dir, entry)
           if File.symlink?(symlink_path)
@@ -235,12 +235,13 @@ module Sepia
       array_dir = File.join(path, name)
       loaded_collection = T.new
       if Dir.exists?(array_dir)
-        dirs = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort_by(&.to_i)
+        dirs = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort
         dirs.each do |entry|
           container_path = File.join(array_dir, entry)
           if Dir.exists?(container_path)
             container = U.new
-            container.sepia_id = entry
+            # Extract the sepia_id from the filename (e.g., "00000_some_id" -> "some_id")
+            container.sepia_id = entry.split("_", 2)[1]
             container.load_references(container_path)
             loaded_collection << container
           end
