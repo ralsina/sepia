@@ -26,45 +26,81 @@ module Sepia
 
     def save_references(path : String)
       {% for ivar in @type.instance_vars %}
-        # For each instance variable, check if it's a Serializable or a Container.
-        # We need to ensure the object is not nil before attempting to save it.
-        {% if ivar.type < Sepia::Serializable %}
-          obj = {{ ivar.name }}
-          # Only save if the object is not nil (for nilable properties)
-          if obj
-            # Save the referenced object (which could be Serializable or Container)
-            obj.save
-            # Create a symlink to the saved object
-            symlink_path = File.join(path, {{ivar.name.stringify}})
-            obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
-            FileUtils.ln_s(obj_path, symlink_path)
-          end
-        {% elsif ivar.type < Sepia::Container %}
-          if container = @{{ivar.name}}
-            container_path = File.join(path, {{ivar.name.stringify}})
-            FileUtils.mkdir_p(container_path)
-            container.save_references(container_path)
-          end
-        {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Serializable %}
-          if array = @{{ivar.name}}
-            save_array_of_references(path, array, {{ivar.name.stringify}})
-          end
-        {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Container %}
-          if array = @{{ivar.name}}
-            save_array_of_references(path, array, {{ivar.name.stringify}})
-          end
-        {% elsif ivar.type < Hash && ivar.type.type_vars.first == String && ivar.type.type_vars.last < Sepia::Serializable %}
-          if hash = @{{ivar.name}}
-            save_hash_of_references(path, hash, {{ivar.name.stringify}})
-          end
-        {% elsif ivar.type < Hash && ivar.type.type_vars.first == String && ivar.type.type_vars.last < Sepia::Container %}
-          if hash = @{{ivar.name}}
-            save_hash_of_references(path, hash, {{ivar.name.stringify}})
-          end
-        {% else %}
-            # If it's not a Serializable or Container, we don't need to do anything.
-        {% end %}
+        save_value(path, @{{ivar.name}}, {{ivar.name.stringify}})
       {% end %}
+    end
+
+    private def save_value(path, value : Serializable?, name)
+      if obj = value
+        obj.save
+        symlink_path = File.join(path, name)
+        obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
+        FileUtils.ln_s(obj_path, symlink_path)
+      end
+    end
+
+    private def save_value(path, value : Container?, name)
+      if container = value
+        container_path = File.join(path, name)
+        FileUtils.mkdir_p(container_path)
+        container.save_references(container_path)
+      end
+    end
+
+    private def save_value(path, value : Enumerable(Serializable)?, name)
+      if array = value
+        return if array.empty?
+        array_dir = File.join(path, name)
+        FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
+        FileUtils.mkdir_p(array_dir)
+
+        array.each_with_index do |obj, index|
+          save_value(array_dir, obj, index.to_s)
+        end
+      end
+    end
+
+    private def save_value(path, value : Enumerable(Container)?, name)
+      if array = value
+        return if array.empty?
+        array_dir = File.join(path, name)
+        FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
+        FileUtils.mkdir_p(array_dir)
+
+        array.each_with_index do |container, index|
+          save_value(array_dir, container, index.to_s)
+        end
+      end
+    end
+
+    private def save_value(path, value : Hash(String, Serializable)?, name)
+      if hash = value
+        return if hash.empty?
+        hash_dir = File.join(path, name)
+        FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
+        FileUtils.mkdir_p(hash_dir)
+
+        hash.each do |key, obj|
+          save_value(hash_dir, obj, key)
+        end
+      end
+    end
+
+    private def save_value(path, value : Hash(String, Container)?, name)
+      if hash = value
+        return if hash.empty?
+        hash_dir = File.join(path, name)
+        FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
+        FileUtils.mkdir_p(hash_dir)
+
+        hash.each do |key, container|
+          save_value(hash_dir, container, key)
+        end
+      end
+    end
+
+    private def save_value(path, value, name)
+      # Do nothing for other types
     end
 
     def load_references(path : String)
@@ -79,10 +115,8 @@ module Sepia
             @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{ivar.type}}, obj_id).as({{ ivar.type }})
           else
             {% if ivar.type.nilable? %}
-              # If the symlink doesn't exist and the ivar is nilable, set to nil.
               @{{ ivar.name }} = nil
             {% else %}
-              # If the symlink doesn't exist and the ivar is NOT nilable, it's an error.
               raise "Missing required reference for '#{symlink_path}' for non-nilable property '{{ivar.name}}'"
             {% end %}
           end
@@ -145,73 +179,11 @@ module Sepia
       {% end %}
     end
 
-    # Saves a collection of Serializable objects as a directory of references.
-    #
-    # It creates a subdirectory named `name` inside the container's `path`.
-    # For each object in the `array`, it saves the object and then creates a
-    # symlink inside the subdirectory, pointing to the saved object's canonical location.
-    def save_array_of_references(path : String, array : Enumerable(Serializable|Container), name : String)
-      return if array.empty?
-      array_dir = File.join(path, name)
-      FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
-      FileUtils.mkdir_p(array_dir)
-
-      array.each_with_index do |obj, index|
-        # Save the object to its canonical location
-        obj.save
-
-        # Create a symlink inside the container's array-property directory
-        FileUtils.ln_s(File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id), File.join(array_dir, index.to_s))
-      end
-    end
-
-    def save_array_of_references(path : String, array : Enumerable(Container), name : String)
-      return if array.empty?
-      array_dir = File.join(path, name)
-      FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
-      FileUtils.mkdir_p(array_dir)
-
-      array.each_with_index do |container, index|
-        container_path = File.join(array_dir, index.to_s)
-        FileUtils.mkdir_p(container_path)
-        container.save_references(container_path)
-      end
-    end
-
-    def save_hash_of_references(path : String, hash : Hash(String, Serializable), name : String)
-      return if hash.empty?
-      hash_dir = File.join(path, name)
-      FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
-      FileUtils.mkdir_p(hash_dir)
-
-      hash.each do |key, obj|
-        obj.save
-        FileUtils.ln_s(File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id), File.join(hash_dir, key))
-      end
-    end
-
-    def save_hash_of_references(path : String, hash : Hash(String, Container), name : String)
-      return if hash.empty?
-      hash_dir = File.join(path, name)
-      FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
-      FileUtils.mkdir_p(hash_dir)
-
-      hash.each do |key, container|
-        container_path = File.join(hash_dir, key)
-        FileUtils.mkdir_p(container_path)
-        container.save_references(container_path)
-      end
-    end
-
-    # Loads a collection of Serializable objects from a directory of references.
     def load_enumerable_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       array_dir = File.join(path, name)
       loaded_collection = T.new
-
       if Dir.exists?(array_dir)
-        # Read all symlinks, filter out '.' and '..', sort them numerically to preserve order
         symlinks = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort_by(&.to_i)
-
         symlinks.each do |entry|
           symlink_path = File.join(array_dir, entry)
           if File.symlink?(symlink_path)
@@ -222,18 +194,14 @@ module Sepia
           end
         end
       end
-
       loaded_collection
     end
 
     def load_enumerable_of_containers(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       array_dir = File.join(path, name)
       loaded_collection = T.new
-
       if Dir.exists?(array_dir)
-        # Read all directories, filter out '.' and '..'
         dirs = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort_by(&.to_i)
-
         dirs.each do |entry|
           container_path = File.join(array_dir, entry)
           if Dir.exists?(container_path)
@@ -244,17 +212,14 @@ module Sepia
           end
         end
       end
-
       loaded_collection
     end
-  def load_hash_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
+
+    def load_hash_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       hash_dir = File.join(path, name)
       loaded_hash = T.new
-
       if Dir.exists?(hash_dir)
-        # Read all symlinks, filter out '.' and '..'
         symlinks = Dir.entries(hash_dir).reject { |e| e == "." || e == ".." }
-
         symlinks.each do |entry|
           symlink_path = File.join(hash_dir, entry)
           if File.symlink?(symlink_path)
@@ -265,18 +230,14 @@ module Sepia
           end
         end
       end
-
       loaded_hash
     end
 
     def load_hash_of_containers(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       hash_dir = File.join(path, name)
       loaded_hash = T.new
-
       if Dir.exists?(hash_dir)
-        # Read all directories, filter out '.' and '..'
         dirs = Dir.entries(hash_dir).reject { |e| e == "." || e == ".." }
-
         dirs.each do |entry|
           container_path = File.join(hash_dir, entry)
           if Dir.exists?(container_path)
@@ -287,7 +248,6 @@ module Sepia
           end
         end
       end
-
       loaded_hash
     end
   end
