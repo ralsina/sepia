@@ -26,6 +26,7 @@ class MyBox
 
   property my_thing : MyThing = MyThing.new
   property nested_box : MyNestedBox = MyNestedBox.new
+  property nested_boxes : Array(MyNestedBox) = [MyNestedBox.new]
   property my_things : Array(MyThing) = [MyThing.new]
   property not_things : Array(String) = ["foo"] of String
 end
