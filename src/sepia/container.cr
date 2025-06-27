@@ -33,6 +33,8 @@ module Sepia
     end
 
     private def save_value(path, value : Serializable?, name)
+      # Saves a Serializable object by saving it and then creating a symlink
+      # to its canonical location within the container's directory.
       if obj = value
         obj.save
         symlink_path = File.join(path, name)
@@ -42,6 +44,8 @@ module Sepia
     end
 
     private def save_value(path, value : Container?, name)
+      # Saves a nested Container object by creating a subdirectory for it
+      # and recursively calling `save_references` on it.
       if container = value
         container_path = File.join(path, name)
         FileUtils.mkdir_p(container_path)
@@ -50,6 +54,9 @@ module Sepia
     end
 
     private def save_value(path, value : Enumerable(Serializable)?, name)
+      # Saves an Enumerable (e.g., Array, Set) of Serializable objects.
+      # Each serializable object is saved and then symlinked into a subdirectory
+      # named after the enumerable, using its index as the symlink name.
       if array = value
         return if array.empty?
         array_dir = File.join(path, name)
@@ -63,6 +70,9 @@ module Sepia
     end
 
     private def save_value(path, value : Enumerable(Container)?, name)
+      # Saves an Enumerable (e.g., Array, Set) of Container objects.
+      # Each container object is saved as a subdirectory within a subdirectory
+      # named after the enumerable, using its index as the subdirectory name.
       if array = value
         return if array.empty?
         array_dir = File.join(path, name)
@@ -76,6 +86,9 @@ module Sepia
     end
 
     private def save_value(path, value : Hash(String, Serializable)?, name)
+      # Saves a Hash with String keys and Serializable values.
+      # Each serializable object is saved and then symlinked into a subdirectory
+      # named after the hash, using its key as the symlink name.
       if hash = value
         return if hash.empty?
         hash_dir = File.join(path, name)
@@ -89,6 +102,9 @@ module Sepia
     end
 
     private def save_value(path, value : Hash(String, Container)?, name)
+      # Saves a Hash with String keys and Container values.
+      # Each container object is saved as a subdirectory within a subdirectory
+      # named after the hash, using its key as the subdirectory name.
       if hash = value
         return if hash.empty?
         hash_dir = File.join(path, name)
@@ -102,6 +118,8 @@ module Sepia
     end
 
     private def save_value(path, value, name)
+      # This is a catch-all for types that are not Serializable, Container,
+      # or collections of them. These types are not persisted by Sepia.
       # Do nothing for other types
     end
 
