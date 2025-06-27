@@ -19,16 +19,17 @@ module Sepia
 
     # Saves a Serializable object to its canonical path.
     # The object's `to_sepia` method is used to get the content to be saved.
-    def save(object : Serializable)
-      object_dir = File.join(@path, object.class.name)
+    def save(object : Serializable, path : String? = nil)
+      object_path = path || File.join(@path, object.class.name, "#{object.sepia_id}")
+      object_dir = File.dirname(object_path)
       FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
-      File.write(File.join(object_dir, "#{object.sepia_id}"), object.to_sepia)
+      File.write(object_path, object.to_sepia)
     end
 
     # Saves a Container object to its canonical path as a directory.
     # The container's `save_references` method is called to save its contents.
-    def save(object : Container)
-      object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
+    def save(object : Container, path : String? = nil)
+      object_path = path || File.join(@path, object.class.name, "#{object.sepia_id}")
       FileUtils.mkdir_p(object_path) # Create a directory for the container
       object.save_references(object_path)
     end
@@ -66,15 +67,6 @@ module Sepia
         File.delete(object_path)
       else
         raise "Object with ID #{object.sepia_id} not found in storage for type #{object.class.name}."
-      end
-    end
-
-    def delete(object : Container)
-      object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
-      if Dir.exists?(object_path)
-        FileUtils.rm_rf(object_path)
-      else
-        raise "Container with ID #{object.sepia_id} not found in storage for type #{object.class.name}."
       end
     end
 

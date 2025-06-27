@@ -28,8 +28,8 @@ module Sepia
       end
 
       # Sepia-serializable classes know how to save themselves
-      def save
-        Sepia::Storage::INSTANCE.save(self)
+      def save(path : String? = nil)
+        Sepia::Storage::INSTANCE.save(self, path)
       end
 
       # Sepia-serializable classes can load themselves from storage

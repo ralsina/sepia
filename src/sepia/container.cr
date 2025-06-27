@@ -14,8 +14,8 @@ module Sepia
       end
 
       # Container classes know how to save themselves
-      def save
-        Sepia::Storage::INSTANCE.save(self)
+      def save(path : String? = nil)
+        Sepia::Storage::INSTANCE.save(self, path)
       end
 
       # Container classes know how to load themselves

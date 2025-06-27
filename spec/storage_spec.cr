@@ -8,8 +8,13 @@ class DeletableContainer
 
   # These are needed to satisfy the Serializable contract,
   # but won't be called if it's treated as a Container.
-  def to_sepia; ""; end
-  def self.from_sepia(s); new; end
+  def to_sepia
+    ""
+  end
+
+  def self.from_sepia(s)
+    new
+  end
 end
 
 describe Sepia::Storage do
