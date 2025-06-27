@@ -103,12 +103,12 @@ module Sepia
         {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Container %}
           array_dir = File.join(path, {{ivar.name.stringify}})
           if Dir.exists?(array_dir)
-            @{{ivar.name}} = load_array_of_containers(path, {{ivar.name.stringify}}, {{ivar.type.type_vars.first}})
+            @{{ivar.name}} = load_enumerable_of_containers(path, {{ivar.name.stringify}}, {{ivar.type}}, {{ivar.type.type_vars.first}})
           else
             {% if ivar.type.union? %} # It's nilable
               @{{ivar.name}} = nil
             {% else %} # It's not nilable, so create empty array
-              @{{ivar.name}} = [] of {{ivar.type.type_vars.first}}
+              @{{ivar.name}} = {{ivar.type}}.new
             {% end %}
           end
         {% end %}
@@ -171,9 +171,9 @@ module Sepia
       loaded_collection
     end
 
-    def load_array_of_containers(path : String, name : String, item_type : T.class) forall T
+    def load_enumerable_of_containers(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       array_dir = File.join(path, name)
-      loaded_array = [] of T
+      loaded_collection = T.new
 
       if Dir.exists?(array_dir)
         # Read all directories, filter out '.' and '..'
@@ -182,15 +182,15 @@ module Sepia
         dirs.each do |entry|
           container_path = File.join(array_dir, entry)
           if Dir.exists?(container_path)
-            container = T.new
+            container = U.new
             container.sepia_id = entry
             container.load_references(container_path)
-            loaded_array << container
+            loaded_collection << container
           end
         end
       end
 
-      loaded_array
+      loaded_collection
     end
   end
 end
