@@ -31,6 +31,11 @@ class MyBox
   property not_things : Array(String) = ["foo"] of String
 end
 
+class MySetBox
+  include Sepia::Container
+  property my_things : Set(MyThing) = Set(MyThing).new
+end
+
 describe Sepia::Container do
   before_each do
     FileUtils.rm_rf(PATH) if File.exists?(PATH)
@@ -108,5 +113,25 @@ describe Sepia::Container do
     loaded.nested_boxes[1].sepia_id.should eq "1"
     loaded.nested_boxes[1].nested_thing.name.should eq "NestedInBox2"
     loaded.nested_boxes[1].nested_thing.sepia_id.should eq "nested_in_box2_id"
+  end
+
+  it "can roundtrip a set" do
+    box = MySetBox.new
+    box.sepia_id = "mysetbox"
+
+    thing1 = MyThing.new
+    thing1.name = "Thing1"
+    thing1.sepia_id = "thing1_id"
+    thing2 = MyThing.new
+    thing2.name = "Thing2"
+    thing2.sepia_id = "thing2_id"
+    box.my_things = Set{thing1, thing2}
+
+    box.save
+
+    loaded = MySetBox.load("mysetbox").as(MySetBox)
+    loaded.should be_a(MySetBox)
+    loaded.my_things.size.should eq 2
+    loaded.my_things.map(&.name).to_a.sort.should eq ["Thing1", "Thing2"]
   end
 end

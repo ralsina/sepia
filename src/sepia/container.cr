@@ -92,12 +92,12 @@ module Sepia
         {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Serializable %}
           array_dir = File.join(path, {{ivar.name.stringify}})
           if Dir.exists?(array_dir)
-            @{{ivar.name}} = load_array_of_references(path, {{ivar.name.stringify}}, {{ivar.type.type_vars.first}})
+            @{{ivar.name}} = load_enumerable_of_references(path, {{ivar.name.stringify}}, {{ivar.type}}, {{ivar.type.type_vars.first}})
           else
             {% if ivar.type.union? %} # It's nilable
               @{{ivar.name}} = nil
             {% else %} # It's not nilable, so create empty array
-              @{{ivar.name}} = [] of {{ivar.type.type_vars.first}}
+              @{{ivar.name}} = {{ivar.type}}.new
             {% end %}
           end
         {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Container %}
@@ -149,9 +149,9 @@ module Sepia
     end
 
     # Loads a collection of Serializable objects from a directory of references.
-    def load_array_of_references(path : String, name : String, item_type : T.class) forall T
+    def load_enumerable_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       array_dir = File.join(path, name)
-      loaded_array = [] of T
+      loaded_collection = T.new
 
       if Dir.exists?(array_dir)
         # Read all symlinks, filter out '.' and '..', sort them numerically to preserve order
@@ -163,12 +163,12 @@ module Sepia
             obj_path = File.readlink(symlink_path)
             obj_id = File.basename(obj_path)
             loaded_obj = Sepia::Storage::INSTANCE.load(item_type, obj_id)
-            loaded_array << loaded_obj.as(T)
+            loaded_collection << loaded_obj.as(U)
           end
         end
       end
 
-      loaded_array
+      loaded_collection
     end
 
     def load_array_of_containers(path : String, name : String, item_type : T.class) forall T
