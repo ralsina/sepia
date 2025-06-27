@@ -53,6 +53,14 @@ module Sepia
           if array = @{{ivar.name}}
             save_array_of_references(path, array, {{ivar.name.stringify}})
           end
+        {% elsif ivar.type < Hash && ivar.type.type_vars.first == String && ivar.type.type_vars.last < Sepia::Serializable %}
+          if hash = @{{ivar.name}}
+            save_hash_of_references(path, hash, {{ivar.name.stringify}})
+          end
+        {% elsif ivar.type < Hash && ivar.type.type_vars.first == String && ivar.type.type_vars.last < Sepia::Container %}
+          if hash = @{{ivar.name}}
+            save_hash_of_references(path, hash, {{ivar.name.stringify}})
+          end
         {% else %}
             # If it's not a Serializable or Container, we don't need to do anything.
         {% end %}
@@ -111,6 +119,28 @@ module Sepia
               @{{ivar.name}} = {{ivar.type}}.new
             {% end %}
           end
+        {% elsif ivar.type < Hash && ivar.type.type_vars.first == String && ivar.type.type_vars.last < Sepia::Serializable %}
+          hash_dir = File.join(path, {{ivar.name.stringify}})
+          if Dir.exists?(hash_dir)
+            @{{ivar.name}} = load_hash_of_references(path, {{ivar.name.stringify}}, {{ivar.type}}, {{ivar.type.type_vars.last}})
+          else
+            {% if ivar.type.union? %} # It's nilable
+              @{{ivar.name}} = nil
+            {% else %} # It's not nilable, so create empty hash
+              @{{ivar.name}} = {{ivar.type}}.new
+            {% end %}
+          end
+        {% elsif ivar.type < Hash && ivar.type.type_vars.first == String && ivar.type.type_vars.last < Sepia::Container %}
+          hash_dir = File.join(path, {{ivar.name.stringify}})
+          if Dir.exists?(hash_dir)
+            @{{ivar.name}} = load_hash_of_containers(path, {{ivar.name.stringify}}, {{ivar.type}}, {{ivar.type.type_vars.last}})
+          else
+            {% if ivar.type.union? %} # It's nilable
+              @{{ivar.name}} = nil
+            {% else %} # It's not nilable, so create empty hash
+              @{{ivar.name}} = {{ivar.type}}.new
+            {% end %}
+          end
         {% end %}
       {% end %}
     end
@@ -143,6 +173,31 @@ module Sepia
 
       array.each_with_index do |container, index|
         container_path = File.join(array_dir, index.to_s)
+        FileUtils.mkdir_p(container_path)
+        container.save_references(container_path)
+      end
+    end
+
+    def save_hash_of_references(path : String, hash : Hash(String, Serializable), name : String)
+      return if hash.empty?
+      hash_dir = File.join(path, name)
+      FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
+      FileUtils.mkdir_p(hash_dir)
+
+      hash.each do |key, obj|
+        obj.save
+        FileUtils.ln_s(File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id), File.join(hash_dir, key))
+      end
+    end
+
+    def save_hash_of_references(path : String, hash : Hash(String, Container), name : String)
+      return if hash.empty?
+      hash_dir = File.join(path, name)
+      FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
+      FileUtils.mkdir_p(hash_dir)
+
+      hash.each do |key, container|
+        container_path = File.join(hash_dir, key)
         FileUtils.mkdir_p(container_path)
         container.save_references(container_path)
       end
@@ -191,6 +246,49 @@ module Sepia
       end
 
       loaded_collection
+    end
+  def load_hash_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
+      hash_dir = File.join(path, name)
+      loaded_hash = T.new
+
+      if Dir.exists?(hash_dir)
+        # Read all symlinks, filter out '.' and '..'
+        symlinks = Dir.entries(hash_dir).reject { |e| e == "." || e == ".." }
+
+        symlinks.each do |entry|
+          symlink_path = File.join(hash_dir, entry)
+          if File.symlink?(symlink_path)
+            obj_path = File.readlink(symlink_path)
+            obj_id = File.basename(obj_path)
+            loaded_obj = Sepia::Storage::INSTANCE.load(item_type, obj_id)
+            loaded_hash[entry] = loaded_obj.as(U)
+          end
+        end
+      end
+
+      loaded_hash
+    end
+
+    def load_hash_of_containers(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
+      hash_dir = File.join(path, name)
+      loaded_hash = T.new
+
+      if Dir.exists?(hash_dir)
+        # Read all directories, filter out '.' and '..'
+        dirs = Dir.entries(hash_dir).reject { |e| e == "." || e == ".." }
+
+        dirs.each do |entry|
+          container_path = File.join(hash_dir, entry)
+          if Dir.exists?(container_path)
+            container = U.new
+            container.sepia_id = entry
+            container.load_references(container_path)
+            loaded_hash[entry] = container
+          end
+        end
+      end
+
+      loaded_hash
     end
   end
 end

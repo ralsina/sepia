@@ -33,19 +33,17 @@ end
 class Board
   include Sepia::Container
 
-  property boards : Array(Board)
+  property boards : Hash(String, Board)
   property postits : Array(Postit)
 
-  def initialize(@postits = [] of Postit, @boards = [] of Board); end
+  def initialize(@boards = Hash(String, Board).new, @postits = [] of Postit); end
 end
 
 # Helper method to print a board and its contents recursively.
 def print_board(board : Board, indent = 0)
   puts "#{"  " * indent}- Board: #{board.sepia_id}"
-  if boards = board.boards
-    boards.each do |item|
-      print_board(item, indent + 1)
-    end
+  board.boards.each do |key, item|
+    print_board(item, indent + 1)
   end
   board.postits.each do |item|
     puts "#{"  " * (indent + 1)}- Postit: \"#{item.text}\" (ID: #{item.sepia_id})"
@@ -53,18 +51,17 @@ def print_board(board : Board, indent = 0)
 end
 
 
+
 # --- Create and Save ---
 
 puts "--- Saving State ---"
 
 # A top-level board for "Work"
-work_board = Board.new(boards: [] of Board)
+work_board = Board.new
 work_board.sepia_id = "work_board"
 
 # A nested board for "Project X"
 project_x_board = Board.new
-project_x_board.sepia_id = "project_x"
-
 # Post-its for the boards
 postit1 = Postit.new("Finish the report")
 postit1.sepia_id = "report_postit"
@@ -81,7 +78,7 @@ postit5.sepia_id = "dentist_postit"
 project_x_board.postits << postit2
 work_board.postits << postit1
 work_board.postits << postit5
-work_board.boards << project_x_board
+work_board.boards["project_x"] = project_x_board
 
 # A top-level board for "Home"
 home_board = Board.new
@@ -113,16 +110,12 @@ print_board(loaded_home_board)
 # --- Verification ---
 puts "\n--- Verification ---"
 puts "Work board ID: #{loaded_work_board.sepia_id}"
-if loaded_boards = loaded_work_board.boards
-  puts "Number of boards in work board: #{loaded_boards.size}"
-  loaded_project_x = loaded_boards[0].as(Board)
-  puts "Project X board ID: #{loaded_project_x.sepia_id}"
-  puts "Number of items in Project X board: #{loaded_project_x.postits.size}"
-  puts "Project X post-it text: \"#{loaded_project_x.postits[0].as(Postit).text}\""
-else
-  puts "Number of boards in work board: 0"
-end
+puts "Number of boards in work board: #{loaded_work_board.boards.size}"
 puts "Number of postits in work board: #{loaded_work_board.postits.size}"
+loaded_project_x = loaded_work_board.boards["project_x"]
+puts "Project X board ID: #{loaded_project_x.sepia_id}"
+puts "Number of items in Project X board: #{loaded_project_x.postits.size}"
+puts "Project X post-it text: \"#{loaded_project_x.postits[0].as(Postit).text}\""
 puts "Home board ID: #{loaded_home_board.sepia_id}"
 puts "Home board post-it text: \"#{loaded_home_board.postits[0].as(Postit).text}\""
 puts "Home board post-it 2 text: \"#{loaded_home_board.postits[1].as(Postit).text}\""

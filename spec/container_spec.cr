@@ -41,6 +41,16 @@ class MySetOfContainersBox
   property nested_boxes : Set(MyNestedBox) = Set(MyNestedBox).new
 end
 
+class MyHashBox
+  include Sepia::Container
+  property my_things : Hash(String, MyThing) = Hash(String, MyThing).new
+end
+
+class MyHashOfContainersBox
+  include Sepia::Container
+  property nested_boxes : Hash(String, MyNestedBox) = Hash(String, MyNestedBox).new
+end
+
 describe Sepia::Container do
   before_each do
     FileUtils.rm_rf(PATH) if File.exists?(PATH)
@@ -181,5 +191,47 @@ describe Sepia::Container do
     loaded.should be_a(MySetOfContainersBox)
     loaded.nested_boxes.size.should eq 2
     loaded.nested_boxes.map(&.nested_thing.name).to_a.sort.should eq ["NestedInBox1", "NestedInBox2"]
+  end
+
+  it "can roundtrip a hash of serializables" do
+    box = MyHashBox.new
+    box.sepia_id = "myhashbox"
+
+    thing1 = MyThing.new
+    thing1.name = "Thing1"
+    thing1.sepia_id = "thing1_id"
+    thing2 = MyThing.new
+    thing2.name = "Thing2"
+    thing2.sepia_id = "thing2_id"
+    box.my_things = {"a" => thing1, "b" => thing2}
+
+    box.save
+
+    loaded = MyHashBox.load("myhashbox").as(MyHashBox)
+    loaded.should be_a(MyHashBox)
+    loaded.my_things.size.should eq 2
+    loaded.my_things["a"].name.should eq "Thing1"
+    loaded.my_things["b"].name.should eq "Thing2"
+  end
+
+  it "can roundtrip a hash of containers" do
+    box = MyHashOfContainersBox.new
+    box.sepia_id = "myhashofcontainersbox"
+
+    nested_box1 = MyNestedBox.new
+    nested_box1.nested_thing.name = "NestedInBox1"
+    nested_box1.nested_thing.sepia_id = "nested_in_box1_id"
+    nested_box2 = MyNestedBox.new
+    nested_box2.nested_thing.name = "NestedInBox2"
+    nested_box2.nested_thing.sepia_id = "nested_in_box2_id"
+    box.nested_boxes = {"a" => nested_box1, "b" => nested_box2}
+
+    box.save
+
+    loaded = MyHashOfContainersBox.load("myhashofcontainersbox").as(MyHashOfContainersBox)
+    loaded.should be_a(MyHashOfContainersBox)
+    loaded.nested_boxes.size.should eq 2
+    loaded.nested_boxes["a"].nested_thing.name.should eq "NestedInBox1"
+    loaded.nested_boxes["b"].nested_thing.name.should eq "NestedInBox2"
   end
 end
