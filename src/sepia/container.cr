@@ -24,6 +24,8 @@ module Sepia
       end
     end
 
+    # Saves all references (Serializable, Container, Enumerable of either)
+    # to the container's path.
     def save_references(path : String)
       {% for ivar in @type.instance_vars %}
         save_value(path, @{{ivar.name}}, {{ivar.name.stringify}})
@@ -103,6 +105,8 @@ module Sepia
       # Do nothing for other types
     end
 
+    # Loads all references (Serializable, Container, Enumerable of either)
+    # from the container's path.
     def load_references(path : String)
       {% for ivar in @type.instance_vars %}
         # For each instance variable, check if it's a Serializable or a Container.
@@ -179,6 +183,7 @@ module Sepia
       {% end %}
     end
 
+    # Loads an enumerable of serializable objects from a directory of symlinks.
     def load_enumerable_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       array_dir = File.join(path, name)
       loaded_collection = T.new
@@ -197,6 +202,7 @@ module Sepia
       loaded_collection
     end
 
+    # Loads an enumerable of containers from a directory of subdirectories.
     def load_enumerable_of_containers(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       array_dir = File.join(path, name)
       loaded_collection = T.new
@@ -215,6 +221,7 @@ module Sepia
       loaded_collection
     end
 
+    # Loads a hash of serializable objects from a directory of symlinks.
     def load_hash_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       hash_dir = File.join(path, name)
       loaded_hash = T.new
@@ -233,6 +240,7 @@ module Sepia
       loaded_hash
     end
 
+    # Loads a hash of containers from a directory of subdirectories.
     def load_hash_of_containers(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       hash_dir = File.join(path, name)
       loaded_hash = T.new

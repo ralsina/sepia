@@ -1,6 +1,10 @@
 require "file_utils"
 
 module Sepia
+  # The `Storage` class is responsible for handling the persistence of
+  # `Sepia::Serializable` and `Sepia::Container` objects to the file system.
+  # It manages saving and loading these objects based on their `sepia_id`
+  # and class name, and provides a configurable storage path.
   class Storage
     INSTANCE = new
 
@@ -8,18 +12,21 @@ module Sepia
     getter path : String = Dir.tempdir
 
     # But user can override it.
+    # Sets the storage path. This is where all serialized objects will be stored.
     def path=(path : String)
       @path = path
     end
 
-    # Save the object to the canonical path in sepia format.
+    # Saves a Serializable object to its canonical path.
+    # The object's `to_sepia` method is used to get the content to be saved.
     def save(object : Serializable)
       object_dir = File.join(@path, object.class.name)
       FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
       File.write(File.join(object_dir, "#{object.sepia_id}"), object.to_sepia)
     end
 
-    # Saves the container object to the canonical path as a folder of references
+    # Saves a Container object to its canonical path as a directory.
+    # The container's `save_references` method is called to save its contents.
     def save(object : Container)
       object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
       FileUtils.mkdir_p(object_path) # Create a directory for the container

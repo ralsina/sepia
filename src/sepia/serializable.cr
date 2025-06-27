@@ -1,8 +1,9 @@
 require "uuid"
 
 module Sepia
-  # Sepia serializable objects decide their own serialization .
-  # This is intentional.
+  # The `Serializable` module provides a contract for objects that can be
+  # serialized to a single file. Classes including this module must implement
+  # `to_sepia` to define the file content and `self.from_sepia` to deserialize.
   module Serializable
     # When Sepia::Serializable is included, define the `to_sepia`
     # and `self.from_sepia` methods for the class.
