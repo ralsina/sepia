@@ -28,7 +28,7 @@ module Sepia
       {% for ivar in @type.instance_vars %}
         # For each instance variable, check if it's a Serializable or a Container.
         # We need to ensure the object is not nil before attempting to save it.
-        {% if ivar.type < Sepia::Serializable || ivar.type < Sepia::Container %}
+        {% if ivar.type < Sepia::Serializable %}
           obj = {{ ivar.name }}
           # Only save if the object is not nil (for nilable properties)
           if obj
@@ -39,10 +39,21 @@ module Sepia
             obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
             FileUtils.ln_s(obj_path, symlink_path)
           end
-          {% elsif ivar.type < Enumerable && (ivar.type.type_vars.first < Serializable || ivar.type.type_vars.first < Container) %}
-            # If it's an array of Serializable or Container, save each item
-            save_array_of_references(path, {{ ivar.name }}, {{ ivar.name.stringify }})
-          {% else %}
+        {% elsif ivar.type < Sepia::Container %}
+          if container = @{{ivar.name}}
+            container_path = File.join(path, {{ivar.name.stringify}})
+            FileUtils.mkdir_p(container_path)
+            container.save_references(container_path)
+          end
+        {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Serializable %}
+          if array = @{{ivar.name}}
+            save_array_of_references(path, array, {{ivar.name.stringify}})
+          end
+        {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Container %}
+          if array = @{{ivar.name}}
+            save_array_of_references(path, array, {{ivar.name.stringify}})
+          end
+        {% else %}
             # If it's not a Serializable or Container, we don't need to do anything.
         {% end %}
       {% end %}
@@ -51,7 +62,7 @@ module Sepia
     def load_references(path : String)
       {% for ivar in @type.instance_vars %}
         # For each instance variable, check if it's a Serializable or a Container.
-        {% if ivar.type < Sepia::Serializable || ivar.type < Sepia::Container %}
+        {% if ivar.type < Sepia::Serializable %}
           symlink_path = File.join(path, {{ivar.name.stringify}})
           if File.symlink?(symlink_path)
             # See where the symlink points to and get the object ID
@@ -67,9 +78,39 @@ module Sepia
               raise "Missing required reference for '#{symlink_path}' for non-nilable property '{{ivar.name}}'"
             {% end %}
           end
-        {% elsif ivar.type < Enumerable && (ivar.type.type_vars.first < Serializable || ivar.type.type_vars.first < Container) %}
-          # If it's an array of Serializable or Container, load each item
-          @{{ivar.name}} = load_array_of_references(path, {{ivar.name.stringify}}, {{ivar.type.type_vars.first}})
+        {% elsif ivar.type < Sepia::Container %}
+          container_path = File.join(path, {{ivar.name.stringify}})
+          if Dir.exists?(container_path)
+            @{{ivar.name}} = {{ivar.type}}.new
+            @{{ivar.name}}.as({{ivar.type}}).sepia_id = {{ivar.name.stringify}}
+            @{{ivar.name}}.as(Container).load_references(container_path)
+          else
+            {% if ivar.type.nilable? %}
+              @{{ivar.name}} = nil
+            {% end %}
+          end
+        {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Serializable %}
+          array_dir = File.join(path, {{ivar.name.stringify}})
+          if Dir.exists?(array_dir)
+            @{{ivar.name}} = load_array_of_references(path, {{ivar.name.stringify}}, {{ivar.type.type_vars.first}})
+          else
+            {% if ivar.type.union? %} # It's nilable
+              @{{ivar.name}} = nil
+            {% else %} # It's not nilable, so create empty array
+              @{{ivar.name}} = [] of {{ivar.type.type_vars.first}}
+            {% end %}
+          end
+        {% elsif ivar.type < Enumerable && ivar.type.type_vars.first < Sepia::Container %}
+          array_dir = File.join(path, {{ivar.name.stringify}})
+          if Dir.exists?(array_dir)
+            @{{ivar.name}} = load_array_of_containers(path, {{ivar.name.stringify}}, {{ivar.type.type_vars.first}})
+          else
+            {% if ivar.type.union? %} # It's nilable
+              @{{ivar.name}} = nil
+            {% else %} # It's not nilable, so create empty array
+              @{{ivar.name}} = [] of {{ivar.type.type_vars.first}}
+            {% end %}
+          end
         {% end %}
       {% end %}
     end
@@ -80,6 +121,7 @@ module Sepia
     # For each object in the `array`, it saves the object and then creates a
     # symlink inside the subdirectory, pointing to the saved object's canonical location.
     def save_array_of_references(path : String, array : Enumerable(Serializable|Container), name : String)
+      return if array.empty?
       array_dir = File.join(path, name)
       FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
       FileUtils.mkdir_p(array_dir)
@@ -90,6 +132,19 @@ module Sepia
 
         # Create a symlink inside the container's array-property directory
         FileUtils.ln_s(File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id), File.join(array_dir, index.to_s))
+      end
+    end
+
+    def save_array_of_references(path : String, array : Enumerable(Container), name : String)
+      return if array.empty?
+      array_dir = File.join(path, name)
+      FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
+      FileUtils.mkdir_p(array_dir)
+
+      array.each_with_index do |container, index|
+        container_path = File.join(array_dir, index.to_s)
+        FileUtils.mkdir_p(container_path)
+        container.save_references(container_path)
       end
     end
 
@@ -109,6 +164,28 @@ module Sepia
             obj_id = File.basename(obj_path)
             loaded_obj = Sepia::Storage::INSTANCE.load(item_type, obj_id)
             loaded_array << loaded_obj.as(T)
+          end
+        end
+      end
+
+      loaded_array
+    end
+
+    def load_array_of_containers(path : String, name : String, item_type : T.class) forall T
+      array_dir = File.join(path, name)
+      loaded_array = [] of T
+
+      if Dir.exists?(array_dir)
+        # Read all directories, filter out '.' and '..'
+        dirs = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort_by(&.to_i)
+
+        dirs.each do |entry|
+          container_path = File.join(array_dir, entry)
+          if Dir.exists?(container_path)
+            container = T.new
+            container.sepia_id = entry
+            container.load_references(container_path)
+            loaded_array << container
           end
         end
       end

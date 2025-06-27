@@ -1,0 +1,13 @@
+name: example
+version: 0.1.0
+
+authors:
+  - Me
+
+crystal: '>= 1.16.3'
+
+license: MIT
+
+dependencies:
+  sepia:
+    path: ../

@@ -73,6 +73,11 @@ describe Sepia::Container do
 
     box.save
 
+    # Assertions for the on-disk representation
+    File.directory?(File.join(PATH, "MyBox", "mybox", "nested_box")).should be_true
+    File.symlink?(File.join(PATH, "MyBox", "mybox", "my_thing")).should be_true
+    File.directory?(File.join(PATH, "MyBox", "mybox", "nested_boxes", "0")).should be_true
+
     loaded = MyBox.load("mybox").as(MyBox)
 
     loaded.should be_a(MyBox)
@@ -83,7 +88,7 @@ describe Sepia::Container do
     loaded.my_thing.name.should eq "Barfoo"
 
     loaded.nested_box.should be_a(MyNestedBox)
-    loaded.nested_box.sepia_id.should eq "NestedBoxID"
+    loaded.nested_box.sepia_id.should eq "nested_box"
     loaded.nested_box.nested_thing.should be_a(MyThing)
     loaded.nested_box.nested_thing.sepia_id.should eq "NestedThingID"
     loaded.nested_box.nested_thing.name.should eq "NestedThingName"
@@ -97,10 +102,10 @@ describe Sepia::Container do
 
     # Assertions for the array of MyNestedBox
     loaded.nested_boxes.size.should eq 2
-    loaded.nested_boxes[0].sepia_id.should eq "nested_box1_id"
+    loaded.nested_boxes[0].sepia_id.should eq "0"
     loaded.nested_boxes[0].nested_thing.name.should eq "NestedInBox1"
     loaded.nested_boxes[0].nested_thing.sepia_id.should eq "nested_in_box1_id"
-    loaded.nested_boxes[1].sepia_id.should eq "nested_box2_id"
+    loaded.nested_boxes[1].sepia_id.should eq "1"
     loaded.nested_boxes[1].nested_thing.name.should eq "NestedInBox2"
     loaded.nested_boxes[1].nested_thing.sepia_id.should eq "nested_in_box2_id"
   end
