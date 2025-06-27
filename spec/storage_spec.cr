@@ -24,7 +24,7 @@ describe Sepia::Storage do
   end
 
   after_each do
-    # FileUtils.rm_rf("sepia-storage-spec") if Dir.exists?("sepia-storage-spec")
+    FileUtils.rm_rf("sepia-storage-spec") if Dir.exists?("sepia-storage-spec")
   end
 
   it "roundtrips an object to the storage" do
