@@ -111,7 +111,7 @@ After running the code above, the `_data` directory will have the following stru
 │       │       └── postits
 │       │           └── 0 -> ./_data/Postit/code_review_postit
 │       └── postits
-���           └── 0 -> ./_data/Postit/report_postit
+│           └── 0 -> ./_data/Postit/report_postit
 └── Postit
     ├── code_review_postit
     └── report_postit
