@@ -67,6 +67,9 @@ module Sepia
               raise "Missing required reference for '#{symlink_path}' for non-nilable property '{{ivar.name}}'"
             {% end %}
           end
+        {% elsif ivar.type < Enumerable && (ivar.type.type_vars.first < Serializable || ivar.type.type_vars.first < Container) %}
+          # If it's an array of Serializable or Container, load each item
+          @{{ivar.name}} = load_array_of_references(path, {{ivar.name.stringify}}, {{ivar.type.type_vars.first}})
         {% end %}
       {% end %}
     end
@@ -90,6 +93,29 @@ module Sepia
         obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
         FileUtils.ln_s(obj_path, symlink_path)
       end
+    end
+
+    # Loads a collection of Serializable objects from a directory of references.
+    def load_array_of_references(path : String, name : String, item_type : T.class) forall T
+      array_dir = File.join(path, name)
+      loaded_array = [] of T
+
+      if Dir.exists?(array_dir)
+        # Read all symlinks, filter out '.' and '..', sort them numerically to preserve order
+        symlinks = Dir.entries(array_dir).reject { |e| e == "." || e == ".." }.sort_by(&.to_i)
+
+        symlinks.each do |entry|
+          symlink_path = File.join(array_dir, entry)
+          if File.symlink?(symlink_path)
+            obj_path = File.readlink(symlink_path)
+            obj_id = File.basename(obj_path)
+            loaded_obj = Sepia::Storage::INSTANCE.load(item_type, obj_id)
+            loaded_array << loaded_obj.as(T)
+          end
+        end
+      end
+
+      loaded_array
     end
   end
 end

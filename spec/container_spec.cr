@@ -51,6 +51,26 @@ describe Sepia::Container do
     box.nested_box.nested_thing.sepia_id = "NestedThingID"
     box.nested_box.nested_thing.name = "NestedThingName"
 
+    # Create a couple of MyThing objects for the array
+    thing1 = MyThing.new
+    thing1.name = "Thing1"
+    thing1.sepia_id = "thing1_id"
+    thing2 = MyThing.new
+    thing2.name = "Thing2"
+    thing2.sepia_id = "thing2_id"
+    box.my_things = [thing1, thing2]
+
+    # Create a couple of MyNestedBox objects for the array
+    nested_box1 = MyNestedBox.new
+    nested_box1.sepia_id = "nested_box1_id"
+    nested_box1.nested_thing.name = "NestedInBox1"
+    nested_box1.nested_thing.sepia_id = "nested_in_box1_id"
+    nested_box2 = MyNestedBox.new
+    nested_box2.sepia_id = "nested_box2_id"
+    nested_box2.nested_thing.name = "NestedInBox2"
+    nested_box2.nested_thing.sepia_id = "nested_in_box2_id"
+    box.nested_boxes = [nested_box1, nested_box2]
+
     box.save
 
     loaded = MyBox.load("mybox").as(MyBox)
@@ -67,5 +87,21 @@ describe Sepia::Container do
     loaded.nested_box.nested_thing.should be_a(MyThing)
     loaded.nested_box.nested_thing.sepia_id.should eq "NestedThingID"
     loaded.nested_box.nested_thing.name.should eq "NestedThingName"
+
+    # Assertions for the array of MyThing
+    loaded.my_things.size.should eq 2
+    loaded.my_things[0].name.should eq "Thing1"
+    loaded.my_things[0].sepia_id.should eq "thing1_id"
+    loaded.my_things[1].name.should eq "Thing2"
+    loaded.my_things[1].sepia_id.should eq "thing2_id"
+
+    # Assertions for the array of MyNestedBox
+    loaded.nested_boxes.size.should eq 2
+    loaded.nested_boxes[0].sepia_id.should eq "nested_box1_id"
+    loaded.nested_boxes[0].nested_thing.name.should eq "NestedInBox1"
+    loaded.nested_boxes[0].nested_thing.sepia_id.should eq "nested_in_box1_id"
+    loaded.nested_boxes[1].sepia_id.should eq "nested_box2_id"
+    loaded.nested_boxes[1].nested_thing.name.should eq "NestedInBox2"
+    loaded.nested_boxes[1].nested_thing.sepia_id.should eq "nested_in_box2_id"
   end
 end
