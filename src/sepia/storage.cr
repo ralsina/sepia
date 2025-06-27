@@ -65,8 +65,6 @@ module Sepia
       object_path = object.canonical_path
       if File.exists?(object_path)
         File.delete(object_path)
-      else
-        raise "Object with ID #{object.sepia_id} not found in storage for type #{object.class.name}."
       end
     end
 
@@ -74,8 +72,6 @@ module Sepia
       object_path = object.canonical_path
       if Dir.exists?(object_path)
         FileUtils.rm_rf(object_path)
-      else
-        raise "Container with ID #{object.sepia_id} not found in storage for type #{object.class.name}."
       end
     end
   end

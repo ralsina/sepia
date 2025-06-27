@@ -58,13 +58,10 @@ describe Sepia::Storage do
       File.exists?(file_path).should be_false
     end
 
-    it "raises an error if the serializable object to delete is not found" do
+    it "does not raise an error if the serializable object to delete is not found" do
       obj = TestUser.new
       obj.sepia_id = "non_existent_serializable"
-
-      expect_raises(Exception, "Object with ID non_existent_serializable not found in storage for type TestUser.") do
-        obj.delete
-      end
+      obj.delete
     end
   end
 
@@ -82,13 +79,10 @@ describe Sepia::Storage do
       Dir.exists?(dir_path).should be_false
     end
 
-    it "raises an error if the container object to delete is not found" do
+    it "does not raise an error if the container object to delete is not found" do
       container = DeletableContainer.new
       container.sepia_id = "non_existent_container"
-
-      expect_raises(Exception, /not found in storage for type DeletableContainer/) do
-        container.delete
-      end
+      container.delete
     end
   end
 end
