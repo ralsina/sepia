@@ -36,24 +36,24 @@ module Sepia
 
     # Load an object from the canonical path in sepia format.
     # T must be a class that includes Sepia::Serializable or Sepia::Container.
-    def load(object_class : T.class, id : String) : T forall T
-      object_path_base = File.join(@path, object_class.to_s, id)
+    def load(object_class : T.class, id : String, path : String? = nil) : T forall T
+      object_path = path || File.join(@path, object_class.to_s, id)
 
       case
       when object_class.responds_to?(:from_sepia) # This implies it's a Serializable
-        unless File.exists?(object_path_base)
+        unless File.exists?(object_path)
           raise "Object with ID #{id} not found in storage for type #{object_class}."
         end
-        obj = object_class.from_sepia(File.read(object_path_base))
+        obj = object_class.from_sepia(File.read(object_path))
         obj.sepia_id = id
         obj
-      when object_class < Container              # This implies it's a Container
-        unless File.directory?(object_path_base) # Containers are directories
+      when object_class < Container         # This implies it's a Container
+        unless File.directory?(object_path) # Containers are directories
           raise "Object with ID #{id} not found in storage for type #{object_class} (directory missing)."
         end
         obj = object_class.new
         obj.sepia_id = id
-        obj.as(Container).load_references(object_path_base)
+        obj.as(Container).load_references(object_path)
         obj
       else
         # If it's neither Serializable nor Container, it's an unsupported type for Sepia storage

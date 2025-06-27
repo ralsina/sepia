@@ -85,7 +85,7 @@ describe Sepia do
     TestUser.load(user_id).should be_a(TestUser)
   end
 
-  it "can save a serializable to a custom path" do
+  it "can save and load a serializable to a custom path" do
     user = TestUser.new("Custom Path User")
     user.sepia_id = "custom_serializable_id"
     custom_path = File.join(PATH, "custom_serializable_location", user.sepia_id)
@@ -94,10 +94,8 @@ describe Sepia do
     File.exists?(custom_path).should be_true
     File.exists?(File.join(PATH, "TestUser", user.sepia_id)).should be_false
 
-    # Manually load from custom path as Sepia::Storage::INSTANCE.load expects canonical path
-    loaded_content = File.read(custom_path)
-    loaded_user = TestUser.from_sepia(loaded_content)
-    loaded_user.sepia_id = user.sepia_id # sepia_id is not part of the serialized content by default
+    # Load from custom path
+    loaded_user = TestUser.load("custom_serializable_id", custom_path)
 
     loaded_user.name.should eq "Custom Path User"
     loaded_user.sepia_id.should eq "custom_serializable_id"

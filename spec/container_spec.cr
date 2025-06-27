@@ -235,21 +235,19 @@ describe Sepia::Container do
     loaded.nested_boxes["b"].nested_thing.name.should eq "NestedInBox2"
   end
 
-  it "can save a container to a custom path" do
+  it "can save and load a container from a custom path" do
     box = MyBox.new
     box.sepia_id = "custom_path_box"
+    box.my_thing.name = "Thing in custom path"
     custom_path = File.join(PATH, "custom_container_location", box.sepia_id)
     box.save(custom_path)
 
     File.directory?(custom_path).should be_true
     File.directory?(File.join(PATH, "MyBox", box.sepia_id)).should be_false
 
-    # Load from the custom path (Sepia::Storage::INSTANCE.load still uses canonical path)
-    # So we need to manually load it for this test
-    loaded_box = MyBox.new
-    loaded_box.sepia_id = box.sepia_id
-    loaded_box.as(Sepia::Container).load_references(custom_path)
+    loaded_box = MyBox.load("custom_path_box", path: custom_path).as(MyBox)
 
     loaded_box.sepia_id.should eq "custom_path_box"
+    loaded_box.my_thing.name.should eq "Thing in custom path"
   end
 end

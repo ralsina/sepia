@@ -33,8 +33,8 @@ module Sepia
       end
 
       # Sepia-serializable classes can load themselves from storage
-      def self.load(id : String)
-        Sepia::Storage::INSTANCE.load(self, id)
+      def self.load(id : String, path : String? = nil) : self
+        Sepia::Storage::INSTANCE.load(self, id, path)
       end
 
       # Sepia-serializable classes can delete themselves from storage

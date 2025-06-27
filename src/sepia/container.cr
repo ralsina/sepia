@@ -19,8 +19,8 @@ module Sepia
       end
 
       # Container classes know how to load themselves
-      def self.load(id : String)
-        Sepia::Storage::INSTANCE.load(self, id)
+      def self.load(id : String, path : String? = nil)
+        Sepia::Storage::INSTANCE.load(self, id, path)
       end
 
       # Sepia-serializable containers can delete themselves from storage

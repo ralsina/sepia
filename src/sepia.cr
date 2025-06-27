@@ -12,7 +12,7 @@ require "./sepia/*"
 #
 #   Example:
 #
-# ```crystal
+# ```
 # class MySerializable
 #   include Sepia::Serializable
 #   property value : String
@@ -32,7 +32,7 @@ require "./sepia/*"
 # my_obj.sepia_id = "my_obj_id"
 # my_obj.save
 # ```
-# 
+#
 #
 #   On-disk representation:
 #
@@ -47,14 +47,14 @@ require "./sepia/*"
 #
 #   Example:
 #
-# ```crystal
-#   class MyContainer
-#     include Sepia::Container
-#   end
+# ```
+# class MyContainer
+#   include Sepia::Container
+# end
 #
-#   my_container = MyContainer.new
-#   my_container.sepia_id = "my_container_id"
-#   my_container.save
+# my_container = MyContainer.new
+# my_container.sepia_id = "my_container_id"
+# my_container.save
 # ```
 #
 #   On-disk representation:
@@ -71,19 +71,19 @@ require "./sepia/*"
 #
 #   Example:
 #
-# ```crystal
-#   class MyContainer
-#     include Sepia::Container
-#     property nested_serializable : MySerializable
+# ```
+# class MyContainer
+#   include Sepia::Container
+#   property nested_serializable : MySerializable
 #
-#     def initialize(@nested_serializable); end
-#   end
+#   def initialize(@nested_serializable); end
+# end
 #
-#   my_serializable = MySerializable.new("nested")
-#   my_serializable.sepia_id = "nested_serializable_id"
-#   my_container = MyContainer.new(my_serializable)
-#   my_container.sepia_id = "container_with_serializable"
-#   my_container.save
+# my_serializable = MySerializable.new("nested")
+# my_serializable.sepia_id = "nested_serializable_id"
+# my_container = MyContainer.new(my_serializable)
+# my_container.sepia_id = "container_with_serializable"
+# my_container.save
 # ```
 #
 #   On-disk representation:
@@ -102,23 +102,23 @@ require "./sepia/*"
 #
 #   Example:
 #
-# ```crystal
-#   class MyOuterContainer
-#     include Sepia::Container
-#     property inner_container : MyContainer
+# ```
+# class MyOuterContainer
+#   include Sepia::Container
+#   property inner_container : MyContainer
 #
-#     def initialize(@inner_container); end
-#   end
+#   def initialize(@inner_container); end
+# end
 #
-#   class MyInnerContainer
-#     include Sepia::Container
-#   end
+# class MyInnerContainer
+#   include Sepia::Container
+# end
 #
-#   inner = MyInnerContainer.new
-#   inner.sepia_id = "inner_container_id"
-#   outer = MyOuterContainer.new(inner)
-#   outer.sepia_id = "outer_container_id"
-#   outer.save
+# inner = MyInnerContainer.new
+# inner.sepia_id = "inner_container_id"
+# outer = MyOuterContainer.new(inner)
+# outer.sepia_id = "outer_container_id"
+# outer.save
 # ```
 #
 #   On-disk representation:
@@ -137,19 +137,19 @@ require "./sepia/*"
 #
 #   #   Example:
 #
-# ```crystal
-#   class MyContainerWithArray
-#     include Sepia::Container
-#     property serializables : Array(MySerializable)
+# ```
+# class MyContainerWithArray
+#   include Sepia::Container
+#   property serializables : Array(MySerializable)
 #
-#     def initialize(@serializables = [] of MySerializable); end
-#   end
+#   def initialize(@serializables = [] of MySerializable); end
+# end
 #
-#   s1 = MySerializable.new("one"); s1.sepia_id = "s1_id"
-#   s2 = MySerializable.new("two"); s2.sepia_id = "s2_id"
-#   container = MyContainerWithArray.new([s1, s2])
-#   container.sepia_id = "array_of_serializables"
-#   container.save
+# s1 = MySerializable.new("one"); s1.sepia_id = "s1_id"
+# s2 = MySerializable.new("two"); s2.sepia_id = "s2_id"
+# container = MyContainerWithArray.new([s1, s2])
+# container.sepia_id = "array_of_serializables"
+# container.save
 # ```
 #
 #   On-disk representation:
@@ -172,14 +172,14 @@ require "./sepia/*"
 #   the directory name.
 #
 #   Example:
-# ```crystal
+# ```
 # class MyContainerWithArrayOfContainers
 #   include Sepia::Container
-#  property containers : Array(MyContainer)
-# 
+#   property containers : Array(MyContainer)
+#
 #   def initialize(@containers = [] of MyContainer); end
 # end
-# 
+#
 # c1 = MyContainer.new; c1.sepia_id = "c1_id"
 # c2 = MyContainer.new; c2.sepia_id = "c2_id"
 # container = MyContainerWithArrayOfContainers.new([c1, c2])
@@ -206,24 +206,24 @@ require "./sepia/*"
 #   is symlinked into that directory using its key as the filename.
 #
 #   Example:
-# 
-#   ```crystal
-#   class MyContainerWithHash
-#     include Sepia::Container
-#     property serializables_hash : Hash(String, MySerializable)
-# 
-#     def initialize(@serializables_hash = {} of String => MySerializable); end
-#   end
-# 
-#   s1 = MySerializable.new("alpha"); s1.sepia_id = "alpha_id"
-#   s2 = MySerializable.new("beta"); s2.sepia_id = "beta_id"
-#   container = MyContainerWithHash.new({"a" => s1, "b" => s2})
-#   container.sepia_id = "hash_of_serializables"
-#   container.save
+#
 #   ```
-# 
+# class MyContainerWithHash
+#   include Sepia::Container
+#   property serializables_hash : Hash(String, MySerializable)
+#
+#   def initialize(@serializables_hash = {} of String => MySerializable); end
+# end
+#
+# s1 = MySerializable.new("alpha"); s1.sepia_id = "alpha_id"
+# s2 = MySerializable.new("beta"); s2.sepia_id = "beta_id"
+# container = MyContainerWithHash.new({"a" => s1, "b" => s2})
+# container.sepia_id = "hash_of_serializables"
+# container.save
+#   ```
+#
 #   On-disk representation:
-# 
+#
 # ```text
 # _data/
 # ├── MyContainerWithHash/
@@ -242,24 +242,24 @@ require "./sepia/*"
 #   the directory name.
 #
 #   Example:
-# 
-# ```crystal
+#
+# ```
 # class MyContainerWithHashOfContainers
 #   include Sepia::Container
 #   property containers_hash : Hash(String, MyContainer)
-# 
+#
 #   def initialize(@containers_hash = {} of String => MyContainer); end
 # end
-# 
+#
 # c1 = MyContainer.new; c1.sepia_id = "hash_c1_id"
 # c2 = MyContainer.new; c2.sepia_id = "hash_c2_id"
 # container = MyContainerWithHashOfContainers.new({"x" => c1, "y" => c2})
 # container.sepia_id = "hash_of_containers"
 # container.save
 # ```
-# 
+#
 # On-disk representation:
-# 
+#
 # ```text
 # _data/
 # ├── MyContainerWithHashOfContainers/
