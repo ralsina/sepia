@@ -22,6 +22,11 @@ module Sepia
       def self.load(id : String)
         Sepia::Storage::INSTANCE.load(self, id)
       end
+
+      # Sepia-serializable containers can delete themselves from storage
+      def delete
+        Sepia::Storage::INSTANCE.delete(self)
+      end
     end
 
     # Saves all references (Serializable, Container, Enumerable of either)

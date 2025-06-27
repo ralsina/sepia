@@ -1,3 +1,4 @@
+require "json"
 require "./spec_helper"
 
 PATH = File.join(Dir.tempdir, "sepia_storage_test")
@@ -11,6 +12,7 @@ class Broken
 end
 
 class TestUser
+  include JSON::Serializable
   include Sepia::Serializable
 
   property name : String
@@ -22,16 +24,11 @@ class TestUser
   end
 
   def to_sepia : String
-    builder = Hash(String, String).new
-    builder["name"] = @name
-    builder["age"] = @age.to_s
-    builder["user_email"] = @email
-    builder["city"] = @city || "Unknown"
-    builder.to_s
+    self.to_json
   end
 
   def self.from_sepia(sepia_string : String) : TestUser
-    TestUser.new
+    TestUser.from_json(sepia_string)
   end
 end
 
@@ -59,15 +56,16 @@ describe Sepia do
 
   it "serializes an object to sepia format" do
     user = TestUser.new("John Doe", 42, "john.doe@example.com", "Crystal City")
+    user.sepia_id = "74978fc0-1f28-4810-ba9a-0686305f471d" # Set a fixed ID for testing
     sepia_string = user.to_sepia
-    expected = "{\"name\" => \"John Doe\", \"age\" => \"42\", \"user_email\" => \"john.doe@example.com\", \"city\" => \"Crystal City\"}"
+    expected = "{\"sepia_id\":\"74978fc0-1f28-4810-ba9a-0686305f471d\",\"name\":\"John Doe\",\"age\":42,\"email\":\"john.doe@example.com\",\"city\":\"Crystal City\"}"
 
     # Split lines and sort to make test independent of property order
     sepia_string.should eq expected
   end
 
   it "deserializes an object from sepia format" do
-    user = TestUser.from_sepia("whocares")
+    user = TestUser.from_sepia("{\"sepia_id\":\"74978fc0-1f28-4810-ba9a-0686305f471d\",\"name\":\"John Doe\",\"age\":42,\"email\":\"john.doe@example.com\",\"city\":\"Crystal City\"}")
     user.should be_a(TestUser)
   end
 

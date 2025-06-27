@@ -46,7 +46,7 @@ module Sepia
         obj = object_class.from_sepia(File.read(object_path_base))
         obj.sepia_id = id
         obj
-      when object_class < Container # This implies it's a Container
+      when object_class < Container              # This implies it's a Container
         unless File.directory?(object_path_base) # Containers are directories
           raise "Object with ID #{id} not found in storage for type #{object_class} (directory missing)."
         end
@@ -57,6 +57,33 @@ module Sepia
       else
         # If it's neither Serializable nor Container, it's an unsupported type for Sepia storage
         raise "Unsupported class for Sepia storage: #{object_class.name}. Must include Sepia::Serializable or Sepia::Container."
+      end
+    end
+
+    def delete(object : Serializable)
+      object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
+      if File.exists?(object_path)
+        File.delete(object_path)
+      else
+        raise "Object with ID #{object.sepia_id} not found in storage for type #{object.class.name}."
+      end
+    end
+
+    def delete(object : Container)
+      object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
+      if Dir.exists?(object_path)
+        FileUtils.rm_rf(object_path)
+      else
+        raise "Container with ID #{object.sepia_id} not found in storage for type #{object.class.name}."
+      end
+    end
+
+    def delete(object : Container)
+      object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
+      if Dir.exists?(object_path)
+        FileUtils.rm_rf(object_path)
+      else
+        raise "Container with ID #{object.sepia_id} not found in storage for type #{object.class.name}."
       end
     end
   end
