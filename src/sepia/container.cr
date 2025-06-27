@@ -27,6 +27,11 @@ module Sepia
       def delete
         Sepia::Storage::INSTANCE.delete(self)
       end
+
+      # Returns the canonical path for the object in storage.
+      def canonical_path : String
+        File.join(Sepia::Storage::INSTANCE.path, self.class.name, sepia_id)
+      end
     end
 
     # Saves all references (Serializable, Container, Enumerable of either)

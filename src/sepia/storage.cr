@@ -20,7 +20,7 @@ module Sepia
     # Saves a Serializable object to its canonical path.
     # The object's `to_sepia` method is used to get the content to be saved.
     def save(object : Serializable, path : String? = nil)
-      object_path = path || File.join(@path, object.class.name, "#{object.sepia_id}")
+      object_path = path || object.canonical_path
       object_dir = File.dirname(object_path)
       FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
       File.write(object_path, object.to_sepia)
@@ -29,7 +29,7 @@ module Sepia
     # Saves a Container object to its canonical path as a directory.
     # The container's `save_references` method is called to save its contents.
     def save(object : Container, path : String? = nil)
-      object_path = path || File.join(@path, object.class.name, "#{object.sepia_id}")
+      object_path = path || object.canonical_path
       FileUtils.mkdir_p(object_path) # Create a directory for the container
       object.save_references(object_path)
     end
@@ -62,7 +62,7 @@ module Sepia
     end
 
     def delete(object : Serializable)
-      object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
+      object_path = object.canonical_path
       if File.exists?(object_path)
         File.delete(object_path)
       else
@@ -71,7 +71,7 @@ module Sepia
     end
 
     def delete(object : Container)
-      object_path = File.join(@path, object.class.name, "#{object.sepia_id}")
+      object_path = object.canonical_path
       if Dir.exists?(object_path)
         FileUtils.rm_rf(object_path)
       else
