@@ -223,6 +223,9 @@ module Sepia
             obj_path = File.readlink(symlink_path)
             obj_id = File.basename(obj_path)
             loaded_obj = Sepia::Storage::INSTANCE.load(item_type, obj_id)
+            if loaded_obj.is_a?(Container)
+              loaded_obj.load_references(obj_path)
+            end
             loaded_collection << loaded_obj.as(U)
           end
         end
