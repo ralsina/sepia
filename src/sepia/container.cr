@@ -49,7 +49,7 @@ module Sepia
         obj.save
         symlink_path = File.join(path, name)
         obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
-        FileUtils.ln_s(obj_path, symlink_path)
+        FileUtils.ln_s(Path[obj_path].relative_to(Path[symlink_path].parent), symlink_path)
       end
     end
 
