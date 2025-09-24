@@ -86,6 +86,16 @@ module Sepia
       end
     end
 
+    def delete(class_name : String, id : String)
+      if Sepia.is_container?(class_name)
+        object_key = "#{class_name}/#{id}"
+        @container_storage.delete(object_key)
+      else
+        object_path = File.join(@path, class_name, id)
+        @serializable_storage.delete(object_path)
+      end
+    end
+
     def list_all(object_class : Class) : Array(String)
       class_name = object_class.to_s
       ids = [] of String
@@ -199,6 +209,32 @@ module Sepia
 
     def get_container_references(container_path : String) : Hash(String, String)
       @container_references[container_path] || {} of String => String
+    end
+
+    def list_all_objects : Hash(String, Array(String))
+      objects = Hash(String, Array(String)).new { |h, k| h[k] = [] of String }
+      prefix = @path + "/"
+
+      @serializable_storage.each_key do |key|
+        if key.starts_with?(prefix)
+          # key is like "/tmp/ClassName/id"
+          # remove prefix -> "ClassName/id"
+          class_and_id = key[prefix.size..-1]
+          parts = class_and_id.split('/')
+          if parts.size == 2 # Should be just [class, id]
+            class_name, id = parts
+            objects[class_name] << id
+          end
+        end
+      end
+
+      @container_storage.each_key do |key|
+        # key is "ClassName/id"
+        class_name, id = key.split('/', 2)
+        objects[class_name] << id
+      end
+
+      objects
     end
   end
 end

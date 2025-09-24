@@ -6,31 +6,32 @@ module Sepia
   # or to Sepia::Serializable objects.
   module Container
     macro included
-      # Container classes MUST have a sepia_id property which defaults to a lazy UUID
-      getter sepia_id : String = UUID.random.to_s
+      Sepia.register_class_type({{@type.name.stringify}}, true)
+    end
 
-      def sepia_id=(id : String)
-        @sepia_id = id
-      end
+    # Returns a list of all Sepia objects referenced by this object.
+    def sepia_references : Enumerable(Sepia::Object)
+      refs = [] of Sepia::Object
+      {% for ivar in @type.instance_vars %}
+        value = @{{ivar.name}}
+        if value.is_a?(Sepia::Object)
+          refs << value
+        elsif value.is_a?(Enumerable)
+          value.each do |item|
+            add_sepia_object_to_refs(item, refs)
+          end
+        elsif value.is_a?(Hash)
+          value.each_value do |item|
+            add_sepia_object_to_refs(item, refs)
+          end
+        end
+      {% end %}
+      refs
+    end
 
-      # Container classes know how to save themselves
-      def save(path : String? = nil)
-        Sepia::Storage::INSTANCE.save(self, path)
-      end
-
-      # Container classes know how to load themselves
-      def self.load(id : String, path : String? = nil)
-        Sepia::Storage::INSTANCE.load(self, id, path)
-      end
-
-      # Sepia-serializable containers can delete themselves from storage
-      def delete
-        Sepia::Storage::INSTANCE.delete(self)
-      end
-
-      # Returns the canonical path for the object in storage.
-      def canonical_path : String
-        File.join(Sepia::Storage::INSTANCE.path, self.class.name, sepia_id)
+    private def add_sepia_object_to_refs(item, refs : Array(Sepia::Object))
+      if item.is_a?(Sepia::Object)
+        refs << item
       end
     end
 
@@ -65,20 +66,19 @@ module Sepia
       # Saves a nested Container object by creating a subdirectory for it
       # and recursively calling `save_references` on it.
       if container = value
+        container.save # <-- THE FIX
         container_path = File.join(path, name)
         FileUtils.mkdir_p(container_path)
         container.save_references(container_path)
       end
     end
 
-    private def save_value(path, value : Enumerable(Serializable)?, name)
-      # Saves an Enumerable (e.g., Array, Set) of Serializable objects.
-      # Each serializable object is saved and then symlinked into a subdirectory
-      # named after the enumerable, using its index as the symlink name.
+    private def save_value(path, value : Enumerable(Sepia::Object)?, name)
+      # Saves an Enumerable (e.g., Array, Set) of Serializable or Container objects.
       if array = value
         return if array.empty?
         array_dir = File.join(path, name)
-        FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
+        FileUtils.rm_rf(array_dir)
         FileUtils.mkdir_p(array_dir)
 
         array.each_with_index do |obj, index|
@@ -87,50 +87,16 @@ module Sepia
       end
     end
 
-    private def save_value(path, value : Enumerable(Container)?, name)
-      # Saves an Enumerable (e.g., Array, Set) of Container objects.
-      # Each container object is saved as a subdirectory within a subdirectory
-      # named after the enumerable, using its index as the subdirectory name.
-      if array = value
-        return if array.empty?
-        array_dir = File.join(path, name)
-        FileUtils.rm_rf(array_dir) if File.exists?(array_dir)
-        FileUtils.mkdir_p(array_dir)
-
-        array.each_with_index do |container, index|
-          save_value(array_dir, container, "#{index.to_s.rjust(4, '0')}_#{container.sepia_id}")
-        end
-      end
-    end
-
-    private def save_value(path, value : Hash(String, Serializable)?, name)
-      # Saves a Hash with String keys and Serializable values.
-      # Each serializable object is saved and then symlinked into a subdirectory
-      # named after the hash, using its key as the symlink name.
+    private def save_value(path, value : Hash(String, Sepia::Object)?, name)
+      # Saves a Hash with String keys and Serializable or Container values.
       if hash = value
         return if hash.empty?
         hash_dir = File.join(path, name)
-        FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
+        FileUtils.rm_rf(hash_dir)
         FileUtils.mkdir_p(hash_dir)
 
         hash.each do |key, obj|
           save_value(hash_dir, obj, key)
-        end
-      end
-    end
-
-    private def save_value(path, value : Hash(String, Container)?, name)
-      # Saves a Hash with String keys and Container values.
-      # Each container object is saved as a subdirectory within a subdirectory
-      # named after the hash, using its key as the subdirectory name.
-      if hash = value
-        return if hash.empty?
-        hash_dir = File.join(path, name)
-        FileUtils.rm_rf(hash_dir) if File.exists?(hash_dir)
-        FileUtils.mkdir_p(hash_dir)
-
-        hash.each do |key, container|
-          save_value(hash_dir, container, key)
         end
       end
     end

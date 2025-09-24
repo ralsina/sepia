@@ -273,4 +273,15 @@ require "./sepia/*"
 # ```
 module Sepia
   VERSION = "0.1.0"
+
+  # Type registry for GC
+  @@is_container_registry = {} of String => Bool
+
+  def self.register_class_type(name : String, is_container : Bool)
+    @@is_container_registry[name] = is_container
+  end
+
+  def self.is_container?(name : String) : Bool
+    @@is_container_registry[name]? || false
+  end
 end

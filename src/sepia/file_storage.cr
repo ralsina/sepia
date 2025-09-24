@@ -48,11 +48,7 @@ module Sepia
     end
 
     def delete(object : Serializable | Container)
-      object_path = if object.is_a?(Serializable)
-                      File.join(@path, object.class.name, object.sepia_id)
-                    else
-                      File.join(@path, object.class.name, object.sepia_id)
-                    end
+      object_path = File.join(@path, object.class.name, object.sepia_id)
 
       if object.is_a?(Serializable)
         if File.exists?(object_path)
@@ -61,6 +57,19 @@ module Sepia
       elsif object.is_a?(Container)
         if Dir.exists?(object_path)
           FileUtils.rm_rf(object_path)
+        end
+      end
+    end
+
+    def delete(class_name : String, id : String)
+      object_path = File.join(@path, class_name, id)
+      if Sepia.is_container?(class_name)
+        if Dir.exists?(object_path)
+          FileUtils.rm_rf(object_path)
+        end
+      else
+        if File.exists?(object_path)
+          File.delete(object_path)
         end
       end
     end
@@ -150,6 +159,21 @@ module Sepia
           end
         end
       end
+    end
+
+    def list_all_objects : Hash(String, Array(String))
+      objects = Hash(String, Array(String)).new { |h, k| h[k] = [] of String }
+      return objects unless Dir.exists?(@path)
+
+      Dir.each_child(@path) do |class_name|
+        class_dir = File.join(@path, class_name)
+        next unless File.directory?(class_dir)
+
+        Dir.each_child(class_dir) do |id|
+          objects[class_name] << id
+        end
+      end
+      objects
     end
   end
 end

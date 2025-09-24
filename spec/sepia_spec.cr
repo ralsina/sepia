@@ -3,7 +3,7 @@ require "./spec_helper"
 
 PATH = File.join(Dir.tempdir, "sepia_storage_test")
 
-class Broken
+class Broken < Sepia::Object
   include Sepia::Serializable
 
   property name : String = "Default Name"
@@ -11,7 +11,7 @@ class Broken
   property city : String = "Default City"
 end
 
-class TestUser
+class TestUser < Sepia::Object
   include JSON::Serializable
   include Sepia::Serializable
 

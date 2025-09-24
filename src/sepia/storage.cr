@@ -93,5 +93,53 @@ module Sepia
     def self.import_data(data : Hash(String, Array(Hash(String, String))))
       @@current_backend.import_data(data)
     end
+
+    def self.delete(class_name : String, id : String)
+      @@current_backend.delete(class_name, id)
+    end
+
+    def self.list_all_objects : Hash(String, Array(String))
+      @@current_backend.list_all_objects
+    end
+
+    def self.gc(roots : Enumerable(Sepia::Object), dry_run : Bool = false) : Hash(String, Array(String))
+      # Phase 1: Mark
+      live_object_keys = Set(String).new
+      roots.each do |obj|
+        mark_live_objects(obj, live_object_keys)
+      end
+
+      # Phase 2: Sweep
+      deleted_keys = Hash(String, Array(String)).new { |h, k| h[k] = [] of String }
+      all_objects = list_all_objects
+
+      all_objects.each do |class_name, ids|
+        ids.each do |id|
+          key = "#{class_name}/#{id}"
+          unless live_object_keys.includes?(key)
+            # Orphaned object
+            deleted_keys[class_name] << id
+            unless dry_run
+              delete(class_name, id)
+            end
+          end
+        end
+      end
+
+      deleted_keys
+    end
+
+    private def self.mark_live_objects(object : Sepia::Object, live_set : Set(String))
+      key = "#{object.class.name}/#{object.sepia_id}"
+      return if live_set.includes?(key) # Already visited, stop recursion
+
+      live_set.add(key)
+
+      if object.responds_to?(:sepia_references)
+        object.sepia_references.each do |child|
+          mark_live_objects(child, live_set)
+        end
+      end
+    end
   end
 end

@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-class MyThing
+class MyThing < Sepia::Object
   include Sepia::Serializable
 
   property name : String = "Foo"
@@ -16,12 +16,12 @@ class MyThing
   end
 end
 
-class MyNestedBox
+class MyNestedBox < Sepia::Object
   include Sepia::Container
   property nested_thing : MyThing = MyThing.new
 end
 
-class MyBox
+class MyBox < Sepia::Object
   include Sepia::Container
 
   property my_thing : MyThing = MyThing.new
@@ -31,22 +31,22 @@ class MyBox
   property not_things : Array(String) = ["foo"] of String
 end
 
-class MySetBox
+class MySetBox < Sepia::Object
   include Sepia::Container
   property my_things : Set(MyThing) = Set(MyThing).new
 end
 
-class MySetOfContainersBox
+class MySetOfContainersBox < Sepia::Object
   include Sepia::Container
   property nested_boxes : Set(MyNestedBox) = Set(MyNestedBox).new
 end
 
-class MyHashBox
+class MyHashBox < Sepia::Object
   include Sepia::Container
   property my_things : Hash(String, MyThing) = Hash(String, MyThing).new
 end
 
-class MyHashOfContainersBox
+class MyHashOfContainersBox < Sepia::Object
   include Sepia::Container
   property nested_boxes : Hash(String, MyNestedBox) = Hash(String, MyNestedBox).new
 end

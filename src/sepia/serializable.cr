@@ -1,5 +1,3 @@
-require "uuid"
-
 module Sepia
   # The `Serializable` module provides a contract for objects that can be
   # serialized to a single file. Classes including this module must implement
@@ -19,33 +17,12 @@ module Sepia
       def self.from_sepia(sepia_string : String)
         raise "self.from_sepia must be implemented by the class including Sepia::Serializable"
       end
+    end
 
-      # Sepia-serializable classes MUST have a sepia_id property which defaults to a lazy UUID
-      getter sepia_id : String = UUID.random.to_s
-
-      def sepia_id=(id : String)
-        @sepia_id = id
-      end
-
-      # Sepia-serializable classes know how to save themselves
-      def save(path : String? = nil)
-        Sepia::Storage::INSTANCE.save(self, path)
-      end
-
-      # Sepia-serializable classes can load themselves from storage
-      def self.load(id : String, path : String? = nil) : self
-        Sepia::Storage::INSTANCE.load(self, id, path)
-      end
-
-      # Sepia-serializable classes can delete themselves from storage
-      def delete
-        Sepia::Storage::INSTANCE.delete(self)
-      end
-
-      # Returns the canonical path for the object in storage.
-      def canonical_path : String
-        File.join(Sepia::Storage::INSTANCE.path, self.class.name, sepia_id)
-      end
+    # Returns a list of all Sepia objects referenced by this object.
+    # By default, a Serializable object references nothing.
+    def sepia_references : Enumerable(Sepia::Object)
+      [] of Sepia::Object
     end
   end
 end

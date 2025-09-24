@@ -3,7 +3,7 @@ require "file_utils"
 
 # A simple Container for testing.
 # It includes Serializable to get the .delete method.
-class DeletableContainer
+class DeletableContainer < Sepia::Object
   include Sepia::Container
 
   # These are needed to satisfy the Serializable contract,

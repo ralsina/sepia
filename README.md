@@ -35,6 +35,47 @@ Sepia supports pluggable storage backends. Two backends are currently available:
 
 You can configure the storage backend using `Sepia::Storage.configure`.
 
+## Garbage Collection
+
+Sepia includes a mark-and-sweep garbage collector (GC) to automatically find and delete orphaned objects from storage.
+
+### New Requirement: Inheriting from `Sepia::Object`
+
+To enable garbage collection and other shared features, all classes that you intend to manage with Sepia **must** inherit from the `Sepia::Object` base class.
+
+```crystal
+class MySerializable < Sepia::Object
+  include Sepia::Serializable
+  # ...
+end
+
+class MyContainer < Sepia::Object
+  include Sepia::Container
+  # ...
+end
+```
+
+### How it Works
+
+The garbage collector identifies "live" objects by starting from a set of "root objects" that you provide. It marks them and any object they reference (and so on recursively) as "live". Any object in storage that is not marked as live is considered an orphan and is deleted.
+
+To run the collector, you must pass an `Enumerable` (like an `Array`) of the objects you consider to be the roots.
+
+```crystal
+# Assume my_app_roots is an array containing the top-level
+# objects that your application considers the starting point.
+my_app_roots = [user1, user2, top_level_board]
+
+# Find and delete all orphaned objects
+deleted_summary = Sepia::Storage.gc(roots: my_app_roots)
+
+# To get a report of what would be deleted without actually deleting anything:
+orphans = Sepia::Storage.gc(roots: my_app_roots, dry_run: true)
+
+# To garbage collect everything, pass an empty array:
+deleted_summary = Sepia::Storage.gc(roots: [] of Sepia::Object)
+```
+
 ## Usage
 
 Here's a simple example demonstrating how to use `Sepia` to save and load a nested structure of "Boards" and "Post-its".
@@ -48,7 +89,7 @@ require "sepia"
 Sepia::Storage.configure(:filesystem, {"path" => "./_data"})
 
 # A Postit is a simple Serializable object.
-class Postit
+class Postit < Sepia::Object
   include Sepia::Serializable
 
   property text : String
@@ -68,7 +109,7 @@ class Postit
 end
 
 # A Board is a Container that can hold other Boards and Postits.
-class Board
+class Board < Sepia::Object
   include Sepia::Container
 
   property boards : Array(Board)

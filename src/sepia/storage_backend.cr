@@ -14,6 +14,9 @@ module Sepia
     # Delete an object
     abstract def delete(object : Serializable | Container)
 
+    # Delete an object by its class name and ID
+    abstract def delete(class_name : String, id : String)
+
     # List all object IDs of a given class
     abstract def list_all(object_class : Class) : Array(String)
 
@@ -31,5 +34,8 @@ module Sepia
 
     # Import data from a hash structure
     abstract def import_data(data : Hash(String, Array(Hash(String, String))))
+
+    # List all objects, grouped by class name
+    abstract def list_all_objects : Hash(String, Array(String))
   end
 end

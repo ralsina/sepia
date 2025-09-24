@@ -7,7 +7,7 @@ FileUtils.rm_rf("./_data") if Dir.exists?("./_data")
 FileUtils.mkdir_p("./_data")
 
 # A Postit is a simple Serializable object that stores its text content.
-class Postit
+class Postit < Sepia::Object
   include Sepia::Serializable
 
   property text : String
@@ -30,7 +30,7 @@ end
 
 # A Board is a Container that holds other Boards or Postits.
 # It is identified by its `sepia_id`.
-class Board
+class Board < Sepia::Object
   include Sepia::Container
 
   property boards : Hash(String, Board)
