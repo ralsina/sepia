@@ -55,7 +55,7 @@ describe Sepia::Container do
   before_each do
     FileUtils.rm_rf(PATH) if File.exists?(PATH)
     FileUtils.mkdir_p(PATH)
-    Sepia::Storage::INSTANCE.path = PATH
+    Sepia::Storage.configure(:filesystem, {"path" => PATH})
   end
   after_each do
     # FileUtils.rm_rf(PATH) if File.exists?(PATH)

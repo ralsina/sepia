@@ -20,7 +20,7 @@ end
 describe Sepia::Storage do
   # Use a temporary directory for all storage tests
   before_each do
-    Sepia::Storage::INSTANCE.path = "sepia-storage-spec"
+    Sepia::Storage.configure(:filesystem, {"path" => "sepia-storage-spec"})
   end
 
   after_each do

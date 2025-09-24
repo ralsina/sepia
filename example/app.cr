@@ -42,15 +42,13 @@ end
 # Helper method to print a board and its contents recursively.
 def print_board(board : Board, indent = 0)
   puts "#{"  " * indent}- Board: #{board.sepia_id}"
-  board.boards.each do |key, item|
+  board.boards.each do |_, item|
     print_board(item, indent + 1)
   end
   board.postits.each do |item|
     puts "#{"  " * (indent + 1)}- Postit: \"#{item.text}\" (ID: #{item.sepia_id})"
   end
 end
-
-
 
 # --- Create and Save ---
 
@@ -92,7 +90,6 @@ home_board.save
 
 puts "Saved 'work_board' and 'home_board' to ./_data"
 
-
 # --- Load and Verify ---
 
 puts "\n--- Loading State ---"
@@ -123,4 +120,3 @@ puts "Home board post-it 2 text: \"#{loaded_home_board.postits[1].as(Postit).tex
 puts "\n--- On-Disk Representation ---"
 puts "And all the data is stored like this on disk:"
 system("tree ./_data")
-

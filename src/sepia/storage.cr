@@ -1,78 +1,97 @@
 require "file_utils"
+require "./storage_backend"
 
 module Sepia
-  # The `Storage` class is responsible for handling the persistence of
-  # `Sepia::Serializable` and `Sepia::Container` objects to the file system.
-  # It manages saving and loading these objects based on their `sepia_id`
-  # and class name, and provides a configurable storage path.
+  # The `Storage` class manages storage backends and provides
+  # backward compatibility with the original singleton API.
   class Storage
+    # Class variable to hold the current backend
+    @@current_backend : StorageBackend = FileStorage.new(Dir.tempdir)
+
+    # Legacy singleton instance for backward compatibility
     INSTANCE = new
 
-    # By default, the storage path is a temporary directory.
-    getter path : String = Dir.tempdir
-
-    # But user can override it.
-    # Sets the storage path. This is where all serialized objects will be stored.
-    def path=(path : String)
-      @path = path
+    # Get the current storage backend
+    def self.backend
+      @@current_backend
     end
 
-    # Saves a Serializable object to its canonical path.
-    # The object's `to_sepia` method is used to get the content to be saved.
-    def save(object : Serializable, path : String? = nil)
-      object_path = path || object.canonical_path
-      object_dir = File.dirname(object_path)
-      FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
-      File.write(object_path, object.to_sepia)
+    # Set the current storage backend
+    def self.backend=(backend : StorageBackend)
+      @@current_backend = backend
     end
 
-    # Saves a Container object to its canonical path as a directory.
-    # The container's `save_references` method is called to save its contents.
-    def save(object : Container, path : String? = nil)
-      object_path = path || object.canonical_path
-      FileUtils.mkdir_p(object_path) # Create a directory for the container
-      object.save_references(object_path)
-    end
-
-    # Load an object from the canonical path in sepia format.
-    # T must be a class that includes Sepia::Serializable or Sepia::Container.
-    def load(object_class : T.class, id : String, path : String? = nil) : T forall T
-      object_path = path || File.join(@path, object_class.to_s, id)
-
-      case
-      when object_class.responds_to?(:from_sepia) # This implies it's a Serializable
-        unless File.exists?(object_path)
-          raise "Object with ID #{id} not found in storage for type #{object_class}."
-        end
-        obj = object_class.from_sepia(File.read(object_path))
-        obj.sepia_id = id
-        obj
-      when object_class < Container         # This implies it's a Container
-        unless File.directory?(object_path) # Containers are directories
-          raise "Object with ID #{id} not found in storage for type #{object_class} (directory missing)."
-        end
-        obj = object_class.new
-        obj.sepia_id = id
-        obj.as(Container).load_references(object_path)
-        obj
+    # Configure storage with a named backend
+    def self.configure(backend : Symbol, config = {} of String => String)
+      case backend
+      when :filesystem
+        path = config["path"]? || Dir.tempdir
+        self.backend = FileStorage.new(path)
+      when :memory
+        self.backend = InMemoryStorage.new
       else
-        # If it's neither Serializable nor Container, it's an unsupported type for Sepia storage
-        raise "Unsupported class for Sepia storage: #{object_class.name}. Must include Sepia::Serializable or Sepia::Container."
+        raise "Unknown storage backend: #{backend}"
       end
     end
 
-    def delete(object : Serializable)
-      object_path = object.canonical_path
-      if File.exists?(object_path)
-        File.delete(object_path)
+    # Legacy API - delegates to current backend
+    def save(object : Serializable, path : String? = nil)
+      @@current_backend.save(object, path)
+    end
+
+    def save(object : Container, path : String? = nil)
+      @@current_backend.save(object, path)
+    end
+
+    def load(object_class : T.class, id : String, path : String? = nil) : T forall T
+      @@current_backend.load(object_class, id, path).as(T)
+    end
+
+    def delete(object : Serializable | Container)
+      @@current_backend.delete(object)
+    end
+
+    # Legacy path property (only works with FileStorage)
+    def path : String
+      if @@current_backend.is_a?(FileStorage)
+        @@current_backend.as(FileStorage).path
+      else
+        raise "path property is only available with FileStorage backend"
       end
     end
 
-    def delete(object : Container)
-      object_path = object.canonical_path
-      if Dir.exists?(object_path)
-        FileUtils.rm_rf(object_path)
+    def path=(path : String)
+      if @@current_backend.is_a?(FileStorage)
+        @@current_backend.as(FileStorage).path = path
+      else
+        raise "path property is only available with FileStorage backend"
       end
+    end
+
+    # Discovery API - delegates to current backend
+    def self.list_all(object_class : Class) : Array(String)
+      @@current_backend.list_all(object_class)
+    end
+
+    def self.exists?(object_class : Class, id : String) : Bool
+      @@current_backend.exists?(object_class, id)
+    end
+
+    def self.count(object_class : Class) : Int32
+      @@current_backend.count(object_class)
+    end
+
+    # Bulk operations
+    def self.clear
+      @@current_backend.clear
+    end
+
+    def self.export_data : Hash(String, Array(Hash(String, String)))
+      @@current_backend.export_data
+    end
+
+    def self.import_data(data : Hash(String, Array(Hash(String, String))))
+      @@current_backend.import_data(data)
     end
   end
 end
