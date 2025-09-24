@@ -26,15 +26,26 @@ API documentation can be found at [crystaldoc.info/github/ralsina/sepia/](https:
 
 2. Run `shards install`
 
+## Storage Backends
+
+Sepia supports pluggable storage backends. Two backends are currently available:
+
+- **`:filesystem`**: The default backend, which stores objects on the local filesystem. This is the original Sepia behavior.
+- **`:memory`**: An in-memory backend, useful for testing or for temporary, non-persistent data.
+
+You can configure the storage backend using `Sepia::Storage.configure`.
+
 ## Usage
 
 Here's a simple example demonstrating how to use `Sepia` to save and load a nested structure of "Boards" and "Post-its".
 
+First, configure the storage backend. For this example, we'll use the `:filesystem` backend to store data in a local `_data` directory.
+
 ```crystal
 require "sepia"
 
-# Configure Sepia to use a local directory for storage.
-Sepia::Storage::INSTANCE.path = "./_data"
+# Configure Sepia to use the filesystem backend.
+Sepia::Storage.configure(:filesystem, {"path" => "./_data"})
 
 # A Postit is a simple Serializable object.
 class Postit
