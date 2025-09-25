@@ -1,3 +1,5 @@
+require "json"
+
 module Sepia
   # Sepia::Container tagged objects can contain Sepia::Serializable objects or
   # other Sepia::Container objects.
@@ -6,7 +8,28 @@ module Sepia
   # or to Sepia::Serializable objects.
   module Container
     macro included
+      include JSON::Serializable
       Sepia.register_class_type({{@type.name.stringify}}, true)
+    end
+
+    # Generate filtered JSON string with only primitive properties
+    def to_filtered_json : String
+      String.build do |io|
+        JSON.build(io) do |json|
+          json.object do
+            {% for ivar in @type.instance_vars %}
+              {% unless ivar.type < Sepia::Object ||
+                          (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) ||
+                          (ivar.type.stringify.includes?("Array") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
+                          (ivar.type.stringify.includes?("Set") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
+                          (ivar.type.stringify.includes?("Hash") && ivar.type.type_vars.size > 1 && ivar.type.type_vars.last < Sepia::Object) ||
+                          ivar.name.stringify == "sepia_id" %}
+                json.field {{ivar.name.stringify}}, @{{ivar.name}}
+              {% end %}
+            {% end %}
+          end
+        end
+      end
     end
 
     # Returns a list of all Sepia objects referenced by this object.
@@ -38,9 +61,14 @@ module Sepia
     # Saves all references (Serializable, Container, Enumerable of either)
     # to the container's path.
     def save_references(path : String)
+      # Save object references (existing behavior)
       {% for ivar in @type.instance_vars %}
         save_value(path, @{{ivar.name}}, {{ivar.name.stringify}})
       {% end %}
+
+      # Save primitive properties to JSON
+      data_file = File.join(path, "data.json")
+      File.write(data_file, to_filtered_json)
     end
 
     private def save_value(path, value : Serializable?, name)
@@ -212,6 +240,43 @@ module Sepia
           end
         {% end %}
       {% end %}
+
+      # Load primitive properties from JSON
+      data_file = File.join(path, "data.json")
+      if File.exists?(data_file)
+        json_data = File.read(data_file)
+        unless json_data.empty?
+          # Parse JSON and extract primitive properties
+          parser = JSON::Parser.new(json_data)
+          data = parser.parse
+
+          if data_hash = data.as_h?
+            {% for ivar in @type.instance_vars %}
+                {% unless ivar.type < Sepia::Object ||
+                            (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) ||
+                            (ivar.type.stringify.includes?("Array") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
+                            (ivar.type.stringify.includes?("Set") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
+                            (ivar.type.stringify.includes?("Hash") && ivar.type.type_vars.size > 1 && ivar.type.type_vars.last < Sepia::Object) ||
+                            ivar.name.stringify == "sepia_id" %}
+                  # Find the key (it might be a JSON::Any)
+                  key = data_hash.keys.find { |k| k.to_s == {{ivar.name.stringify}} }
+                  if key
+                    value = data_hash[key]
+                    # Use JSON::Serializable's built-in parsing
+                    {% if ivar.type.stringify.includes?("Array") %}
+                      parsed_value = Array({{ivar.type.type_vars.first}}).from_json(value.to_json)
+                    {% elsif ivar.type.stringify.includes?("Hash") %}
+                      parsed_value = Hash({{ivar.type.type_vars.first}}, {{ivar.type.type_vars.last}}).from_json(value.to_json)
+                    {% else %}
+                      parsed_value = {{ivar.type}}.from_json(value.to_json)
+                    {% end %}
+                    @{{ivar.name}} = parsed_value
+                  end
+                {% end %}
+              {% end %}
+          end
+        end
+      end
     end
 
     # Loads an enumerable of serializable objects from a directory of symlinks.

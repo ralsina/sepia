@@ -9,6 +9,7 @@ Sepia is a simple, file-system-based serialization library for Crystal. It provi
 - **`Sepia::Container`**: Objects that include this module are serialized as directories. They can contain other `Serializable` or `Container` objects.
   - Nested `Serializable` objects are stored as symlinks to their canonical file.
   - Nested `Container` objects are stored as subdirectories, creating a nested on-disk structure that mirrors the object hierarchy.
+  - **Automatic JSON Serialization**: Primitive properties (String, Int32, Bool, Time, etc.) are automatically serialized to a `data.json` file without requiring custom methods.
 
 ## Documentation
 
@@ -76,6 +77,110 @@ orphans = Sepia::Storage.gc(roots: my_app_roots, dry_run: true)
 deleted_summary = Sepia::Storage.gc(roots: [] of Sepia::Object)
 ```
 
+## Automatic JSON Serialization for Container Objects
+
+`Sepia::Container` now automatically handles JSON serialization for primitive properties, eliminating the need to write custom save/load methods for simple data types.
+
+### Supported Primitive Types
+
+- Basic types: `String`, `Int32`, `Int64`, `Float32`, `Float64`, `Bool`
+- Time types: `Time`
+- Collections of primitives: `Array`, `Set`, `Hash` (when containing primitive types)
+- Nilable versions of all above types
+
+### How It Works
+
+1. **Automatic Detection**: The Container module automatically identifies primitive instance variables at compile time
+2. **Filtered Serialization**: Only primitive properties are included in the JSON - Sepia objects and collections containing them are excluded
+3. **File Storage**: Primitive properties are stored in a `data.json` file within the container's directory
+4. **Type-Safe Parsing**: Each type is parsed using the appropriate method to ensure type safety
+
+### Example with Primitive Properties
+
+```crystal
+class UserProfile < Sepia::Object
+  include Sepia::Container
+
+  # Primitive properties - automatically serialized to JSON
+  property name : String
+  property age : Int32
+  property active : Bool
+  property created_at : Time
+  property tags : Array(String)
+  property metadata : Hash(String, String)
+
+  # Sepia objects - handled via symlinks as before
+  property friends : Array(User)
+  property settings : UserSettings?
+
+  def initialize(@name = "", @age = 0, @active = false)
+    @created_at = Time.utc
+    @tags = [] of String
+    @metadata = {} of String => String
+    @friends = [] of User
+  end
+end
+```
+
+When you save and load a `UserProfile`, all primitive properties are automatically handled:
+
+```crystal
+profile = UserProfile.new
+profile.name = "Alice"
+profile.age = 30
+profile.active = true
+profile.tags = ["admin", "premium"]
+profile.metadata = {"theme" => "dark", "locale" => "en_US"}
+
+# Save - primitive properties automatically written to data.json
+# Sepia objects saved as symlinks
+profile.save
+
+# Load - primitive properties automatically restored from data.json
+loaded = UserProfile.load(profile.sepia_id).as(UserProfile)
+
+puts loaded.name        # => "Alice"
+puts loaded.tags[0]      # => "admin"
+puts loaded.metadata     # => {"theme" => "dark", "locale" => "en_US"}
+```
+
+### On-Disk Structure with Primitives
+
+```
+./_data
+└── UserProfile
+    └── alice_profile
+        ├── data.json              # Primitive properties
+        ├── friends
+        │   └── 0000_bob -> ./_data/User/bob
+        └── settings -> ./_data/UserSettings/default
+```
+
+The `data.json` file contains:
+```json
+{
+  "name": "Alice",
+  "age": 30,
+  "active": true,
+  "created_at": "2024-01-15T10:30:00Z",
+  "tags": ["admin", "premium"],
+  "metadata": {"theme": "dark", "locale": "en_US"}
+}
+```
+
+### Excluded Properties
+
+The following are automatically excluded from JSON serialization:
+- Any property whose type inherits from `Sepia::Object`
+- Arrays containing `Sepia::Object` elements
+- Sets containing `Sepia::Object` elements
+- Hashes with `Sepia::Object` values
+- The `sepia_id` property (handled separately)
+
+### Backward Compatibility
+
+This feature is fully backward compatible. Existing Container classes will continue to work exactly as before, with primitive properties simply gaining automatic serialization support.
+
 ## Usage
 
 Here's a simple example demonstrating how to use `Sepia` to save and load a nested structure of "Boards" and "Post-its".
@@ -112,10 +217,21 @@ end
 class Board < Sepia::Object
   include Sepia::Container
 
+  # Primitive properties - automatically serialized
+  property name : String
+  property description : String?
+  property created_at : Time
+  property is_public : Bool = false
+
+  # Sepia object references - handled via symlinks
   property boards : Array(Board)
   property postits : Array(Postit)
 
-  def initialize(@boards = [] of Board, @postits = [] of Postit); end
+  def initialize(@name = "", @description = nil)
+    @created_at = Time.utc
+    @boards = [] of Board
+    @postits = [] of Postit
+  end
 end
 
 # --- Create and Save ---
@@ -123,10 +239,15 @@ end
 # A top-level board for "Work"
 work_board = Board.new
 work_board.sepia_id = "work_board"
+work_board.name = "Work"
+work_board.description = "Work-related boards"
+work_board.is_public = false
 
 # A nested board for "Project X"
 project_x_board = Board.new
 project_x_board.sepia_id = "project_x" # This ID is only used for top-level objects
+project_x_board.name = "Project X"
+project_x_board.description = "Tracking Project X progress"
 
 # Create some Post-its
 postit1 = Postit.new("Finish the report")
@@ -158,8 +279,10 @@ After running the code above, the `_data` directory will have the following stru
 ./_data
 ├── Board
 │   └── work_board
+│       ├── data.json              # Primitive properties (name, description, etc.)
 │       ├── boards
-│       │   └── project_x
+│       │   └── 0000_project_x     # Array elements are prefixed with index
+│       │       ├── data.json      # Primitive properties for project_x
 │       │       └── postits
 │       │           └── 0000_code_review_postit -> ./_data/Postit/code_review_postit
 │       └── postits
@@ -171,7 +294,19 @@ After running the code above, the `_data` directory will have the following stru
 
 Notice how:
 - The `work_board` and its nested `project_x` board are directories.
+- Each board directory contains a `data.json` file with primitive properties.
+- Array elements (like `boards` and `postits`) are stored in subdirectories with indexed prefixes (e.g., `0000_project_x`) to maintain order.
 - The `Postit` objects are stored in the canonical `Postit` directory and are referenced by symlinks.
+
+The `data.json` for `work_board` would contain:
+```json
+{
+  "name": "Work",
+  "description": "Work-related boards",
+  "created_at": "2024-01-15T10:30:00Z",
+  "is_public": false
+}
+```
 
 ## Development
 

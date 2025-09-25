@@ -6,6 +6,11 @@ require "file_utils"
 class DeletableContainer < Sepia::Object
   include Sepia::Container
 
+  # Default constructor for Container objects
+  def initialize
+    @sepia_id = ""
+  end
+
   # These are needed to satisfy the Serializable contract,
   # but won't be called if it's treated as a Container.
   def to_sepia
