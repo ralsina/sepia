@@ -115,7 +115,16 @@ module Sepia
         # Handle both direct Serializable types and nilable Serializables (unions)
         {% if ivar.type < Sepia::Serializable || (ivar.type.union? && ivar.type.union_types.any? { |type| type < Sepia::Serializable }) %}
           # Determine the actual Serializable type (for union types, find the non-nil type)
-          {% serializable_type = ivar.type < Sepia::Serializable ? ivar.type : ivar.type.union_types.find { |type| type < Sepia::Serializable } %}
+          {% if ivar.type < Sepia::Serializable %}
+            {% serializable_type = ivar.type %}
+          {% else %}
+            {% serializable_type = nil %}
+            {% for type in ivar.type.union_types %}
+              {% if type < Sepia::Serializable %}
+                {% serializable_type = type %}
+              {% end %}
+            {% end %}
+          {% end %}
           # Check if we're using InMemoryStorage
           if Sepia::Storage.backend.is_a?(InMemoryStorage)
             # Load from in-memory reference storage
