@@ -51,14 +51,27 @@ class MyHashOfContainersBox < Sepia::Object
   property nested_boxes : Hash(String, MyNestedBox) = Hash(String, MyNestedBox).new
 end
 
+class MyNilableBox < Sepia::Object
+  include Sepia::Container
+  property nilable_thing : MyThing?
+  property required_thing : MyThing
+
+  def initialize
+    @nilable_thing = nil
+    @required_thing = MyThing.new
+  end
+end
+
 describe Sepia::Container do
+  path = File.join(Dir.tempdir, "sepia_storage_test")
+
   before_each do
-    FileUtils.rm_rf(PATH) if File.exists?(PATH)
-    FileUtils.mkdir_p(PATH)
-    Sepia::Storage.configure(:filesystem, {"path" => PATH})
+    FileUtils.rm_rf(path) if File.exists?(path)
+    FileUtils.mkdir_p(path)
+    Sepia::Storage.configure(:filesystem, {"path" => path})
   end
   after_each do
-    # FileUtils.rm_rf(PATH) if File.exists?(PATH)
+    # FileUtils.rm_rf(path) if File.exists?(path)
   end
 
   describe MyBox do
@@ -139,9 +152,9 @@ describe Sepia::Container do
       nested_box1 = MyNestedBox.new
       box.nested_boxes = [nested_box1]
       box.save
-      File.directory?(File.join(PATH, "MyBox", "mybox", "nested_box")).should be_true
-      File.symlink?(File.join(PATH, "MyBox", "mybox", "my_thing")).should be_true
-      File.directory?(File.join(PATH, "MyBox", "mybox", "nested_boxes")).should be_true
+      File.directory?(File.join(path, "MyBox", "mybox", "nested_box")).should be_true
+      File.symlink?(File.join(path, "MyBox", "mybox", "my_thing")).should be_true
+      File.directory?(File.join(path, "MyBox", "mybox", "nested_boxes")).should be_true
     end
 
     it "does not create directories for empty arrays" do
@@ -149,7 +162,7 @@ describe Sepia::Container do
       box.sepia_id = "mybox"
       box.nested_boxes = [] of MyNestedBox
       box.save
-      File.directory?(File.join(PATH, "MyBox", "mybox", "nested_boxes")).should be_false
+      File.directory?(File.join(path, "MyBox", "mybox", "nested_boxes")).should be_false
     end
   end
 
@@ -239,15 +252,72 @@ describe Sepia::Container do
     box = MyBox.new
     box.sepia_id = "custom_path_box"
     box.my_thing.name = "Thing in custom path"
-    custom_path = File.join(PATH, "custom_container_location", box.sepia_id)
+    custom_path = File.join(path, "custom_container_location", box.sepia_id)
     box.save(custom_path)
 
     File.directory?(custom_path).should be_true
-    File.directory?(File.join(PATH, "MyBox", box.sepia_id)).should be_false
+    File.directory?(File.join(path, "MyBox", box.sepia_id)).should be_false
 
     loaded_box = MyBox.load("custom_path_box", path: custom_path).as(MyBox)
 
     loaded_box.sepia_id.should eq "custom_path_box"
     loaded_box.my_thing.name.should eq "Thing in custom path"
+  end
+
+  describe "nilable Serializable properties" do
+    it "correctly saves and loads nilable Serializable objects" do
+      container = MyNilableBox.new
+      container.nilable_thing = MyThing.new
+      container.nilable_thing.not_nil!.name = "Nilable Thing"
+      container.required_thing.name = "Required Thing"
+
+      container.save
+
+      loaded = MyNilableBox.load(container.sepia_id).as(MyNilableBox)
+
+      loaded.nilable_thing.should_not be_nil
+      loaded.nilable_thing.not_nil!.name.should eq "Nilable Thing"
+      loaded.required_thing.name.should eq "Required Thing"
+    end
+
+    it "correctly handles nil values for nilable Serializable properties" do
+      container = MyNilableBox.new
+      container.nilable_thing = nil
+      container.required_thing.name = "Required Thing"
+
+      container.save
+
+      loaded = MyNilableBox.load(container.sepia_id).as(MyNilableBox)
+
+      loaded.nilable_thing.should be_nil
+      loaded.required_thing.name.should eq "Required Thing"
+    end
+
+    it "creates symlinks for nilable Serializable objects when not nil" do
+      container = MyNilableBox.new
+      container.nilable_thing = MyThing.new
+      container.nilable_thing.not_nil!.name = "Nilable Thing"
+      container.required_thing.name = "Required Thing"
+
+      container.save
+
+      container_path = File.join(path, "MyNilableBox", container.sepia_id)
+      symlink_path = File.join(container_path, "nilable_thing")
+
+      File.symlink?(symlink_path).should be_true
+    end
+
+    it "does not create symlinks for nilable Serializable objects when nil" do
+      container = MyNilableBox.new
+      container.nilable_thing = nil
+      container.required_thing.name = "Required Thing"
+
+      container.save
+
+      container_path = File.join(path, "MyNilableBox", container.sepia_id)
+      symlink_path = File.join(container_path, "nilable_thing")
+
+      File.symlink?(symlink_path).should be_false
+    end
   end
 end

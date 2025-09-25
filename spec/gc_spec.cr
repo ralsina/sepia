@@ -8,8 +8,13 @@ class GCPostit < Sepia::Object
 
   def initialize(@text = ""); end
 
-  def to_sepia; @text; end
-  def self.from_sepia(s); new(s); end
+  def to_sepia
+    @text
+  end
+
+  def self.from_sepia(s)
+    new(s)
+  end
 end
 
 class GCBoard < Sepia::Object
@@ -88,7 +93,7 @@ describe "Sepia::Storage.gc" do
 
     # Run GC again, but only with board2 as a root. board1 and its postit are now orphans.
     deleted = Sepia::Storage.gc(roots: [board2])
-    deleted.keys.sort.should eq ["GCBoard", "GCPostit"]
+    deleted.keys.sort!.should eq ["GCBoard", "GCPostit"]
     deleted["GCBoard"].should eq ["board1"]
     deleted["GCPostit"].should eq ["task1"]
 
@@ -149,7 +154,7 @@ describe "Sepia::Storage.gc" do
 
     # Run GC with an empty root set
     deleted = Sepia::Storage.gc(roots: [] of Sepia::Object)
-    deleted.keys.sort.should eq ["GCBoard", "GCPostit"]
+    deleted.keys.sort!.should eq ["GCBoard", "GCPostit"]
     deleted["GCBoard"].should eq ["board1"]
     deleted["GCPostit"].should eq ["postit1"]
 

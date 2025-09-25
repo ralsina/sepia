@@ -112,14 +112,17 @@ module Sepia
     def load_references(path : String)
       {% for ivar in @type.instance_vars %}
         # For each instance variable, check if it's a Serializable or a Container.
-        {% if ivar.type < Sepia::Serializable %}
+        # Handle both direct Serializable types and nilable Serializables (unions)
+        {% if ivar.type < Sepia::Serializable || (ivar.type.union? && ivar.type.union_types.any? { |type| type < Sepia::Serializable }) %}
+          # Determine the actual Serializable type (for union types, find the non-nil type)
+          {% serializable_type = ivar.type < Sepia::Serializable ? ivar.type : ivar.type.union_types.find { |type| type < Sepia::Serializable } %}
           # Check if we're using InMemoryStorage
           if Sepia::Storage.backend.is_a?(InMemoryStorage)
             # Load from in-memory reference storage
             ref_key = Sepia::Storage.backend.as(InMemoryStorage).get_reference(path, {{ivar.name.stringify}})
             if ref_key
               obj_class_name, obj_id = ref_key.split('/', 2)
-              @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{ivar.type}}, obj_id).as({{ ivar.type }})
+              @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{serializable_type}}, obj_id).as({{ ivar.type }})
             else
               {% if ivar.type.nilable? %}
                 @{{ ivar.name }} = nil
@@ -134,7 +137,7 @@ module Sepia
               # See where the symlink points to and get the object ID
               obj_path = File.readlink(symlink_path)
               obj_id = File.basename(obj_path)
-              @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{ivar.type}}, obj_id).as({{ ivar.type }})
+              @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{serializable_type}}, obj_id).as({{ ivar.type }})
             else
               {% if ivar.type.nilable? %}
                 @{{ ivar.name }} = nil
