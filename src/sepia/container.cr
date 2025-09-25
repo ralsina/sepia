@@ -171,10 +171,19 @@ module Sepia
             # Load from filesystem symlinks
             symlink_path = File.join(path, {{ivar.name.stringify}})
             if File.symlink?(symlink_path)
-              # See where the symlink points to and get the object ID
+              # See where the symlink points to - it might be relative or absolute
               obj_path = File.readlink(symlink_path)
-              obj_id = File.basename(obj_path)
-              @{{ ivar.name }} = Sepia::Storage::INSTANCE.load({{serializable_type}}, obj_id).as({{ ivar.type }})
+              # Resolve to absolute path
+              abs_obj_path = if obj_path.starts_with?("/")
+                               obj_path
+                             else
+                               File.expand_path(obj_path, File.dirname(symlink_path))
+                             end
+              obj_id = File.basename(abs_obj_path)
+              # Read the file directly
+              obj = {{serializable_type}}.from_sepia(File.read(abs_obj_path))
+              obj.sepia_id = obj_id
+              @{{ ivar.name }} = obj.as({{ ivar.type }})
             else
               {% if ivar.type.nilable? %}
                 @{{ ivar.name }} = nil
@@ -289,10 +298,20 @@ module Sepia
           symlink_path = File.join(array_dir, entry)
           if File.symlink?(symlink_path)
             obj_path = File.readlink(symlink_path)
-            obj_id = File.basename(obj_path)
-            loaded_obj = Sepia::Storage::INSTANCE.load(item_type, obj_id)
+            # Resolve to absolute path
+            abs_obj_path = if obj_path.starts_with?("/")
+                             obj_path
+                           else
+                             File.expand_path(obj_path, File.dirname(symlink_path))
+                           end
+            obj_id = File.basename(abs_obj_path)
+            # Load the object directly from file
+            loaded_obj = item_type.from_sepia(File.read(abs_obj_path))
+            loaded_obj.sepia_id = obj_id
             if loaded_obj.is_a?(Container)
-              loaded_obj.load_references(obj_path)
+              # For containers, obj_path might be relative, resolve it
+              container_path = abs_obj_path
+              loaded_obj.load_references(File.dirname(container_path))
             end
             loaded_collection << loaded_obj.as(U)
           end
