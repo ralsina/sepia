@@ -31,9 +31,12 @@ module Sepia
       # Store container metadata
       @container_storage[object_key]["_type"] = "container"
 
-      # Store references in a separate structure
+      # Store primitive properties from JSON serialization
+      @container_storage[object_key]["_data"] = object.to_filtered_json
+
+      # Store references
       if path
-        @container_references[path] = {} of String => String
+        object.save_references(path)
       end
     end
 
@@ -60,6 +63,13 @@ module Sepia
 
         obj = object_class.new
         obj.sepia_id = id
+
+        # Load primitive properties from stored JSON
+        if data = @container_storage[object_key]["_data"]?
+          unless data.empty?
+            obj.as(Container).restore_properties_from_json(data)
+          end
+        end
 
         # Load references if path is provided
         if path

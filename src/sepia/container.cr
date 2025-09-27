@@ -288,6 +288,40 @@ module Sepia
       end
     end
 
+    # Restore primitive properties from JSON without creating a new instance
+    def restore_properties_from_json(json_data : String)
+      return if json_data.empty?
+
+      # Parse JSON and extract primitive properties
+      parser = JSON::Parser.new(json_data)
+      data = parser.parse
+
+      if data_hash = data.as_h?
+        {% for ivar in @type.instance_vars %}
+          {% unless ivar.type < Sepia::Object ||
+                      (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) ||
+                      (ivar.type.stringify.includes?("Array") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
+                      (ivar.type.stringify.includes?("Set") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
+                      (ivar.type.stringify.includes?("Hash") && ivar.type.type_vars.size > 1 && ivar.type.type_vars.last < Sepia::Object) ||
+                      ivar.name.stringify == "sepia_id" %}
+            key = data_hash.keys.find { |k| k.to_s == {{ivar.name.stringify}} }
+            if key
+              value = data_hash[key]
+              # Parse the value based on type
+              {% if ivar.type.stringify.includes?("Array") %}
+                parsed_value = Array({{ivar.type.type_vars.first}}).from_json(value.to_json)
+              {% elsif ivar.type.stringify.includes?("Hash") %}
+                parsed_value = Hash({{ivar.type.type_vars.first}}, {{ivar.type.type_vars.last}}).from_json(value.to_json)
+              {% else %}
+                parsed_value = {{ivar.type}}.from_json(value.to_json)
+              {% end %}
+              @{{ivar.name}} = parsed_value
+            end
+          {% end %}
+        {% end %}
+      end
+    end
+
     # Loads an enumerable of serializable objects from a directory of symlinks.
     def load_enumerable_of_references(path : String, name : String, collection_type : T.class, item_type : U.class) forall T, U
       array_dir = File.join(path, name)
