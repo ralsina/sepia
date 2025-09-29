@@ -110,7 +110,7 @@ module Sepia
       end
 
       # Phase 2: Sweep
-      deleted_keys = Hash(String, Array(String)).new { |h, k| h[k] = [] of String }
+      deleted_keys = Hash(String, Array(String)).new { |hash, key| hash[key] = [] of String }
       all_objects = list_all_objects
 
       all_objects.each do |class_name, ids|

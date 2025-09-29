@@ -281,7 +281,7 @@ module Sepia
     @@is_container_registry[name] = is_container
   end
 
-  def self.is_container?(name : String) : Bool
+  def self.container?(name : String) : Bool
     @@is_container_registry[name]? || false
   end
 end

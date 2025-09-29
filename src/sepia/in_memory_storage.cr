@@ -97,7 +97,7 @@ module Sepia
     end
 
     def delete(class_name : String, id : String)
-      if Sepia.is_container?(class_name)
+      if Sepia.container?(class_name)
         object_key = "#{class_name}/#{id}"
         @container_storage.delete(object_key)
       else
@@ -222,7 +222,7 @@ module Sepia
     end
 
     def list_all_objects : Hash(String, Array(String))
-      objects = Hash(String, Array(String)).new { |h, k| h[k] = [] of String }
+      objects = Hash(String, Array(String)).new { |hash, key| hash[key] = [] of String }
       prefix = @path + "/"
 
       @serializable_storage.each_key do |key|

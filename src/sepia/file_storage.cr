@@ -67,7 +67,7 @@ module Sepia
 
     def delete(class_name : String, id : String)
       object_path = File.join(@path, class_name, id)
-      if Sepia.is_container?(class_name)
+      if Sepia.container?(class_name)
         if Dir.exists?(object_path)
           FileUtils.rm_rf(object_path)
         end
@@ -166,7 +166,7 @@ module Sepia
     end
 
     def list_all_objects : Hash(String, Array(String))
-      objects = Hash(String, Array(String)).new { |h, k| h[k] = [] of String }
+      objects = Hash(String, Array(String)).new { |hash, key| hash[key] = [] of String }
       return objects unless Dir.exists?(@path)
 
       Dir.each_child(@path) do |class_name|
