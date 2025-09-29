@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "Bash(crystal spec:*)"
+      "Bash(crystal spec:*)",
+      "Bash(crystal run:*)",
+      "Bash(crystal compile:*)",
+      "WebSearch",
+      "Bash(crystal build:*)",
+      "Bash(crystal tool format:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(crystal:*)",
+      "Bash(LIBRARY_PATH=src crystal:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

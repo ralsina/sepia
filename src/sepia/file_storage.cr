@@ -14,7 +14,11 @@ module Sepia
       object_path = path || File.join(@path, object.class.name, object.sepia_id)
       object_dir = File.dirname(object_path)
       FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
-      File.write(object_path, object.to_sepia)
+
+      # Atomic write: write to temp file first, then rename
+      temp_path = "#{object_path}.tmp"
+      File.write(temp_path, object.to_sepia)
+      File.rename(temp_path, object_path)
     end
 
     def save(object : Container, path : String? = nil)
