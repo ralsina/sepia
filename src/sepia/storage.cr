@@ -2,26 +2,112 @@ require "file_utils"
 require "./storage_backend"
 
 module Sepia
-  # The `Storage` class manages storage backends and provides
-  # backward compatibility with the original singleton API.
+  # Central storage management class.
+  #
+  # The `Storage` class manages pluggable storage backends and provides
+  # both a modern class-based API and backward compatibility with the
+  # original singleton pattern.
+  #
+  # ⚠️ **WARNING**: The Storage API and backend interfaces are subject to change.
+  # The on-disk format for the filesystem backend is not stable.
+  #
+  # ### Supported Backends
+  #
+  # - `:filesystem` - Default file-based storage (FileStorage)
+  # - `:memory` - In-memory storage for testing (InMemoryStorage)
+  #
+  # ### Usage
+  #
+  # ```
+  # # Configure storage backend
+  # Sepia::Storage.configure(:filesystem, {"path" => "./data"})
+  #
+  # # Or use in-memory storage
+  # Sepia::Storage.configure(:memory)
+  #
+  # # Class-based API (recommended)
+  # Sepia::Storage.save(my_object)
+  # loaded = Sepia::Storage.load(MyClass, "object-id")
+  #
+  # # Legacy singleton API (still supported)
+  # Sepia::Storage::INSTANCE.save(my_object)
+  # loaded = Sepia::Storage::INSTANCE.load(MyClass, "object-id")
+  # ```
   class Storage
-    # Class variable to hold the current backend
+    # Current storage backend instance.
+    #
+    # Defaults to FileStorage using the system temporary directory.
+    # Can be changed at runtime to switch storage backends.
     @@current_backend : StorageBackend = FileStorage.new(Dir.tempdir)
 
-    # Legacy singleton instance for backward compatibility
+    # Legacy singleton instance for backward compatibility.
+    #
+    # Provides the same API as the class methods for existing code
+    # that relies on the singleton pattern.
     INSTANCE = new
 
-    # Get the current storage backend
+    # Returns the current storage backend.
+    #
+    # ### Returns
+    #
+    # The currently active StorageBackend instance.
+    #
+    # ### Example
+    #
+    # ```
+    # backend = Sepia::Storage.backend
+    # puts backend.class # => FileStorage or InMemoryStorage
+    # ```
     def self.backend
       @@current_backend
     end
 
-    # Set the current storage backend
+    # Sets the current storage backend.
+    #
+    # Allows switching to a different backend implementation at runtime.
+    #
+    # ### Parameters
+    #
+    # - *backend* : A StorageBackend instance to use
+    #
+    # ### Example
+    #
+    # ```
+    # # Switch to custom backend
+    # custom_backend = MyCustomStorage.new
+    # Sepia::Storage.backend = custom_backend
+    # ```
     def self.backend=(backend : StorageBackend)
       @@current_backend = backend
     end
 
-    # Configure storage with a named backend
+    # Configures storage using a named backend.
+    #
+    # Provides a convenient way to configure common backends without
+    # instantiating them manually.
+    #
+    # ### Parameters
+    #
+    # - *backend* : Symbol identifying the backend type (`:filesystem` or `:memory`)
+    # - *config* : Optional configuration hash for the backend
+    #
+    # ### Configuration Options
+    #
+    # For `:filesystem` backend:
+    # - `"path"`: Root directory path (defaults to system temp directory)
+    #
+    # For `:memory` backend:
+    # - No configuration options available
+    #
+    # ### Example
+    #
+    # ```
+    # # Configure filesystem storage with custom path
+    # Sepia::Storage.configure(:filesystem, {"path" => "./app_data"})
+    #
+    # # Configure in-memory storage
+    # Sepia::Storage.configure(:memory)
+    # ```
     def self.configure(backend : Symbol, config = {} of String => String)
       case backend
       when :filesystem
@@ -34,15 +120,68 @@ module Sepia
       end
     end
 
-    # Legacy API - delegates to current backend
+    # Saves a Serializable object using the current backend.
+    #
+    # Delegates to the current storage backend's save method.
+    #
+    # ### Parameters
+    #
+    # - *object* : The Serializable object to save
+    # - *path* : Optional custom save path
+    #
+    # ### Example
+    #
+    # ```
+    # doc = MyDocument.new("Hello")
+    # Sepia::Storage.save(doc) # Uses current backend
+    # ```
     def save(object : Serializable, path : String? = nil)
       @@current_backend.save(object, path)
     end
 
+    # Saves a Container object using the current backend.
+    #
+    # Delegates to the current storage backend's save method.
+    #
+    # ### Parameters
+    #
+    # - *object* : The Container object to save
+    # - *path* : Optional custom save path
+    #
+    # ### Example
+    #
+    # ```
+    # board = Board.new("My Board")
+    # Sepia::Storage.save(board) # Uses current backend
+    # ```
     def save(object : Container, path : String? = nil)
       @@current_backend.save(object, path)
     end
 
+    # Loads an object using the current backend.
+    #
+    # Generic method that loads an object of the specified class.
+    # The type parameter ensures type safety without requiring casting.
+    #
+    # ### Parameters
+    #
+    # - *object_class* : The class of object to load
+    # - *id* : The object's unique identifier
+    # - *path* : Optional custom load path
+    #
+    # ### Returns
+    #
+    # An instance of type T loaded from storage.
+    #
+    # ### Example
+    #
+    # ```
+    # # Load with explicit type
+    # doc = Sepia::Storage.load(MyDocument, "doc-uuid")
+    #
+    # # Type is inferred, no casting needed
+    # puts doc.content # doc is typed as MyDocument
+    # ```
     def load(object_class : T.class, id : String, path : String? = nil) : T forall T
       @@current_backend.load(object_class, id, path).as(T)
     end

@@ -1,5 +1,8 @@
 # Sepia
 
+⚠️ **Warning: Unstable API and Storage Format**
+Sepia is currently in active development and does not have a stable API or storage format. **The API is subject to change without notice**, and **breaking changes may occur in any release**. Additionally, the on-disk storage format is not stable - you will need to migrate your data stores when upgrading between versions. Use at your own risk in production.
+
 Sepia is a simple, file-system-based serialization library for Crystal. It provides two modules, `Sepia::Serializable` and `Sepia::Container`, to handle the persistence of objects to disk.
 
 ## Core Concepts
@@ -75,6 +78,109 @@ orphans = Sepia::Storage.gc(roots: my_app_roots, dry_run: true)
 
 # To garbage collect everything, pass an empty array:
 deleted_summary = Sepia::Storage.gc(roots: [] of Sepia::Object)
+```
+
+## Generation Tracking for Optimistic Concurrency Control
+
+Sepia supports generation tracking to enable optimistic concurrency control and versioning of objects. This is particularly useful for collaborative applications where multiple users might edit the same data.
+
+### Key Concepts
+
+- **Generation Number**: Each object version has a generation number (0, 1, 2, etc.) encoded in its ID
+- **Base ID**: The unique identifier without the generation suffix
+- **Atomic Updates**: New versions are created as new files, never modifying existing ones
+- **Optimistic Locking**: Detect conflicts when multiple users try to save simultaneously
+
+### ID Format
+
+Objects use the format: `{type}-{uuid}.{generation}`
+
+Examples:
+- `note-123e4567-e89b-12d3-a456-426614174000.0` (initial version)
+- `note-123e4567-e89b-12d3-a456-426614174000.1` (first update)
+- `note-123e4567-e89b-12d3-a456-426614174000.2` (second update)
+
+### Core API
+
+```crystal
+class Note < Sepia::Object
+  include Sepia::Serializable
+
+  property title : String
+  property content : String
+
+  def initialize(@title, @content)
+  end
+
+  def to_sepia : String
+    {title: @title, content: @content}.to_json
+  end
+
+  def self.from_sepia(json : String) : self
+    data = JSON.parse(json)
+    new(data["title"].as_s, data["content"].as_s)
+  end
+end
+
+# Create and save
+note = Note.new("My Note", "Initial content")
+note.save  # Creates note-xxx.0
+
+# Create new version
+v2 = note.save_with_generation
+# v2.id is now note-xxx.1
+
+# Check current generation
+note.generation      # => 0
+v2.generation        # => 1
+
+# Get base ID
+note.base_id         # => "note-xxx"
+v2.base_id           # => "note-xxx"
+
+# Check for newer versions
+note.stale?(0)       # => true (because v2 exists)
+
+# Find latest version
+latest = Note.latest("note-xxx")
+latest.generation    # => 1
+
+# Get all versions
+versions = Note.versions("note-xxx")
+versions.map(&.generation)  # => [0, 1]
+```
+
+### Conflict Resolution
+
+```crystal
+# User 1 loads note
+user1_note = Note.load("note-xxx.1")
+
+# User 2 loads same note
+user2_note = Note.load("note-xxx.1")
+
+# User 1 saves
+user1_saved = user1_note.save_with_generation  # Creates note-xxx.2
+
+# User 2 tries to save
+if user2_note.stale?(1)
+  # Conflict! Reload and merge
+  latest = Note.latest(user2_note.base_id)
+  # Merge changes and save again
+else
+  user2_saved = user2_note.save_with_generation
+end
+```
+
+### Backward Compatibility
+
+Existing objects without generation suffix are treated as generation 0 and continue to work seamlessly:
+
+```crystal
+# Legacy object
+old_note = Note.load("legacy-note")
+old_note.generation  # => 0
+old_note.base_id     # => "legacy-note"
 ```
 
 ## Automatic JSON Serialization for Container Objects

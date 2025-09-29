@@ -1,21 +1,68 @@
 require "./storage_backend"
 
 module Sepia
-  # In-memory storage backend for testing and demo purposes.
-  # Stores all data in memory without any filesystem operations.
+  # In-memory storage backend for Sepia objects.
+  #
+  # This backend stores all data in memory hashes without any filesystem
+  # operations. It's primarily useful for:
+  #
+  # - Testing: Fast operations without disk I/O
+  # - Demos: Self-contained examples that don't persist data
+  # - Temporary data: Caching or session storage
+  #
+  # ### Data Structure
+  #
+  # The storage uses three main hashes:
+  # - `@serializable_storage`: Maps class_name/id to serialized content
+  # - `@container_storage`: Maps class_name/id to property data and references
+  # - `@container_references`: Maps container paths to reference mappings
+  #
+  # ### Example
+  #
+  # ```
+  # # Configure Sepia to use in-memory storage
+  # Sepia::Storage.configure(:memory)
+  #
+  # # Objects will be stored in memory only
+  # doc = MyDocument.new("Hello")
+  # doc.save # Stored in @serializable_storage
+  # ```
   class InMemoryStorage < StorageBackend
-    # Store Serializable objects: {class_name/id => content}
+    # Storage for Serializable objects.
+    #
+    # Maps full path strings to serialized content.
+    # Format: `{ "path/to/ClassName/id" => "serialized_content" }`
     @serializable_storage = {} of String => String
 
-    # Store Container objects: {class_name/id => {property => value}}
+    # Storage for Container objects.
+    #
+    # Maps class_name/id to container data including primitive properties.
+    # Format: `{ "ClassName/id" => { "_type" => "container", "_data" => "json" } }`
     @container_storage = {} of String => Hash(String, String)
 
-    # Store container references: {container_path => {reference_name => target_key}}
+    # Storage for container object references.
+    #
+    # Maps container paths to their contained object references.
+    # Format: `{ "container_path" => { "ref_name" => "target_class/target_id" } }`
     @container_references = {} of String => Hash(String, String)
 
-    # For path resolution (like FileStorage)
+    # Base path for compatibility with FileStorage.
+    #
+    # Not actually used for storage, but provides path compatibility
+    # when working with objects that expect filesystem-style paths.
     @path = "/tmp"
 
+    # Saves a Serializable object to memory storage.
+    #
+    # Stores the object's serialized content in the `@serializable_storage` hash.
+    # The key is the full path (including the base path) to maintain
+    # compatibility with FileStorage.
+    #
+    # ```
+    # doc = MyDocument.new("Hello")
+    # storage = InMemoryStorage.new
+    # storage.save(doc) # Stored in @serializable_storage
+    # ```
     def save(object : Serializable, path : String? = nil)
       object_path = path || File.join(@path, object.class.name, object.sepia_id)
       content = object.to_sepia
@@ -24,6 +71,17 @@ module Sepia
       @serializable_storage[object_path] = content
     end
 
+    # Saves a Container object to memory storage.
+    #
+    # Stores the container's metadata and primitive properties in the
+    # `@container_storage` hash. Primitive properties are serialized to JSON
+    # and stored under the "_data" key.
+    #
+    # ```
+    # board = Board.new("My Board")
+    # storage = InMemoryStorage.new
+    # storage.save(board) # Stored in @container_storage
+    # ```
     def save(object : Container, path : String? = nil)
       object_key = "#{object.class.name}/#{object.sepia_id}"
       @container_storage[object_key] = {} of String => String
@@ -40,6 +98,22 @@ module Sepia
       end
     end
 
+    # Loads an object from memory storage.
+    #
+    # Retrieves and deserializes an object of the specified class.
+    # For Serializable objects, uses the class's `from_sepia` method.
+    # For Container objects, restores primitive properties from JSON and
+    # loads references if a path is provided.
+    #
+    # Raises an exception if the object is not found.
+    #
+    # ```
+    # # Load a Serializable object
+    # doc = storage.load(MyDocument, "doc-uuid")
+    #
+    # # Load a Container object
+    # board = storage.load(MyBoard, "board-uuid")
+    # ```
     def load(object_class : Class, id : String, path : String? = nil) : Object
       case
       when object_class.responds_to?(:from_sepia)
@@ -146,6 +220,14 @@ module Sepia
       list_all(object_class).size
     end
 
+    # Clears all data from memory storage.
+    #
+    # Empties all internal hashes, effectively resetting the storage
+    # to its initial empty state.
+    #
+    # ```
+    # storage.clear # All data is now gone
+    # ```
     def clear
       @serializable_storage.clear
       @container_storage.clear

@@ -12,7 +12,8 @@
       "Bash(crystal:*)",
       "Bash(LIBRARY_PATH=src crystal:*)",
       "Bash(git add:*)",
-      "Bash(ameba:*)"
+      "Bash(ameba:*)",
+      "Bash(act:*)"
     ],
     "deny": [],
     "ask": []
