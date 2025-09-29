@@ -1,18 +1,109 @@
 require "json"
 
 module Sepia
-  # Sepia::Container tagged objects can contain Sepia::Serializable objects or
-  # other Sepia::Container objects.
+  # Module for objects that contain other Sepia objects.
   #
-  # Containers serialize as directories with references (links) to other containers
-  # or to Sepia::Serializable objects.
+  # The `Container` module enables objects to contain nested Serializable or
+  # Container objects. Containers serialize as directories on disk, with
+  # contained objects stored as files, subdirectories, or symlinks.
+  #
+  # ⚠️ **WARNING**: The Container API and on-disk format are subject to change.
+  # Data migrations will be required when upgrading Sepia versions.
+  #
+  # ### Key Features
+  #
+  # - **Automatic JSON Serialization**: Primitive properties are automatically
+  #   serialized to a `data.json` file
+  # - **Nested Object Storage**: Contained Sepia objects are stored as references
+  # - **Complex Structure Support**: Handles Arrays, Hashes, Sets, and nilable references
+  # - **Symlink References**: Serializable objects are stored as symlinks to avoid duplication
+  #
+  # ### Directory Structure
+  #
+  # ```
+  # container_id/
+  #   ├── data.json           # Primitive properties (automatic)
+  #   ├── simple_array/       # Array of primitives
+  #   │   ├── 0000_value1
+  #   │   └── 0001_value2
+  #   ├── object_array/       # Array of Sepia objects
+  #   │   ├── 0000 -> ../../ClassName/id1
+  #   │   └── 0001 -> ../../ClassName/id2
+  #   ├── nested_object/      # Single Sepia object
+  #   │   └── 0000 -> ../../OtherClass/id
+  #   └── complex_hash/       # Hash with mixed types
+  #       ├── key1/value1     # Primitive value
+  #       └── key2 -> ../../RefClass/id  # Sepia object reference
+  # ```
+  #
+  # ### Example
+  #
+  # ```
+  # class Project < Sepia::Object
+  #   include Sepia::Container
+  #
+  #   # Primitive properties - automatically serialized
+  #   property name : String
+  #   property created_at : Time
+  #   property tags : Array(String)
+  #
+  #   # Sepia object references - stored as symlinks
+  #   owner : User?
+  #   tasks : Array(Task)
+  #   metadata : Hash(String, Document)?
+  #
+  #   def initialize(@name = "")
+  #     @created_at = Time.utc
+  #     @tags = [] of String
+  #     @tasks = [] of Task
+  #   end
+  # end
+  #
+  # project = Project.new("My Project")
+  # project.owner = user            # User object
+  # project.tasks << task1 << task2 # Task objects
+  # project.save                    # Creates directory structure
+  # ```
   module Container
+    # When included, sets up JSON serialization and registers the class.
+    #
+    # This macro:
+    # - Includes JSON::Serializable for automatic JSON support
+    # - Registers the class as a Container type with Sepia
     macro included
       include JSON::Serializable
       Sepia.register_class_type({{@type.name.stringify}}, true)
     end
 
-    # Generate filtered JSON string with only primitive properties
+    # Serializes only primitive properties to JSON.
+    #
+    # This method automatically filters out any Sepia object references,
+    # serializing only primitive types (String, Int32, Bool, Time, etc.)
+    # and collections of primitives. The resulting JSON is stored in
+    # the container's `data.json` file.
+    #
+    # ### Returns
+    #
+    # A JSON string containing only the primitive properties of the container.
+    #
+    # ### Example
+    #
+    # ```
+    # class UserProfile < Sepia::Object
+    #   include Sepia::Container
+    #   property name : String         # Included in JSON
+    #   property age : Int32           # Included in JSON
+    #   property friends : Array(User) # Excluded (Sepia objects)
+    #
+    #   def initialize(@name = "", @age = 0)
+    #     @friends = [] of User
+    #   end
+    # end
+    #
+    # profile = UserProfile.new("Alice", 30)
+    # json = profile.to_filtered_json
+    # # json = {"name":"Alice","age":30,"friends":[]}
+    # ```
     def to_filtered_json : String
       String.build do |io|
         JSON.build(io) do |json|
@@ -32,7 +123,39 @@ module Sepia
       end
     end
 
-    # Returns a list of all Sepia objects referenced by this object.
+    # Returns all Sepia objects referenced by this container.
+    #
+    # This method automatically inspects all instance variables and collects
+    # any Sepia objects, including those nested in Arrays, Hashes, and Sets.
+    # Used by the garbage collector to track object relationships.
+    #
+    # ### Returns
+    #
+    # An Enumerable containing all Sepia objects referenced by this container.
+    #
+    # ### Example
+    #
+    # ```
+    # class Team < Sepia::Object
+    #   include Sepia::Container
+    #   property members : Array(User)
+    #   property lead : User?
+    #   property projects : Hash(String, Project)
+    #
+    #   def initialize
+    #     @members = [] of User
+    #     @projects = {} of String => Project
+    #   end
+    # end
+    #
+    # team = Team.new
+    # team.members << user1 << user2
+    # team.lead = user3
+    # team.projects["web"] = project1
+    #
+    # refs = team.sepia_references
+    # # refs contains [user1, user2, user3, project1]
+    # ```
     def sepia_references : Enumerable(Sepia::Object)
       refs = [] of Sepia::Object
       {% for ivar in @type.instance_vars %}

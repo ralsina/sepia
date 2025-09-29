@@ -1,0 +1,52 @@
+name: Deploy API Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'shard.yml'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'shard.yml'
+      - '.github/workflows/docs.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for accurate version info
+
+    - name: Set up Crystal
+      uses: crystal-lang/install-crystal@v1
+      with:
+        crystal: latest
+
+    - name: Install dependencies
+      run: shards install
+
+    - name: Generate documentation
+      run: |
+        crystal docs \
+          --project-name="Sepia" \
+          --project-version="${{ github.sha }}" \
+          --source-url-pattern="https://github.com/${{ github.repository }}/blob/{refname}/{path}#L{line}" \
+          --output=docs
+
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+        destination_dir: ./
+        user_name: github-actions[bot]
+        user_email: github-actions[bot]@users.noreply.github.com
+        commit_message: "Deploy API docs from ${{ github.sha }}"

@@ -2,27 +2,131 @@ require "file_utils"
 require "./storage_backend"
 
 module Sepia
-  # Filesystem-based storage backend (original implementation).
-  # This maintains backward compatibility with the existing Sepia behavior.
+  # Filesystem-based storage backend for Sepia objects.
+  #
+  # This is the default storage backend that stores objects on the local filesystem.
+  # Serializable objects are stored as files, while Container objects are stored as
+  # directories with nested structures.
+  #
+  # ### Directory Structure
+  #
+  # The storage creates a directory structure like:
+  #
+  # ```
+  # storage_path/
+  #   ├── ClassName1/
+  #   │   ├── object1_id     (Serializable object file)
+  #   │   └── object2_id     (Serializable object file)
+  #   └── ClassName2/
+  #       ├── container1/    (Container directory)
+  #       │   ├── data.json  (Primitive properties)
+  #       │   └── refs/      (Reference files/symlinks)
+  #       └── container2/    (Container directory)
+  # ```
+  #
+  # ### Example
+  #
+  # ```
+  # # Configure Sepia to use filesystem storage
+  # Sepia::Storage.configure(:filesystem, {"path" => "./data"})
+  #
+  # # Objects will be stored in ./data/ClassName/sepia_id
+  # ```
   class FileStorage < StorageBackend
+    # Root directory path where objects are stored.
+    #
+    # Default is the system's temporary directory. Can be set to any absolute path.
+    #
+    # ```
+    # storage = FileStorage.new
+    # storage.path # => "/tmp"
+    #
+    # # Custom path
+    # storage = FileStorage.new("./my_data")
+    # storage.path # => "./my_data"
+    # ```
     property path : String
 
+    # Creates a new FileStorage instance.
+    #
+    # The `path` parameter specifies the root directory where objects will be stored.
+    # If not provided, uses the system's temporary directory.
+    #
+    # ```
+    # # Use system temp directory
+    # storage = FileStorage.new
+    #
+    # # Use custom directory
+    # storage = FileStorage.new("./data")
+    #
+    # # Use absolute path
+    # storage = FileStorage.new("/var/lib/myapp/data")
+    # ```
     def initialize(@path : String = Dir.tempdir)
     end
 
+    # Saves a Serializable object to the filesystem.
+    #
+    # Writes the object's serialized content to a file. Creates any necessary
+    # parent directories. Uses atomic write operations to prevent corruption.
+    #
+    # The object is saved to `path/class_name/sepia_id` if no specific path is provided.
+    #
+    # ### Atomic Writes
+    #
+    # The file is first written to a temporary file (with .tmp extension),
+    # then atomically renamed to the final path. This prevents partial writes
+    # and ensures data integrity.
+    #
+    # ```
+    # doc = MyDocument.new("Hello")
+    # storage = FileStorage.new("./data")
+    # storage.save(doc) # Creates ./data/MyDocument/uuid
+    # ```
     def save(object : Serializable, path : String? = nil)
       object_path = path || File.join(@path, object.class.name, object.sepia_id)
       object_dir = File.dirname(object_path)
       FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
-      File.write(object_path, object.to_sepia)
+
+      # Atomic write: write to temp file first, then rename
+      temp_path = "#{object_path}.tmp"
+      File.write(temp_path, object.to_sepia)
+      File.rename(temp_path, object_path)
     end
 
+    # Saves a Container object to the filesystem.
+    #
+    # Creates a directory for the container and saves all nested objects and
+    # references. The container's primitive properties are saved to a data.json file,
+    # while nested Sepia objects are saved as files or symlinks.
+    #
+    # ```
+    # board = Board.new("My Board")
+    # storage = FileStorage.new("./data")
+    # storage.save(board) # Creates ./data/Board/uuid/
+    # ```
     def save(object : Container, path : String? = nil)
       object_path = path || File.join(@path, object.class.name, object.sepia_id)
       FileUtils.mkdir_p(object_path)
       object.save_references(object_path)
     end
 
+    # Loads an object from the filesystem.
+    #
+    # Deserializes an object of the specified class with the given ID.
+    # For Serializable objects, reads the file content and uses the class's
+    # `from_sepia` method. For Container objects, reconstructs the object
+    # from its directory structure.
+    #
+    # Raises an exception if the object is not found.
+    #
+    # ```
+    # # Load a Serializable object
+    # doc = storage.load(MyDocument, "doc-uuid")
+    #
+    # # Load a Container object
+    # board = storage.load(MyBoard, "board-uuid")
+    # ```
     def load(object_class : Class, id : String, path : String? = nil) : Object
       object_path = path || File.join(@path, object_class.to_s, id)
 
@@ -47,6 +151,18 @@ module Sepia
       end
     end
 
+    # Deletes an object from the filesystem.
+    #
+    # Removes the object's file or directory. For Container objects, recursively
+    # removes the entire directory structure including all nested objects.
+    #
+    # ```
+    # doc = MyDocument.load("doc-uuid")
+    # storage.delete(doc) # Removes the file
+    #
+    # board = Board.load("board-uuid")
+    # storage.delete(board) # Removes the directory and all contents
+    # ```
     def delete(object : Serializable | Container)
       object_path = File.join(@path, object.class.name, object.sepia_id)
 
@@ -61,9 +177,19 @@ module Sepia
       end
     end
 
+    # Deletes an object by class name and ID.
+    #
+    # Alternative method to delete objects without loading them first.
+    # Requires knowing whether the class is a Container or Serializable type.
+    #
+    # ```
+    # # Delete without loading the object
+    # storage.delete("MyDocument", "doc-uuid")
+    # storage.delete("MyBoard", "board-uuid")
+    # ```
     def delete(class_name : String, id : String)
       object_path = File.join(@path, class_name, id)
-      if Sepia.is_container?(class_name)
+      if Sepia.container?(class_name)
         if Dir.exists?(object_path)
           FileUtils.rm_rf(object_path)
         end
@@ -74,6 +200,15 @@ module Sepia
       end
     end
 
+    # Lists all object IDs for a given class.
+    #
+    # Returns an array of all object IDs found in the class directory.
+    # The IDs are sorted alphabetically.
+    #
+    # ```
+    # ids = storage.list_all(MyDocument)
+    # ids # => ["doc-uuid1", "doc-uuid2", "doc-uuid3"]
+    # ```
     def list_all(object_class : Class) : Array(String)
       class_dir = File.join(@path, object_class.to_s)
       return [] of String unless Dir.exists?(class_dir)
@@ -84,6 +219,16 @@ module Sepia
         .sort!
     end
 
+    # Checks if an object with the given ID exists.
+    #
+    # For Serializable objects, checks if the file exists.
+    # For Container objects, checks if the directory exists.
+    #
+    # ```
+    # if storage.exists?(MyDocument, "doc-uuid")
+    #   puts "Document exists"
+    # end
+    # ```
     def exists?(object_class : Class, id : String) : Bool
       object_path = File.join(@path, object_class.to_s, id)
 
@@ -96,10 +241,27 @@ module Sepia
       end
     end
 
+    # Returns the count of objects for a given class.
+    #
+    # This is equivalent to `list_all(object_class).size` but may be
+    # more efficient in some implementations.
+    #
+    # ```
+    # count = storage.count(MyDocument)
+    # puts "Found #{count} documents"
+    # ```
     def count(object_class : Class) : Int32
       list_all(object_class).size
     end
 
+    # Clears all objects from storage.
+    #
+    # Removes the entire storage directory and recreates it.
+    # This permanently deletes all data - use with caution.
+    #
+    # ```
+    # storage.clear # Deletes everything in the storage path
+    # ```
     def clear
       if Dir.exists?(@path)
         FileUtils.rm_rf(@path)
@@ -107,6 +269,26 @@ module Sepia
       end
     end
 
+    # Exports all data as a portable hash structure.
+    #
+    # Returns a hash where keys are class names and values are arrays of
+    # object data. Each object includes its ID and either its content
+    # (for Serializable objects) or a container type marker.
+    #
+    # Useful for backing up or migrating data between storage backends.
+    #
+    # ```
+    # data = storage.export_data
+    # # data = {
+    # #   "MyDocument" => [
+    # #     {"id" => "doc1", "content" => "Hello"},
+    # #     {"id" => "doc2", "content" => "World"}
+    # #   ],
+    # #   "MyBoard" => [
+    # #     {"id" => "board1", "type" => "container"}
+    # #   ]
+    # # }
+    # ```
     def export_data : Hash(String, Array(Hash(String, String)))
       data = {} of String => Array(Hash(String, String))
 
@@ -140,6 +322,21 @@ module Sepia
       data
     end
 
+    # Imports data from an exported hash structure.
+    #
+    # Restores objects from the data structure created by `export_data`.
+    # Clears any existing data before importing.
+    #
+    # Useful for restoring backups or migrating from another storage backend.
+    #
+    # ```
+    # data = {
+    #   "MyDocument" => [
+    #     {"id" => "doc1", "content" => "Hello"},
+    #   ],
+    # }
+    # storage.import_data(data)
+    # ```
     def import_data(data : Hash(String, Array(Hash(String, String))))
       clear
 
@@ -161,8 +358,24 @@ module Sepia
       end
     end
 
+    # Lists all objects grouped by class name.
+    #
+    # Returns a hash where keys are class names and values are arrays of
+    # object IDs for that class. This provides a complete inventory of
+    # all objects in storage.
+    #
+    # Useful for administrative purposes, data migration, or debugging.
+    #
+    # ```
+    # all_objects = storage.list_all_objects
+    # # all_objects = {
+    # #   "MyDocument" => ["doc1", "doc2"],
+    # #   "MyBoard" => ["board1"],
+    # #   "User" => ["user1", "user2", "user3"]
+    # # }
+    # ```
     def list_all_objects : Hash(String, Array(String))
-      objects = Hash(String, Array(String)).new { |h, k| h[k] = [] of String }
+      objects = Hash(String, Array(String)).new { |hash, key| hash[key] = [] of String }
       return objects unless Dir.exists?(@path)
 
       Dir.each_child(@path) do |class_name|

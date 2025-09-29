@@ -3,6 +3,17 @@ require "./sepia/*"
 # Sepia is a simple, file-system-based serialization library for Crystal.
 # It provides two main modules: `Sepia::Serializable` and `Sepia::Container`.
 #
+# ⚠️ **WARNING: UNSTABLE API AND STORAGE FORMAT**
+#
+# Sepia is currently in active development and does not have a stable API or storage format.
+#
+# - **The API is subject to change without notice**
+# - **Breaking changes may occur in any release**
+# - **The on-disk storage format is not stable** - you will need to migrate your data stores when upgrading between versions
+#
+# Use at your own risk in production. Ensure you have proper backup and migration strategies in place.
+#
+#
 # Disk Storage Strategy:
 #
 # **1. Individual Objects:**
@@ -281,7 +292,7 @@ module Sepia
     @@is_container_registry[name] = is_container
   end
 
-  def self.is_container?(name : String) : Bool
+  def self.container?(name : String) : Bool
     @@is_container_registry[name]? || false
   end
 end

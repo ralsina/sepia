@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.16.3">
+<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia 0.1.0</title>
+  <script type="text/javascript">
+  CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.1.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent " data-id="Sepia/Sepia" data-name="sepia">
+      <a href="Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="Sepia/FileStorage.html">FileStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1><a id="sepia" class="anchor" href="#sepia">  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Sepia</h1>
+<p>Sepia is a simple, file-system-based serialization library for Crystal. It provides two modules, <code><a href="Sepia/Serializable.html">Sepia::Serializable</a></code> and <code><a href="Sepia/Container.html">Sepia::Container</a></code>, to handle the persistence of objects to disk.</p>
+<h2><a id="core-concepts" class="anchor" href="#core-concepts">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Core Concepts</h2>
+<ul>
+<li>
+<p><strong><code><a href="Sepia/Serializable.html">Sepia::Serializable</a></code></strong>: Objects that include this module are serialized to a single file. The content of the file is determined by the object's <code>to_sepia</code> method. These objects are stored in a &quot;canonical&quot; location based on their class name and <code>sepia_id</code>.</p>
+</li>
+<li>
+<p><strong><code><a href="Sepia/Container.html">Sepia::Container</a></code></strong>: Objects that include this module are serialized as directories. They can contain other <code>Serializable</code> or <code>Container</code> objects.</p>
+<ul>
+<li>Nested <code>Serializable</code> objects are stored as symlinks to their canonical file.</li>
+<li>Nested <code>Container</code> objects are stored as subdirectories, creating a nested on-disk structure that mirrors the object hierarchy.</li>
+<li><strong>Automatic JSON Serialization</strong>: Primitive properties (String, Int32, Bool, Time, etc.) are automatically serialized to a <code>data.json</code> file without requiring custom methods.</li>
+</ul>
+</li>
+</ul>
+<h2><a id="documentation" class="anchor" href="#documentation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Documentation</h2>
+<p>API documentation can be found at <a href="https://crystaldoc.info/github/ralsina/sepia/">crystaldoc.info/github/ralsina/sepia/</a></p>
+<h2><a id="installation" class="anchor" href="#installation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Installation</h2>
+<ol>
+<li>
+<p>Add the dependency to your <code>shard.yml</code>:</p>
+<pre><code class="language-yaml">dependencies:
+  sepia:
+    github: ralsina/sepia</code></pre>
+</li>
+<li>
+<p>Run <code>shards install</code></p>
+</li>
+</ol>
+<h2><a id="storage-backends" class="anchor" href="#storage-backends">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Storage Backends</h2>
+<p>Sepia supports pluggable storage backends. Two backends are currently available:</p>
+<ul>
+<li><strong><code>:filesystem</code></strong>: The default backend, which stores objects on the local filesystem. This is the original Sepia behavior.</li>
+<li><strong><code>:memory</code></strong>: An in-memory backend, useful for testing or for temporary, non-persistent data.</li>
+</ul>
+<p>You can configure the storage backend using <code>Sepia::Storage.configure</code>.</p>
+<h2><a id="garbage-collection" class="anchor" href="#garbage-collection">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Garbage Collection</h2>
+<p>Sepia includes a mark-and-sweep garbage collector (GC) to automatically find and delete orphaned objects from storage.</p>
+<h3><a id="new-requirement-inheriting-from-sepiaobject" class="anchor" href="#new-requirement-inheriting-from-sepiaobject">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>New Requirement: Inheriting from <code><a href="Sepia/Object.html">Sepia::Object</a></code></h3>
+<p>To enable garbage collection and other shared features, all classes that you intend to manage with Sepia <strong>must</strong> inherit from the <code><a href="Sepia/Object.html">Sepia::Object</a></code> base class.</p>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MySerializable</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Serializable</span>
+  <span class="c"># ...</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="t">MyContainer</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  <span class="c"># ...</span>
+<span class="k">end</span></code></pre>
+<h3><a id="how-it-works" class="anchor" href="#how-it-works">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>How it Works</h3>
+<p>The garbage collector identifies &quot;live&quot; objects by starting from a set of &quot;root objects&quot; that you provide. It marks them and any object they reference (and so on recursively) as &quot;live&quot;. Any object in storage that is not marked as live is considered an orphan and is deleted.</p>
+<p>To run the collector, you must pass an <code>Enumerable</code> (like an <code>Array</code>) of the objects you consider to be the roots.</p>
+<pre><code class="language-crystal"><span class="c"># Assume my_app_roots is an array containing the top-level</span>
+<span class="c"># objects that your application considers the starting point.</span>
+my_app_roots <span class="o">=</span> [user1, user2, top_level_board]
+
+<span class="c"># Find and delete all orphaned objects</span>
+deleted_summary <span class="o">=</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Storage</span>.gc(roots: my_app_roots)
+
+<span class="c"># To get a report of what would be deleted without actually deleting anything:</span>
+orphans <span class="o">=</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Storage</span>.gc(roots: my_app_roots, dry_run: <span class="n">true</span>)
+
+<span class="c"># To garbage collect everything, pass an empty array:</span>
+deleted_summary <span class="o">=</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Storage</span>.gc(roots: <span class="o">[]</span> <span class="k">of</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>)</code></pre>
+<h2><a id="generation-tracking-for-optimistic-concurrency-control" class="anchor" href="#generation-tracking-for-optimistic-concurrency-control">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Generation Tracking for Optimistic Concurrency Control</h2>
+<p>Sepia supports generation tracking to enable optimistic concurrency control and versioning of objects. This is particularly useful for collaborative applications where multiple users might edit the same data.</p>
+<h3><a id="key-concepts" class="anchor" href="#key-concepts">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Key Concepts</h3>
+<ul>
+<li><strong>Generation Number</strong>: Each object version has a generation number (0, 1, 2, etc.) encoded in its ID</li>
+<li><strong>Base ID</strong>: The unique identifier without the generation suffix</li>
+<li><strong>Atomic Updates</strong>: New versions are created as new files, never modifying existing ones</li>
+<li><strong>Optimistic Locking</strong>: Detect conflicts when multiple users try to save simultaneously</li>
+</ul>
+<h3><a id="id-format" class="anchor" href="#id-format">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>ID Format</h3>
+<p>Objects use the format: <code>{type}-{uuid}.{generation}</code></p>
+<p>Examples:</p>
+<ul>
+<li><code>note-123e4567-e89b-12d3-a456-426614174000.0</code> (initial version)</li>
+<li><code>note-123e4567-e89b-12d3-a456-426614174000.1</code> (first update)</li>
+<li><code>note-123e4567-e89b-12d3-a456-426614174000.2</code> (second update)</li>
+</ul>
+<h3><a id="core-api" class="anchor" href="#core-api">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Core API</h3>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Note</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Serializable</span>
+
+  property title : <span class="t">String</span>
+  property content : <span class="t">String</span>
+
+  <span class="k">def</span> <span class="m">initialize</span>(@title, @content)
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">to_sepia</span> : <span class="t">String</span>
+    {title: @title, content: @content}.to_json
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">self</span>.from_sepia(json : <span class="t">String</span>) : <span class="k">self</span>
+    data <span class="o">=</span> <span class="t">JSON</span>.parse(json)
+    new(data[<span class="s">&quot;title&quot;</span>].as_s, data[<span class="s">&quot;content&quot;</span>].as_s)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c"># Create and save</span>
+note <span class="o">=</span> <span class="t">Note</span>.new(<span class="s">&quot;My Note&quot;</span>, <span class="s">&quot;Initial content&quot;</span>)
+note.save  <span class="c"># Creates note-xxx.0</span>
+
+<span class="c"># Create new version</span>
+v2 <span class="o">=</span> note.save_with_generation
+<span class="c"># v2.id is now note-xxx.1</span>
+
+<span class="c"># Check current generation</span>
+note.generation      <span class="c"># =&gt; 0</span>
+v2.generation        <span class="c"># =&gt; 1</span>
+
+<span class="c"># Get base ID</span>
+note.base_id         <span class="c"># =&gt; &quot;note-xxx&quot;</span>
+v2.base_id           <span class="c"># =&gt; &quot;note-xxx&quot;</span>
+
+<span class="c"># Check for newer versions</span>
+note.stale?(<span class="n">0</span>)       <span class="c"># =&gt; true (because v2 exists)</span>
+
+<span class="c"># Find latest version</span>
+latest <span class="o">=</span> <span class="t">Note</span>.latest(<span class="s">&quot;note-xxx&quot;</span>)
+latest.generation    <span class="c"># =&gt; 1</span>
+
+<span class="c"># Get all versions</span>
+versions <span class="o">=</span> <span class="t">Note</span>.versions(<span class="s">&quot;note-xxx&quot;</span>)
+versions.map(<span class="o">&amp;</span>.generation)  <span class="c"># =&gt; [0, 1]</span></code></pre>
+<h3><a id="conflict-resolution" class="anchor" href="#conflict-resolution">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Conflict Resolution</h3>
+<pre><code class="language-crystal"><span class="c"># User 1 loads note</span>
+user1_note <span class="o">=</span> <span class="t">Note</span>.load(<span class="s">&quot;note-xxx.1&quot;</span>)
+
+<span class="c"># User 2 loads same note</span>
+user2_note <span class="o">=</span> <span class="t">Note</span>.load(<span class="s">&quot;note-xxx.1&quot;</span>)
+
+<span class="c"># User 1 saves</span>
+user1_saved <span class="o">=</span> user1_note.save_with_generation  <span class="c"># Creates note-xxx.2</span>
+
+<span class="c"># User 2 tries to save</span>
+<span class="k">if</span> user2_note.stale?(<span class="n">1</span>)
+  <span class="c"># Conflict! Reload and merge</span>
+  latest <span class="o">=</span> <span class="t">Note</span>.latest(user2_note.base_id)
+  <span class="c"># Merge changes and save again</span>
+<span class="k">else</span>
+  user2_saved <span class="o">=</span> user2_note.save_with_generation
+<span class="k">end</span></code></pre>
+<h3><a id="backward-compatibility" class="anchor" href="#backward-compatibility">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Backward Compatibility</h3>
+<p>Existing objects without generation suffix are treated as generation 0 and continue to work seamlessly:</p>
+<pre><code class="language-crystal"><span class="c"># Legacy object</span>
+old_note <span class="o">=</span> <span class="t">Note</span>.load(<span class="s">&quot;legacy-note&quot;</span>)
+old_note.generation  <span class="c"># =&gt; 0</span>
+old_note.base_id     <span class="c"># =&gt; &quot;legacy-note&quot;</span></code></pre>
+<h2><a id="automatic-json-serialization-for-container-objects" class="anchor" href="#automatic-json-serialization-for-container-objects">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Automatic JSON Serialization for Container Objects</h2>
+<p><code><a href="Sepia/Container.html">Sepia::Container</a></code> now automatically handles JSON serialization for primitive properties, eliminating the need to write custom save/load methods for simple data types.</p>
+<h3><a id="supported-primitive-types" class="anchor" href="#supported-primitive-types">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Supported Primitive Types</h3>
+<ul>
+<li>Basic types: <code>String</code>, <code>Int32</code>, <code>Int64</code>, <code>Float32</code>, <code>Float64</code>, <code>Bool</code></li>
+<li>Time types: <code>Time</code></li>
+<li>Collections of primitives: <code>Array</code>, <code>Set</code>, <code>Hash</code> (when containing primitive types)</li>
+<li>Nilable versions of all above types</li>
+</ul>
+<h3><a id="how-it-works-1" class="anchor" href="#how-it-works-1">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>How It Works</h3>
+<ol>
+<li><strong>Automatic Detection</strong>: The Container module automatically identifies primitive instance variables at compile time</li>
+<li><strong>Filtered Serialization</strong>: Only primitive properties are included in the JSON - Sepia objects and collections containing them are excluded</li>
+<li><strong>File Storage</strong>: Primitive properties are stored in a <code>data.json</code> file within the container's directory</li>
+<li><strong>Type-Safe Parsing</strong>: Each type is parsed using the appropriate method to ensure type safety</li>
+</ol>
+<h3><a id="example-with-primitive-properties" class="anchor" href="#example-with-primitive-properties">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example with Primitive Properties</h3>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">UserProfile</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+
+  <span class="c"># Primitive properties - automatically serialized to JSON</span>
+  property name : <span class="t">String</span>
+  property age : <span class="t">Int32</span>
+  property active : <span class="t">Bool</span>
+  property created_at : <span class="t">Time</span>
+  property tags : <span class="t">Array</span>(<span class="t">String</span>)
+  property metadata : <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>)
+
+  <span class="c"># Sepia objects - handled via symlinks as before</span>
+  property friends : <span class="t">Array</span>(<span class="t">User</span>)
+  property settings : <span class="t">UserSettings</span>?
+
+  <span class="k">def</span> <span class="m">initialize</span>(@name <span class="o">=</span> <span class="s">&quot;&quot;</span>, @age <span class="o">=</span> <span class="n">0</span>, @active <span class="o">=</span> <span class="n">false</span>)
+    @created_at <span class="o">=</span> <span class="t">Time</span>.utc
+    @tags <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>
+    @metadata <span class="o">=</span> {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">String</span>
+    @friends <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">User</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+<p>When you save and load a <code>UserProfile</code>, all primitive properties are automatically handled:</p>
+<pre><code class="language-crystal">profile <span class="o">=</span> <span class="t">UserProfile</span>.new
+profile.name <span class="o">=</span> <span class="s">&quot;Alice&quot;</span>
+profile.age <span class="o">=</span> <span class="n">30</span>
+profile.active <span class="o">=</span> <span class="n">true</span>
+profile.tags <span class="o">=</span> [<span class="s">&quot;admin&quot;</span>, <span class="s">&quot;premium&quot;</span>]
+profile.metadata <span class="o">=</span> {<span class="s">&quot;theme&quot;</span> <span class="o">=&gt;</span> <span class="s">&quot;dark&quot;</span>, <span class="s">&quot;locale&quot;</span> <span class="o">=&gt;</span> <span class="s">&quot;en_US&quot;</span>}
+
+<span class="c"># Save - primitive properties automatically written to data.json</span>
+<span class="c"># Sepia objects saved as symlinks</span>
+profile.save
+
+<span class="c"># Load - primitive properties automatically restored from data.json</span>
+loaded <span class="o">=</span> <span class="t">UserProfile</span>.load(profile.sepia_id).<span class="k">as</span>(<span class="t">UserProfile</span>)
+
+puts loaded.name        <span class="c"># =&gt; &quot;Alice&quot;</span>
+puts loaded.tags[<span class="n">0</span>]      <span class="c"># =&gt; &quot;admin&quot;</span>
+puts loaded.metadata     <span class="c"># =&gt; {&quot;theme&quot; =&gt; &quot;dark&quot;, &quot;locale&quot; =&gt; &quot;en_US&quot;}</span></code></pre>
+<h3><a id="on-disk-structure-with-primitives" class="anchor" href="#on-disk-structure-with-primitives">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>On-Disk Structure with Primitives</h3>
+<pre><code class="language-crystal">./_data
+└── UserProfile
+    └── alice_profile
+        ├── data.json              # Primitive properties
+        ├── friends
+        │   └── 0000_bob -&gt; ./_data/User/bob
+        └── settings -&gt; ./_data/UserSettings/default</code></pre>
+<p>The <code>data.json</code> file contains:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Alice&quot;,
+  &quot;age&quot;: 30,
+  &quot;active&quot;: true,
+  &quot;created_at&quot;: &quot;2024-01-15T10:30:00Z&quot;,
+  &quot;tags&quot;: [&quot;admin&quot;, &quot;premium&quot;],
+  &quot;metadata&quot;: {&quot;theme&quot;: &quot;dark&quot;, &quot;locale&quot;: &quot;en_US&quot;}
+}</code></pre>
+<h3><a id="excluded-properties" class="anchor" href="#excluded-properties">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Excluded Properties</h3>
+<p>The following are automatically excluded from JSON serialization:</p>
+<ul>
+<li>Any property whose type inherits from <code><a href="Sepia/Object.html">Sepia::Object</a></code></li>
+<li>Arrays containing <code><a href="Sepia/Object.html">Sepia::Object</a></code> elements</li>
+<li>Sets containing <code><a href="Sepia/Object.html">Sepia::Object</a></code> elements</li>
+<li>Hashes with <code><a href="Sepia/Object.html">Sepia::Object</a></code> values</li>
+<li>The <code>sepia_id</code> property (handled separately)</li>
+</ul>
+<h3><a id="backward-compatibility-1" class="anchor" href="#backward-compatibility-1">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Backward Compatibility</h3>
+<p>This feature is fully backward compatible. Existing Container classes will continue to work exactly as before, with primitive properties simply gaining automatic serialization support.</p>
+<h2><a id="usage" class="anchor" href="#usage">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usage</h2>
+<p>Here's a simple example demonstrating how to use <code><a href="Sepia.html">Sepia</a></code> to save and load a nested structure of &quot;Boards&quot; and &quot;Post-its&quot;.</p>
+<p>First, configure the storage backend. For this example, we'll use the <code>:filesystem</code> backend to store data in a local <code>_data</code> directory.</p>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;sepia&quot;</span>
+
+<span class="c"># Configure Sepia to use the filesystem backend.</span>
+<span class="t">Sepia</span><span class="t">::</span><span class="t">Storage</span>.configure(<span class="n">:filesystem</span>, {<span class="s">&quot;path&quot;</span> <span class="o">=&gt;</span> <span class="s">&quot;./_data&quot;</span>})
+
+<span class="c"># A Postit is a simple Serializable object.</span>
+<span class="k">class</span> <span class="t">Postit</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Serializable</span>
+
+  property text : <span class="t">String</span>
+
+  <span class="k">def</span> <span class="m">initialize</span>(@text); <span class="k">end</span>
+  <span class="k">def</span> <span class="m">initialize</span>; @text <span class="o">=</span> <span class="s">&quot;&quot;</span>; <span class="k">end</span>
+
+  <span class="c"># The to_sepia method defines the content of the serialized file.</span>
+  <span class="k">def</span> <span class="m">to_sepia</span> : <span class="t">String</span>
+    @text
+  <span class="k">end</span>
+
+  <span class="c"># The from_sepia class method defines how to deserialize the object.</span>
+  <span class="k">def</span> <span class="m">self</span>.from_sepia(sepia_string : <span class="t">String</span>) : <span class="k">self</span>
+    new(sepia_string)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c"># A Board is a Container that can hold other Boards and Postits.</span>
+<span class="k">class</span> <span class="t">Board</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+
+  <span class="c"># Primitive properties - automatically serialized</span>
+  property name : <span class="t">String</span>
+  property description : <span class="t">String</span>?
+  property created_at : <span class="t">Time</span>
+  property is_public : <span class="t">Bool</span> <span class="o">=</span> <span class="n">false</span>
+
+  <span class="c"># Sepia object references - handled via symlinks</span>
+  property boards : <span class="t">Array</span>(<span class="t">Board</span>)
+  property postits : <span class="t">Array</span>(<span class="t">Postit</span>)
+
+  <span class="k">def</span> <span class="m">initialize</span>(@name <span class="o">=</span> <span class="s">&quot;&quot;</span>, @description <span class="o">=</span> <span class="n">nil</span>)
+    @created_at <span class="o">=</span> <span class="t">Time</span>.utc
+    @boards <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">Board</span>
+    @postits <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">Postit</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c"># --- Create and Save ---</span>
+
+<span class="c"># A top-level board for &quot;Work&quot;</span>
+work_board <span class="o">=</span> <span class="t">Board</span>.new
+work_board.sepia_id <span class="o">=</span> <span class="s">&quot;work_board&quot;</span>
+work_board.name <span class="o">=</span> <span class="s">&quot;Work&quot;</span>
+work_board.description <span class="o">=</span> <span class="s">&quot;Work-related boards&quot;</span>
+work_board.is_public <span class="o">=</span> <span class="n">false</span>
+
+<span class="c"># A nested board for &quot;Project X&quot;</span>
+project_x_board <span class="o">=</span> <span class="t">Board</span>.new
+project_x_board.sepia_id <span class="o">=</span> <span class="s">&quot;project_x&quot;</span> <span class="c"># This ID is only used for top-level objects</span>
+project_x_board.name <span class="o">=</span> <span class="s">&quot;Project X&quot;</span>
+project_x_board.description <span class="o">=</span> <span class="s">&quot;Tracking Project X progress&quot;</span>
+
+<span class="c"># Create some Post-its</span>
+postit1 <span class="o">=</span> <span class="t">Postit</span>.new(<span class="s">&quot;Finish the report&quot;</span>)
+postit1.sepia_id <span class="o">=</span> <span class="s">&quot;report_postit&quot;</span>
+postit2 <span class="o">=</span> <span class="t">Postit</span>.new(<span class="s">&quot;Review the code&quot;</span>)
+postit2.sepia_id <span class="o">=</span> <span class="s">&quot;code_review_postit&quot;</span>
+
+<span class="c"># Assemble the structure</span>
+project_x_board.postits <span class="o">&lt;&lt;</span> postit2
+work_board.boards <span class="o">&lt;&lt;</span> project_x_board
+work_board.postits <span class="o">&lt;&lt;</span> postit1
+
+<span class="c"># Save the top-level board. This will recursively save all its contents.</span>
+work_board.save
+
+<span class="c"># --- Load ---</span>
+
+loaded_work_board <span class="o">=</span> <span class="t">Board</span>.load(<span class="s">&quot;work_board&quot;</span>).<span class="k">as</span>(<span class="t">Board</span>)
+
+puts loaded_work_board.postits[<span class="n">0</span>].text <span class="c"># =&gt; &quot;Finish the report&quot;</span>
+puts loaded_work_board.boards[<span class="n">0</span>].postits[<span class="n">0</span>].text <span class="c"># =&gt; &quot;Review the code&quot;</span></code></pre>
+<h3><a id="on-disk-representation" class="anchor" href="#on-disk-representation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>On-Disk Representation</h3>
+<p>After running the code above, the <code>_data</code> directory will have the following structure:</p>
+<pre><code class="language-crystal">./_data
+├── Board
+│   └── work_board
+│       ├── data.json              # Primitive properties (name, description, etc.)
+│       ├── boards
+│       │   └── 0000_project_x     # Array elements are prefixed with index
+│       │       ├── data.json      # Primitive properties for project_x
+│       │       └── postits
+│       │           └── 0000_code_review_postit -&gt; ./_data/Postit/code_review_postit
+│       └── postits
+│           └── 0000_report_postit -&gt; ./_data/Postit/report_postit
+└── Postit
+    ├── code_review_postit
+    └── report_postit</code></pre>
+<p>Notice how:</p>
+<ul>
+<li>The <code>work_board</code> and its nested <code>project_x</code> board are directories.</li>
+<li>Each board directory contains a <code>data.json</code> file with primitive properties.</li>
+<li>Array elements (like <code>boards</code> and <code>postits</code>) are stored in subdirectories with indexed prefixes (e.g., <code>0000_project_x</code>) to maintain order.</li>
+<li>The <code>Postit</code> objects are stored in the canonical <code>Postit</code> directory and are referenced by symlinks.</li>
+</ul>
+<p>The <code>data.json</code> for <code>work_board</code> would contain:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Work&quot;,
+  &quot;description&quot;: &quot;Work-related boards&quot;,
+  &quot;created_at&quot;: &quot;2024-01-15T10:30:00Z&quot;,
+  &quot;is_public&quot;: false
+}</code></pre>
+<h2><a id="development" class="anchor" href="#development">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Development</h2>
+<p>To run the tests, clone the repository and run <code>crystal spec</code>.</p>
+<h2><a id="contributing" class="anchor" href="#contributing">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Contributing</h2>
+<ol>
+<li>Fork it (<a href="https://github.com/ralsina/sepia/fork">https://github.com/ralsina/sepia/fork</a>)</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
+<h2><a id="contributors" class="anchor" href="#contributors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Contributors</h2>
+<ul>
+<li><a href="https://github.com/ralsina">Roberto Alsina</a> - creator and maintainer</li>
+</ul>
+</div>
+</body>
+</html>
