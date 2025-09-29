@@ -41,7 +41,7 @@ class GenerationTestNote < Sepia::Object
     {
       "title"   => @title,
       "content" => @content,
-      "tags"    => @tags
+      "tags"    => @tags,
     }.to_json
   end
 
@@ -134,8 +134,10 @@ describe "Generation tracking" do
 
     latest = GenerationTestUser.latest(base_id)
     latest.should_not be_nil
-    latest.not_nil!.sepia_id.should eq "#{base_id}.2"
-    latest.not_nil!.name.should eq "v3"
+    if latest
+      latest.sepia_id.should eq "#{base_id}.2"
+      latest.name.should eq "v3"
+    end
   end
 
   it "finds all versions" do
@@ -167,8 +169,10 @@ describe "Generation tracking" do
     # Should still work
     found = GenerationTestUser.latest("legacy-user")
     found.should_not be_nil
-    found.not_nil!.sepia_id.should eq "legacy-user"
-    found.not_nil!.generation.should eq 0
+    if found
+      found.sepia_id.should eq "legacy-user"
+      found.generation.should eq 0
+    end
   end
 
   it "checks if object exists" do
@@ -219,7 +223,9 @@ describe "Generation tracking with InMemoryStorage" do
 
     latest = GenerationTestUser.latest("memory-test")
     latest.should_not be_nil
-    latest.not_nil!.generation.should eq 1
+    if latest
+      latest.generation.should eq 1
+    end
   end
 end
 
@@ -233,7 +239,7 @@ describe "Atomic writes" do
     user.save
 
     # Check that no .tmp file remains
-    tmp_files = Dir.children(user_dir).select { |f| f.ends_with?(".tmp") }
+    tmp_files = Dir.children(user_dir).select(&.ends_with?(".tmp"))
     tmp_files.should be_empty
   end
 end

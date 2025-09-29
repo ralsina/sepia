@@ -96,7 +96,7 @@ module Sepia
       else
         # For other backends, try to find versions by checking consecutive generations
         gen = 0
-        while true
+        loop do
           begin
             obj = self.load("#{base_id}#{generation_separator}#{gen}")
             versions << obj
