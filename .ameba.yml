@@ -1,0 +1,22 @@
+# Ameba configuration file
+# See https://crystal-ameba.github.io/latest/#configuration-file
+
+# Enable all rules by default
+Enabled:
+  - Naming/PredicateName
+  - Naming/BlockParameterName
+
+# Exclude specific files or directories
+Exclude:
+  - lib/
+
+# Configure specific rules
+Naming/BlockParameterName:
+  Enabled: true
+  # Exclude single-letter parameters in macro contexts
+  Excluded:
+    - src/sepia/container.cr
+
+# Or we can disable the rule entirely for specific files
+# Naming/BlockParameterName:
+#   Enabled: false
