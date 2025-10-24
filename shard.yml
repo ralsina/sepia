@@ -9,3 +9,7 @@ crystal: '>= 1.16.3'
 main: src/sepia.cr
 
 license: MIT
+
+dependencies:
+  inotify:
+    github: petoem/inotify.cr

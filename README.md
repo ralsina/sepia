@@ -80,6 +80,97 @@ orphans = Sepia::Storage.gc(roots: my_app_roots, dry_run: true)
 deleted_summary = Sepia::Storage.gc(roots: [] of Sepia::Object)
 ```
 
+## File Watcher
+
+Sepia includes a file system watcher that can monitor changes to objects in storage and generate events when data is modified on disk. This is useful for building collaborative applications that need to react to external file changes.
+
+### ⚠️ Linux Only
+
+The file watcher feature currently only supports Linux systems with inotify support.
+
+### Basic Usage
+
+```crystal
+require "sepia"
+
+# Configure storage
+Sepia::Storage.configure(:filesystem, {"path" => "./data"})
+
+# Create a watcher for the current storage backend
+storage = Sepia::Storage.backend.as(Sepia::FileStorage)
+watcher = Sepia::Watcher.new(storage)
+
+# Register a callback for file system events
+watcher.on_change do |event|
+  puts "#{event.type}: #{event.object_class} #{event.object_id} (#{event.path})"
+
+  case event.type
+  when .created?
+    puts "New object created!"
+  when .modified?
+    puts "Object modified, reloading..."
+    begin
+      # Load the modified object
+      obj = Sepia::Storage.load(event.object_class.constantize(typeof(Object)), event.object_id)
+      handle_object_change(obj)
+    rescue ex
+      puts "Failed to load object: #{ex.message}"
+    end
+  when .deleted?
+    puts "Object deleted!"
+  end
+end
+
+# Start watching (runs in background)
+watcher.start
+
+# Your application continues here...
+# The watcher will automatically detect external file changes
+
+# Stop watching when done
+watcher.stop
+```
+
+### Event Types
+
+The watcher generates events of type `Sepia::EventType`:
+
+- **`Created`**: A new file or directory was created
+- **`Modified`**: An existing file or directory was modified
+- **`Deleted`**: A file or directory was deleted
+
+### Event Structure
+
+Each event contains the following information:
+
+```crystal
+event = Sepia::Event.new(
+  type: Sepia::EventType::Modified,
+  object_class: "MyDocument",
+  object_id: "doc-123",
+  path: "/storage/MyDocument/doc-123",
+  timestamp: Time.utc
+)
+
+event.type          # => Sepia::EventType::Modified
+event.object_class   # => "MyDocument"
+event.object_id      # => "doc-123"
+event.path           # => "/storage/MyDocument/doc-123"
+event.timestamp      # => Time instance
+```
+
+### Internal Operation Filtering
+
+The watcher automatically filters out operations performed by Sepia itself to prevent callback loops. This means that if you call `save()` on an object through the Sepia API, it won't trigger the watcher callback.
+
+### Important Notes
+
+- The watcher only monitors the filesystem directory where Sepia stores its data
+- Temporary files (`.tmp` extensions) from atomic writes are automatically ignored
+- The watcher is Linux-only and requires inotify support
+- Events are processed asynchronously in background fibers
+- Multiple rapid changes may be batched or reordered
+
 ## Generation Tracking for Optimistic Concurrency Control
 
 Sepia supports generation tracking to enable optimistic concurrency control and versioning of objects. This is particularly useful for collaborative applications where multiple users might edit the same data.
