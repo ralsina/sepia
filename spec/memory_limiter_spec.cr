@@ -378,9 +378,9 @@ describe Sepia::MemoryLimiter do
       finished = Channel(Nil).new(5)
 
       # Spawn multiple threads accessing the limiter
-      5.times do |i|
+      5.times do |_|
         spawn do
-          10.times do |j|
+          10.times do |_|
             pressure = limiter.check_now
             pressure.should be_a(Sepia::MemoryLimiter::PressureLevel)
 
@@ -406,7 +406,7 @@ describe Sepia::MemoryLimiter do
       limiter = Sepia::MemoryLimiter.new(check_interval: 10.milliseconds)
       finished = Channel(Nil).new(3)
 
-      3.times do |i|
+      3.times do |_|
         spawn do
           5.times do |j|
             limiter.start_monitoring if j % 2 == 0

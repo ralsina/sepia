@@ -27,7 +27,7 @@ module Sepia
   #
   # ### Example
   #
-  # ```crystal
+  # ```
   # event = Event.new(
   #   type: EventType::Modified,
   #   object_class: "MyDocument",
@@ -40,13 +40,13 @@ module Sepia
   # # => Event: Modified MyDocument doc-123
   # ```
   struct Event
-      property type : EventType
-      property object_class : String
-      property object_id : String
-      property path : String
-      property timestamp : Time
+    property type : EventType
+    property object_class : String
+    property object_id : String
+    property path : String
+    property timestamp : Time
 
-      def initialize(@type : EventType, @object_class : String, @object_id : String, @path : String, @timestamp : Time = Time.utc)
-      end
+    def initialize(@type : EventType, @object_class : String, @object_id : String, @path : String, @timestamp : Time = Time.utc)
     end
+  end
 end

@@ -73,7 +73,7 @@ describe Sepia::CacheManager do
       retrieved = cache.get("key1", TestCacheObject)
 
       retrieved.should_not be_nil
-      retrieved.try { |obj| obj.content.should eq("test_value") }
+      retrieved.try(&.content.should(eq("test_value")))
     end
   end
 

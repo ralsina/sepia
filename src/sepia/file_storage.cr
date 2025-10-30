@@ -1,6 +1,6 @@
 require "file_utils"
 require "./storage_backend"
-require "./watcher"
+require "./container"
 
 module Sepia
   # Filesystem-based storage backend for Sepia objects.
@@ -89,19 +89,10 @@ module Sepia
       object_dir = File.dirname(object_path)
       FileUtils.mkdir_p(object_dir) unless File.exists?(object_dir)
 
-      # Track files to avoid triggering watcher callbacks
+      # Atomic write: write to temp file first, then rename
       temp_path = "#{object_path}.tmp"
-      Watcher.add_internal_file(temp_path)
-      Watcher.add_internal_file(object_path)
-
-      begin
-        # Atomic write: write to temp file first, then rename
-        File.write(temp_path, object.to_sepia)
-        File.rename(temp_path, object_path)
-      ensure
-        Watcher.remove_internal_file(temp_path)
-        Watcher.remove_internal_file(object_path)
-      end
+      File.write(temp_path, object.to_sepia)
+      File.rename(temp_path, object_path)
     end
 
     # Saves a Container object to the filesystem.
@@ -118,15 +109,7 @@ module Sepia
     def save(object : Container, path : String? = nil)
       object_path = path || File.join(@path, object.class.name, object.sepia_id)
       FileUtils.mkdir_p(object_path)
-
-      # Track the container directory to avoid triggering watcher callbacks
-      Watcher.add_internal_file(object_path)
-
-      begin
-        object.save_references(object_path)
-      ensure
-        Watcher.remove_internal_file(object_path)
-      end
+      object.save_references(object_path)
     end
 
     # Loads an object from the filesystem.
@@ -169,6 +152,58 @@ module Sepia
       end
     end
 
+    # Loads an object with caching support.
+    #
+    # Similar to the regular `load` method but integrates with the storage
+    # caching system for better performance when loading the same objects
+    # multiple times.
+    #
+    # ### Parameters
+    #
+    # - *object_class* : The class of object to load
+    # - *id* : The object's unique identifier
+    # - *path* : Optional custom load path
+    #
+    # ### Returns
+    #
+    # The loaded object.
+    #
+    # ### Example
+    #
+    # ```
+    # # Load with caching (faster for repeated loads)
+    # doc1 = storage.load_with_cache(MyDocument, "doc-123")
+    # doc2 = storage.load_with_cache(MyDocument, "doc-123") # Returns cached instance
+    # ```
+    def load_with_cache(object_class : Class, id : String, path : String? = nil) : Object
+      object_path = path || File.join(@path, object_class.to_s, id)
+
+      case
+      when object_class.responds_to?(:from_sepia)
+        unless File.exists?(object_path)
+          raise "Object with ID #{id} not found in storage for type #{object_class}."
+        end
+
+        # Read and parse the object
+        content = File.read(object_path)
+        obj = object_class.from_sepia(content)
+        obj.sepia_id = id
+        obj
+      when object_class < Container
+        unless File.directory?(object_path)
+          raise "Object with ID #{id} not found in storage for type #{object_class} (directory missing)."
+        end
+
+        # Create the container and load its references
+        obj = object_class.new
+        obj.sepia_id = id
+        obj.as(Container).load_references(object_path)
+        obj
+      else
+        raise "Unsupported class for Sepia storage: #{object_class.name}. Must include Sepia::Serializable or Sepia::Container."
+      end
+    end
+
     # Deletes an object from the filesystem.
     #
     # Removes the object's file or directory. For Container objects, recursively
@@ -184,21 +219,14 @@ module Sepia
     def delete(object : Serializable | Container)
       object_path = File.join(@path, object.class.name, object.sepia_id)
 
-      # Track the path to avoid triggering watcher callbacks
-      Watcher.add_internal_file(object_path)
-
-      begin
-        if object.is_a?(Serializable)
-          if File.exists?(object_path)
-            File.delete(object_path)
-          end
-        elsif object.is_a?(Container)
-          if Dir.exists?(object_path)
-            FileUtils.rm_rf(object_path)
-          end
+      if object.is_a?(Serializable)
+        if File.exists?(object_path)
+          File.delete(object_path)
         end
-      ensure
-        Watcher.remove_internal_file(object_path)
+      elsif object.is_a?(Container)
+        if Dir.exists?(object_path)
+          FileUtils.rm_rf(object_path)
+        end
       end
     end
 
@@ -215,21 +243,14 @@ module Sepia
     def delete(class_name : String, id : String)
       object_path = File.join(@path, class_name, id)
 
-      # Track the path to avoid triggering watcher callbacks
-      Watcher.add_internal_file(object_path)
-
-      begin
-        if Sepia.container?(class_name)
-          if Dir.exists?(object_path)
-            FileUtils.rm_rf(object_path)
-          end
-        else
-          if File.exists?(object_path)
-            File.delete(object_path)
-          end
+      if Sepia.container?(class_name)
+        if Dir.exists?(object_path)
+          FileUtils.rm_rf(object_path)
         end
-      ensure
-        Watcher.remove_internal_file(object_path)
+      else
+        if File.exists?(object_path)
+          File.delete(object_path)
+        end
       end
     end
 

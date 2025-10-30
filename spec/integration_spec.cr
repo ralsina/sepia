@@ -232,10 +232,10 @@ describe "Sepia Integration Tests" do
       weak_cache.live_keys.size.should eq 20
 
       # Objects should be retrievable while strong references exist
-      objects.each_with_index do |obj, i|
+      objects.each_with_index do |_, i|
         loaded = weak_cache.get("weak_doc_#{i}")
         loaded.should_not be_nil
-        loaded.try { |doc| doc.content.should eq "Content #{i}" }
+        loaded.try(&.content.should(eq("Content #{i}")))
       end
 
       # Clean up strong references
@@ -420,9 +420,9 @@ describe "Sepia Integration Tests" do
       finished = Channel(Nil).new(5)
 
       # Spawn multiple threads loading the same container
-      5.times do |i|
+      5.times do |_|
         spawn do
-          10.times do |j|
+          10.times do |_|
             loaded = IntegrationProject.load(project.sepia_id)
             loaded.should_not be_nil
             loaded.name.should eq "Concurrent Project"

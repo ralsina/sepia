@@ -40,7 +40,7 @@ describe Sepia::WeakCache do
       retrieved = cache.get("key1")
 
       retrieved.should_not be_nil
-      retrieved.try { |obj| obj.content.should eq("test_value") }
+      retrieved.try(&.content.should(eq("test_value")))
     end
 
     it "returns nil for non-existent keys" do
@@ -60,7 +60,7 @@ describe Sepia::WeakCache do
 
       retrieved = cache.get("key1")
       retrieved.should_not be_nil
-      retrieved.try { |obj| obj.content.should eq("value2") }
+      retrieved.try(&.content.should(eq("value2")))
     end
   end
 
@@ -243,7 +243,7 @@ describe Sepia::WeakCache do
 
             # Object should be retrievable immediately
             if retrieved
-              retrieved.try { |obj| obj.content.should eq("thread#{i}_value#{j}") }
+              retrieved.try(&.content.should(eq("thread#{i}_value#{j}")))
             end
           end
           finished.send(nil)
@@ -269,7 +269,7 @@ describe Sepia::WeakCache do
       # Verify object is accessible
       retrieved = cache.get("key1")
       retrieved.should_not be_nil
-      retrieved.try { |obj| obj.content.should eq("test_value") }
+      retrieved.try(&.content.should(eq("test_value")))
 
       # As long as test_obj exists, it should be accessible from cache
       cache.has_key?("key1").should be_true

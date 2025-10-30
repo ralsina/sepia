@@ -14,7 +14,13 @@
       "Bash(git add:*)",
       "Bash(ameba:*)",
       "Bash(act:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(pkill:*)",
+      "Bash(awk:*)",
+      "Bash(xargs kill:*)",
+      "Bash(killall:*)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []

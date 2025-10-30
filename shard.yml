@@ -11,5 +11,5 @@ main: src/sepia.cr
 license: MIT
 
 dependencies:
-  inotify:
-    github: petoem/inotify.cr
+  fswatch:
+    github: bcardiff/crystal-fswatch

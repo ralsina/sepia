@@ -1,274 +1,297 @@
-require "inotify"
-require "./watcher/event"
+require "fswatch"
+require "set"
 require "./storage_backend"
+require "./path_resolver"
 
 module Sepia
-  # File system watcher for monitoring changes to Sepia objects.
+  # File system event types for Sepia objects.
+  enum EventType
+    Created
+    Modified
+    Deleted
+  end
+
+  # Represents a file system event for a Sepia object.
+  struct Event
+    property type : EventType
+    property object_class : String
+    property object_id : String
+    property path : String
+    property timestamp : Time
+    property object_info : PathResolver::ObjectInfo?
+
+    def initialize(@type : EventType, @object_class : String, @object_id : String, @path : String, @object_info : PathResolver::ObjectInfo? = nil)
+      @timestamp = Time.local
+    end
+
+    # Get the resolved object information for this event
+    def object_info?
+      @object_info
+    end
+
+    # Load the actual Sepia object from this event
+    #
+    # ```crystal
+    # obj = event.object(MyDocument)
+    # if obj
+    #   puts "Loaded object: #{obj.class.name}"
+    # end
+    # ```
+    def object(klass : Class) : Object?
+      info = @object_info
+      return nil unless info
+
+      info.object(klass)
+    end
+  end
+
+  # File system watcher for Sepia objects using crystal-fswatch.
   #
-  # The Watcher monitors the storage directory and generates events when
-  # objects are created, modified, or deleted. It uses inotify on Linux
-  # to efficiently monitor file system changes.
+  # This watcher monitors file system changes in a Sepia storage directory
+  # and emits events for created, modified, or deleted objects.
   #
-  # ⚠️ **WARNING**: The Watcher API is subject to change and currently
-  # only supports Linux systems with inotify.
-  #
-  # ### Example
+  # ### Basic Usage
   #
   # ```crystal
-  # # Configure storage
-  # Sepia::Storage.configure(:filesystem, {"path" => "./data"})
+  # storage = Sepia::FileStorage.new("./data")
+  # watcher = Sepia::Watcher.new(storage)
   #
-  # # Create watcher
-  # watcher = Sepia::Watcher.new(Sepia::Storage.backend.as(FileStorage))
-  #
-  # # Register callback
+  # # Register a callback to receive events
   # watcher.on_change do |event|
-  #   puts "#{event.type}: #{event.object_class} #{event.object_id}"
-  #
-  #   # Load the modified object
-  #   if event.type.modified?
-  #     begin
-  #       obj = Sepia::Storage.load(event.object_class.constantize(typeof(Object)), event.object_id)
-  #       handle_object_change(obj)
-  #     rescue ex
-  #       puts "Failed to load object: #{ex.message}"
-  #     end
-  #   end
+  #   puts "Event: #{event.type} for #{event.object_class}:#{event.object_id}"
   # end
   #
-  # # Start watching
+  # # Start watching (this is non-blocking)
   # watcher.start
+  #
+  # # When done, stop watching
+  # watcher.stop
   # ```
+  #
+  # ### Design Principles
+  #
+  # This watcher uses **crystal-fswatch** for reliable file system monitoring:
+  # - Cross-platform support (Linux, macOS, Windows)
+  # - No hanging issues in spec environments
+  # - Clean lifecycle management
+  # - Thread-safe event handling
+  #
+  # ### Path Structure
+  #
+  # The watcher expects paths in the format: `storage_path/ClassName/object_id`
+  # It will parse these paths and extract the class name and object ID for each event.
   class Watcher
-    # Storage backend being watched
-    getter storage : FileStorage
-
-    # Callback for file system events
-    property callback : (Event ->)?
-
-    # Internal file tracking to avoid callback loops
+    # Class-level internal file tracking for thread safety
     @@internal_files = Set(String).new
     @@internal_files_mutex = Mutex.new
 
-    # Inotify watcher instance
-    @inotify : Inotify::Watcher
+    # Storage backend being watched
+    getter storage : FileStorage
 
-    # Creates a new Watcher instance.
-    #
-    # ### Parameters
-    #
-    # - *storage* : The FileStorage backend to monitor
-    #
-    # ### Example
-    #
-    # ```crystal
-    # storage = Sepia::Storage.backend.as(FileStorage)
-    # watcher = Sepia::Watcher.new(storage)
-    # ```
-    def initialize(@storage : FileStorage)
-      @inotify = Inotify.watcher
-      @watching = false
+    # Path resolver for converting file paths to Sepia object information
+    getter path_resolver : PathResolver
+
+    # Whether the watcher is currently running
+    property running : Bool = false
+
+    # The fswatch session instance
+    @session : FSWatch::Session?
+
+    # Event counter for debugging
+    @event_count : Int32 = 0
+
+    # Callback block for event handling
+    getter callback_block : (Event ->)?
+    @callback_block : (Event ->)?
+
+    # Alias for callback_block to match spec expectations
+    def callback
+      @callback_block
     end
 
-    # Registers a callback for file system change events.
-    #
-    # Only one callback can be registered per watcher instance.
-    # Calling this multiple times will replace the previous callback.
-    #
-    # ### Parameters
-    #
-    # - *callback* : A proc that receives an Event object
-    #
-    # ### Example
-    #
-    # ```crystal
-    # watcher.on_change do |event|
-    #   puts "Change detected: #{event.type} #{event.object_class}"
-    # end
-    # ```
-    def on_change(&@callback : Event ->)
-    end
-
-    # Starts monitoring the storage directory for changes.
-    #
-    # This method starts a background fiber that monitors file system
-    # events and calls the registered callback. It returns immediately.
-    #
-    # ### Example
-    #
-    # ```crystal
-    # watcher.on_change { |event| puts event }
-    # watcher.start
-    # # watcher now monitoring in background
-    # ```
-    def start
-      return if @watching
-
-      @watching = true
-
-      # Set up event handler
-      @inotify.on_event do |inotify_event|
-        handle_inotify_event(inotify_event)
-      end
-
-      # Start watching the storage directory
-      @inotify.watch(@storage.path)
-    end
-
-    # Stops monitoring the storage directory.
-    #
-    # This stops the inotify watcher and stops generating events.
-    # The watcher can be started again with `start`.
-    #
-    # ### Example
-    #
-    # ```crystal
-    # watcher.start
-    # # ... monitor changes ...
-    # watcher.stop
-    # ```
-    def stop
-      @watching = false
-      @inotify.close
-    end
-
-    # Checks if the watcher is currently monitoring.
-    #
-    # ### Returns
-    #
-    # `true` if the watcher is actively monitoring, `false` otherwise.
-    #
-    # ### Example
-    #
-    # ```crystal
-    # puts watcher.running? # => false
-    # watcher.start
-    # puts watcher.running? # => true
-    # ```
-    def running? : Bool
-      @watching
-    end
-
-    # Adds a file to the internal operation tracking set.
-    #
-    # This is used by storage backends to mark files that are being
-    # modified by Sepia itself, so the watcher doesn't generate events
-    # for internal operations.
-    #
-    # This method is thread-safe.
-    #
-    # ### Parameters
-    #
-    # - *path* : The file path to track
-    #
-    # ### Example
-    #
-    # ```crystal
-    # # Used internally by storage backends
-    # Sepia::Watcher.add_internal_file("/storage/MyDocument/doc-123.tmp")
-    # # ... perform save operation ...
-    # Sepia::Watcher.remove_internal_file("/storage/MyDocument/doc-123.tmp")
-    # ```
-    def self.add_internal_file(path : String)
-      @@internal_files_mutex.synchronize do
-        @@internal_files.add(path)
-      end
-    end
-
-    # Removes a file from the internal operation tracking set.
-    #
-    # This method is thread-safe.
-    #
-    # ### Parameters
-    #
-    # - *path* : The file path to remove from tracking
-    def self.remove_internal_file(path : String)
-      @@internal_files_mutex.synchronize do
-        @@internal_files.delete(path)
-      end
-    end
-
-    # Checks if a file is currently being tracked as an internal operation.
-    #
-    # This method is thread-safe.
-    #
-    # ### Parameters
-    #
-    # - *path* : The file path to check
-    #
-    # ### Returns
-    #
-    # `true` if the file is being tracked as an internal operation.
+    # Class methods for internal file tracking
     def self.internal_file?(path : String) : Bool
       @@internal_files_mutex.synchronize do
         @@internal_files.includes?(path)
       end
     end
 
-    private def handle_inotify_event(inotify_event : Inotify::Event)
-      # Skip events without a name
-      return unless inotify_event.name
+    def self.add_internal_file(path : String) : Nil
+      @@internal_files_mutex.synchronize do
+        @@internal_files.add(path)
+      end
+    end
 
-      # Skip temporary files from atomic writes
-      return if inotify_event.name.not_nil!.ends_with?(".tmp")
+    def self.remove_internal_file(path : String) : Nil
+      @@internal_files_mutex.synchronize do
+        @@internal_files.delete(path)
+      end
+    end
 
-      # Skip internal operations
-      full_path = File.join(@storage.path, inotify_event.name.not_nil!)
-      return if Watcher.internal_file?(full_path)
+    def initialize(@storage : FileStorage)
+      @path_resolver = PathResolver.new(@storage.path)
+    end
 
-      # Parse the path to extract object class and ID
-      path_result = parse_path(inotify_event.name.not_nil!)
-      if path_result
-        object_class, object_id = path_result
-        event_type = convert_event_type(inotify_event.type)
+    # Register a callback to be called when events occur
+    #
+    # The callback will be called for each event that occurs while the watcher is running.
+    #
+    # ```crystal
+    # watcher.on_change do |event|
+    #   puts "Got event: #{event.type}"
+    # end
+    # ```
+    def on_change(&block : Event ->)
+      @callback_block = block
 
-        if event_type
-          event = Event.new(
-            type: event_type,
-            object_class: object_class,
-            object_id: object_id,
-            path: full_path
-          )
+      # If session is already created, set up the callback immediately
+      if session = @session
+        setup_session_callback(session, block)
+      end
 
-          # Call the callback if one is registered
-          if callback = @callback
-            callback.call(event)
-          end
+      spawn do
+        # Keep the callback fiber alive while watcher is running
+        while @running
+          sleep 0.1.seconds
         end
       end
     end
 
-    private def parse_path(relative_path : String) : Tuple(String, String)?
-      # Path format: ClassName/object_id or ClassName/object_id/...
-      parts = relative_path.split('/', 3)
-      return nil if parts.size < 2
+    # Start watching the storage directory for changes
+    #
+    # This method is non-blocking and returns immediately.
+    # The actual file system monitoring happens in the background.
+    #
+    # ```crystal
+    # watcher.start
+    # puts "Watcher started, continuing with other work..."
+    # ```
+    def start
+      return if @running
 
-      object_class = parts[0]
-      object_id = parts[1]
+      @running = true
+      watch_path = @storage.path
 
-      # Skip system directories
-      return nil if object_class.starts_with?('.')
-      return nil if object_id.starts_with?('.')
+      # Create and configure the fswatch session
+      @session = FSWatch::Session.build(
+        recursive: true,
+        latency: 0.1
+      )
 
-      {object_class, object_id}
+      # Set up callback if one was registered
+      if callback = @callback_block
+        setup_session_callback(@session.not_nil!, callback)
+      end
+
+      # Add the storage path to monitor
+      @session.not_nil!.add_path(watch_path)
+
+      # Start monitoring
+      @session.not_nil!.start_monitor
     end
 
-    private def convert_event_type(event_type : Inotify::Event::Type) : EventType?
-      # Convert inotify type to our EventType
-      case event_type
-      when .create?
-        EventType::Created
-      when .modify?
-        EventType::Modified
-      when .delete?
-        EventType::Deleted
-      when .moved_to?
-        EventType::Modified
-      when .moved_from?
-        EventType::Deleted
-      else
-        nil
+    # Stop watching for file system changes
+    #
+    # This stops the background monitoring.
+    #
+    # ```crystal
+    # watcher.stop
+    # puts "Watcher stopped"
+    # ```
+    def stop
+      return unless @running
+
+      @running = false
+
+      # Stop the fswatch session
+      if session = @session
+        session.stop_monitor
+        @session = nil
       end
+    end
+
+    # Check if the watcher is currently running
+    def running?
+      @running
+    end
+
+    # Get the number of events processed (for debugging)
+    def event_count
+      @event_count
+    end
+
+    # Set up the fswatch session callback
+    private def setup_session_callback(session : FSWatch::Session, block : Event ->)
+      session.on_change do |fswatch_event|
+        sepia_event = convert_fswatch_event(fswatch_event)
+        if sepia_event
+          block.call(sepia_event)
+          @event_count += 1
+        end
+      end
+    end
+
+    # Convert fswatch events to Sepia events
+    #
+    # This method uses the PathResolver to convert file paths to Sepia object information,
+    # then creates appropriate Sepia::Event objects.
+    private def convert_fswatch_event(event : FSWatch::Event) : Event?
+      # Skip hidden files but NOT .tmp files (they indicate real changes)
+      filename = File.basename(event.path)
+      return nil if filename.starts_with?(".")
+
+      # Handle .tmp files by waiting for the real file
+      if filename.ends_with?(".tmp")
+        # For .tmp files, try to resolve the non-tmp version
+        real_path = event.path.gsub(/\.tmp$/, "")
+        object_info = @path_resolver.resolve_path(real_path)
+        return nil unless object_info
+
+        # Create an event for the real file that will be created
+        return Event.new(
+          type: EventType::Created,
+          object_class: object_info.class_name,
+          object_id: object_info.object_id,
+          path: real_path,
+          object_info: object_info
+        )
+      end
+
+      # Use PathResolver to parse the path and get object information
+      object_info = @path_resolver.resolve_path(event.path)
+
+      # If direct resolution fails, check if this is a directory event
+      # and we should be looking for files within it
+      unless object_info
+        if File.directory?(event.path)
+          # For directory events, we don't generate Sepia events directly
+          # but they indicate that files within might be changing
+          return nil
+        end
+      end
+
+      return nil unless object_info
+
+      # Map fswatch event types to Sepia event types
+      event_type = case
+                   when event.created?
+                     EventType::Created
+                   when event.updated?
+                     EventType::Modified
+                   when event.removed?, event.moved_from?
+                     EventType::Deleted
+                   else
+                     return nil # Skip unknown event types
+                   end
+
+      # Create and return the Sepia event with object information
+      Event.new(
+        type: event_type,
+        object_class: object_info.class_name,
+        object_id: object_info.object_id,
+        path: event.path,
+        object_info: object_info
+      )
     end
   end
 end

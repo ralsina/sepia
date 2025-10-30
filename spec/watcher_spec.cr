@@ -37,6 +37,31 @@ class TestContainer < Sepia::Object
   end
 end
 
+class TestWatchDocument < Sepia::Object
+  include Sepia::Serializable
+
+  property title : String
+  property content : String
+
+  def initialize(@title = "", @content = "")
+  end
+
+  def to_sepia : String
+    {
+      title:   @title,
+      content: @content,
+    }.to_json
+  end
+
+  def self.from_sepia(sepia_string : String) : self
+    data = JSON.parse(sepia_string)
+    new(
+      data["title"].as_s,
+      data["content"].as_s
+    )
+  end
+end
+
 describe Sepia::Watcher do
   describe "Event" do
     it "creates an event with all properties" do
@@ -79,7 +104,7 @@ describe Sepia::Watcher do
       if temp_dir && Dir.exists?(temp_dir)
         FileUtils.rm_rf(temp_dir)
       end
-          end
+    end
 
     describe "#initialize" do
       it "creates a watcher with storage backend" do
@@ -87,7 +112,7 @@ describe Sepia::Watcher do
         begin
           new_watcher = Sepia::Watcher.new(storage.not_nil!)
           new_watcher.storage.should eq(storage.not_nil!)
-          new_watcher.running?.should be_false
+          new_watcher.running?.should be_false # Not auto-started
         ensure
           new_watcher.not_nil!.stop
           new_watcher.not_nil!.running?.should be_false
@@ -128,28 +153,11 @@ describe Sepia::Watcher do
 
     describe "#start and #stop" do
       it "starts and stops watching" do
-        local_watcher = nil.as(Sepia::Watcher?)
         begin
           local_watcher = Sepia::Watcher.new(storage.not_nil!)
-          local_watcher.running?.should be_false
+          local_watcher.running?.should be_false # Not auto-started
 
-          local_watcher.start
-          local_watcher.running?.should be_true
-
-          local_watcher.stop
-          local_watcher.running?.should be_false
-        ensure
-          if local_watcher
-            local_watcher.stop
-            local_watcher.running?.should be_false
-          end
-        end
-      end
-
-      it "can be stopped after starting" do
-        local_watcher = nil.as(Sepia::Watcher?)
-        begin
-          local_watcher = Sepia::Watcher.new(storage.not_nil!)
+          # Try to start again (should be idempotent)
           local_watcher.start
           local_watcher.running?.should be_true
 
@@ -329,6 +337,83 @@ describe Sepia::Watcher do
 
       # The watcher should ignore this file when parsing paths
       # This is tested indirectly through the path parsing logic
+    end
+  end
+
+  describe "End-to-End File System Monitoring" do
+    it "detects real file changes with proper lifecycle management" do
+      # Setup temporary storage for testing
+      storage_dir = File.join(Dir.tempdir, "sepia_e2e_#{UUID.random}")
+      Dir.mkdir_p(storage_dir) unless Dir.exists?(storage_dir)
+      pp! storage_dir
+      pp! Dir.exists?(storage_dir)
+
+      watcher = nil.as(Sepia::Watcher?)
+
+      begin
+        # Step 1: Create watcher (not started yet)
+        test_storage = Sepia::FileStorage.new(storage_dir)
+        pp! test_storage.path
+        watcher = Sepia::Watcher.new(test_storage)
+        watcher.running?.should be_false
+
+        # Step 2: Setup event tracking
+        received_events = [] of Sepia::Event
+
+        watcher.on_change do |event|
+          received_events << event
+        end
+
+        # Step 3: Start watching
+        watcher.start
+        watcher.running?.should be_true
+        pp! "pre-sleep"
+        sleep 1.seconds
+        pp! "post-sleep"
+
+        # Step 4: Modify filesystem - create a test file
+        test_file = File.join(storage_dir, "TestClass", "test-id")
+        test_dir = File.dirname(test_file)
+        Dir.mkdir_p(test_dir) unless Dir.exists?(test_dir)
+
+        File.write(test_file, "initial content")
+
+        # Step 5: Brief pause to let events process
+        pp! "pre", test_file
+        Fiber.yield
+        # 10.times { Fiber.yield }
+
+        # Step 6: Modify the file
+        File.write(test_file, "modified content")
+        pp! 1111
+
+        # Step 7: Another brief pause
+        Fiber.yield
+        # 10.times { Fiber.yield }
+        pp! "post"
+
+        # Step 8: Stop watching
+        watcher.stop
+        watcher.running?.should be_false
+
+        # Step 9: Verify we got events
+        received_events.size.should be >= 1
+
+        if received_events.size > 0
+          event = received_events.first
+          event.object_class.should eq("TestClass")
+          event.object_id.should eq("test-id")
+          (event.type == Sepia::EventType::Created ||
+           event.type == Sepia::EventType::Modified).should be_true
+        end
+
+      ensure
+        # Cleanup - ALWAYS stop the watcher
+        if watcher
+          watcher.stop
+        end
+        # FileUtils.rm_r(storage_dir) if Dir.exists?(storage_dir)
+      end
     end
   end
 end
