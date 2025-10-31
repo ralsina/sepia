@@ -41,6 +41,7 @@ module Sepia
       property hits : Int64 = 0
       property misses : Int64 = 0
       property evictions : Int64 = 0
+      property invalidations : Int64 = 0
       property size : Int32 = 0
       property max_size : Int32
 
@@ -54,7 +55,8 @@ module Sepia
 
       def to_s : String
         "{hits: #{@hits}, misses: #{@misses}, evictions: #{@evictions}, " \
-        "size: #{@size}, max_size: #{@max_size}, hit_rate: #{(hit_rate * 100).round(2)}%}"
+        "invalidations: #{@invalidations}, size: #{@size}, max_size: #{@max_size}, " \
+        "hit_rate: #{(hit_rate * 100).round(2)}%}"
       end
     end
 
@@ -242,6 +244,36 @@ module Sepia
       end
     end
 
+    # Invalidates a cache entry and updates invalidation statistics.
+    #
+    # This is similar to remove, but specifically tracks invalidations
+    # (e.g., from external file changes via the filesystem watcher).
+    #
+    # ### Parameters
+    #
+    # - *key* : The cache key to invalidate
+    #
+    # ### Returns
+    #
+    # `true` if the key was invalidated, `false` if it didn't exist.
+    #
+    # ### Example
+    #
+    # ```
+    # cache.invalidate("doc-123") # External file changed
+    # ```
+    def invalidate(key : String) : Bool
+      @mutex.synchronize do
+        if @cache.has_key?(key)
+          remove_key(key)
+          @stats.invalidations += 1
+          true
+        else
+          false
+        end
+      end
+    end
+
     # Clears all entries from the cache.
     #
     # ### Example
@@ -391,6 +423,43 @@ module Sepia
         @stats.evictions += 1
         @stats.size = @cache.size
       end
+    end
+
+    # Global cache manager instance for application-wide use.
+    #
+    # This singleton instance provides a centralized cache that can be
+    # accessed throughout the application. It's automatically initialized
+    # with sensible defaults and is thread-safe.
+    #
+    # ### Example
+    #
+    # ```
+    # # Store an object in the global cache
+    # CacheManager.instance.put("doc-123", my_document)
+    #
+    # # Retrieve from the global cache
+    # doc = CacheManager.instance.get("doc-123")
+    #
+    # # Access global cache statistics
+    # puts CacheManager.instance.stats
+    # ```
+    @@instance : CacheManager?
+    @@instance_mutex = Mutex.new
+
+    def self.instance : CacheManager
+      if instance = @@instance
+        return instance
+      end
+
+      @@instance_mutex.synchronize do
+        @@instance ||= new
+      end
+      @@instance.not_nil!
+    end
+
+    # Alias for convenience (thread-safe)
+    def self.instance_getter
+      instance
     end
   end
 end

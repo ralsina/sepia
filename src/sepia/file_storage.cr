@@ -1,6 +1,8 @@
 require "file_utils"
 require "./storage_backend"
 require "./container"
+require "./watcher"
+require "./cache_manager"
 
 module Sepia
   # Filesystem-based storage backend for Sepia objects.
@@ -48,10 +50,69 @@ module Sepia
     # ```
     property path : String
 
+    # File system watcher for external change detection.
+    #
+    # Automatically monitors the storage directory for external changes
+    # and invalidates cache entries when files are modified.
+    #
+    # ```
+    # storage = FileStorage.new("./data", watch: true)
+    # storage.watcher_running? # => true
+    # ```
+    # Simple configuration class for file system watcher
+    class WatcherConfig
+      property enabled : Bool
+      property recursive : Bool = true
+      property latency : Float64 = 0.1
+
+      def initialize(@enabled : Bool)
+      end
+
+      def self.from(config : Bool | Hash)
+        if config.is_a?(Bool)
+          new(config)
+        else
+          instance = new(true)
+          instance.recursive = config["recursive"]?.as(Bool) || true
+          instance.latency = config["latency"]?.as(Float64) || 0.1
+          instance
+        end
+      end
+    end
+
+    getter watcher : Watcher?
+    @watcher_config : WatcherConfig
+
+    # Configuration for watcher creation.
+    #
+    # Stores the watcher configuration for later use or recreation.
+    #
+    # ```
+    # storage = FileStorage.new("./data", watch: true)
+    # storage.watcher_enabled? # => true
+    # ```
+    def watcher_enabled? : Bool
+      @watcher_config.enabled
+    end
+
     # Creates a new FileStorage instance.
     #
     # The `path` parameter specifies the root directory where objects will be stored.
     # If not provided, uses the system's temporary directory.
+    #
+    # The `watch` parameter enables automatic file system monitoring for external
+    # changes. When enabled, the storage will automatically invalidate cache entries
+    # when files are modified externally.
+    #
+    # ### Parameters
+    #
+    # - *path* : Root directory for object storage (default: system temp directory)
+    # - *watch* : Watcher configuration (default: false - disabled)
+    #   - `false` : Disable watcher
+    #   - `true` : Enable watcher with default settings
+    #   - `Hash` : Custom watcher configuration options
+    #
+    # ### Examples
     #
     # ```
     # # Use system temp directory
@@ -60,10 +121,137 @@ module Sepia
     # # Use custom directory
     # storage = FileStorage.new("./data")
     #
-    # # Use absolute path
-    # storage = FileStorage.new("/var/lib/myapp/data")
+    # # Enable watcher with default settings
+    # storage = FileStorage.new("./data", watch: true)
+    #
+    # # Enable watcher with custom settings
+    # storage = FileStorage.new("./data", watch: {
+    #   recursive: true,
+    #   latency: 0.1
+    # })
     # ```
-    def initialize(@path : String = Dir.tempdir)
+    def initialize(@path : String = Dir.tempdir, watch : Bool | Hash = false)
+      @watcher_config = WatcherConfig.from(watch)
+      @watcher = nil
+
+      # Initialize watcher if requested
+      if @watcher_config.enabled
+        setup_watcher
+      end
+    end
+
+    # Sets up the file system watcher for external change detection.
+    #
+    # This method creates a watcher that monitors the storage directory and
+    # automatically invalidates cache entries when files are modified externally.
+    #
+    # Uses the stored watcher configuration.
+    #
+    # ### Example
+    #
+    # ```
+    # storage.setup_watcher
+    # ```
+    private def setup_watcher
+      return if @watcher && @watcher.not_nil!.running?
+
+      begin
+        @watcher = Watcher.new(self)
+
+        # Set up automatic cache invalidation callback
+        @watcher.not_nil!.on_change do |event|
+          # Cache invalidation is handled automatically by the watcher
+          # This callback can be used for additional logging or custom logic
+        end
+
+        @watcher.not_nil!.start
+      rescue ex
+        # Log error but don't fail storage initialization
+        # The watcher is optional functionality
+        @watcher = nil
+        puts "Warning: Failed to initialize file watcher: #{ex.message}"
+      end
+    end
+
+    # Starts the file system watcher if it's not already running.
+    #
+    # ### Returns
+    #
+    # `true` if watcher was started, `false` if already running or not configured
+    #
+    # ### Example
+    #
+    # ```
+    # storage.start_watcher
+    # puts "Watcher running: #{storage.watcher_running?}"
+    # ```
+    def start_watcher : Bool
+      return false unless @watcher_config.enabled
+      return true if @watcher && @watcher.not_nil!.running?
+
+      setup_watcher
+      @watcher && @watcher.not_nil!.running? || false
+    end
+
+    # Stops the file system watcher if it's running.
+    #
+    # ### Returns
+    #
+    # `true` if watcher was stopped, `false` if not running
+    #
+    # ### Example
+    #
+    # ```
+    # storage.stop_watcher
+    # puts "Watcher running: #{storage.watcher_running?}"
+    # ```
+    def stop_watcher : Bool
+      return false unless @watcher
+
+      begin
+        @watcher.not_nil!.stop
+        true
+      rescue ex
+        # Handle fswatch stop issues gracefully
+        puts "Warning: Could not cleanly stop file watcher: #{ex.message}"
+        false
+      end
+    end
+
+    # Checks if the file system watcher is currently running.
+    #
+    # ### Returns
+    #
+    # `true` if watcher is running, `false` otherwise
+    #
+    # ### Example
+    #
+    # ```
+    # storage = FileStorage.new("./data", watch: true)
+    # puts storage.watcher_running? # => true
+    # ```
+    def watcher_running? : Bool
+      @watcher && @watcher.not_nil!.running? || false
+    end
+
+    # Registers a callback to be called when external file changes are detected.
+    #
+    # This allows users to add custom logic in addition to automatic cache invalidation.
+    #
+    # ### Parameters
+    #
+    # - *&block* : Callback block that receives Event objects
+    #
+    # ### Example
+    #
+    # ```
+    # storage.on_watcher_change do |event|
+    #   puts "External change: #{event.type} #{event.object_class}:#{event.object_id}"
+    # end
+    # ```
+    def on_watcher_change(&block : Event ->)
+      return unless @watcher
+      @watcher.not_nil!.on_change(&block)
     end
 
     # Saves a Serializable object to the filesystem.

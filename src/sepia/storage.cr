@@ -1,5 +1,7 @@
 require "file_utils"
 require "./storage_backend"
+require "./file_storage"
+require "./cache_manager"
 
 module Sepia
   # Central storage management class.
@@ -95,24 +97,61 @@ module Sepia
     #
     # For `:filesystem` backend:
     # - `"path"`: Root directory path (defaults to system temp directory)
+    # - `"watch"`: Enable file system watcher (default: false)
+    #   - `true`: Enable watcher with default settings
+    #   - `false`: Disable watcher
+    #   - `Hash`: Custom watcher configuration options
     #
     # For `:memory` backend:
     # - No configuration options available
     #
-    # ### Example
+    # ### Examples
     #
     # ```
     # # Configure filesystem storage with custom path
     # Sepia::Storage.configure(:filesystem, {"path" => "./app_data"})
     #
+    # # Configure filesystem storage with watcher enabled
+    # Sepia::Storage.configure(:filesystem, {"watch" => true})
+    #
+    # # Configure filesystem storage with custom watcher settings
+    # Sepia::Storage.configure(:filesystem, {
+    #   "path" => "./app_data",
+    #   "watch" => {
+    #     "recursive" => true,
+    #     "latency" => 0.1
+    #   }
+    # })
+    #
     # # Configure in-memory storage
     # Sepia::Storage.configure(:memory)
     # ```
-    def self.configure(backend : Symbol, config = {} of String => String)
+    def self.configure(backend : Symbol, config = {} of String => String | Bool | Hash)
       case backend
       when :filesystem
         path = config["path"]? || Dir.tempdir
-        self.backend = FileStorage.new(path)
+
+        # Handle watcher configuration
+        watch_config = config["watch"]?
+        if watch_config
+          case watch_config
+          when Bool
+            # Simple boolean configuration
+            self.backend = FileStorage.new(path.to_s, watch: watch_config)
+          when Hash
+            # Detailed watcher configuration
+            self.backend = FileStorage.new(path.to_s, watch: watch_config)
+          when String
+            # String configuration - convert to boolean
+            self.backend = FileStorage.new(path.to_s, watch: watch_config == "true")
+          else
+            # Other types - convert to boolean
+            self.backend = FileStorage.new(path.to_s, watch: !!watch_config)
+          end
+        else
+          # No watcher configuration
+          self.backend = FileStorage.new(path.to_s)
+        end
       when :memory
         self.backend = InMemoryStorage.new
       else
@@ -122,52 +161,75 @@ module Sepia
 
     # Saves a Serializable object using the current backend.
     #
-    # Delegates to the current storage backend's save method.
+    # Automatically caches the object for faster retrieval. Set `cache: false`
+    # to disable caching for this operation.
     #
     # ### Parameters
     #
     # - *object* : The Serializable object to save
     # - *path* : Optional custom save path
+    # - *cache* : Whether to cache the object (default: true)
     #
     # ### Example
     #
     # ```
     # doc = MyDocument.new("Hello")
-    # Sepia::Storage.save(doc) # Uses current backend
+    # Sepia::Storage.save(doc) # Save with caching (default)
+    # Sepia::Storage.save(doc, cache: false) # Save without caching
     # ```
-    def save(object : Serializable, path : String? = nil)
+    def save(object : Serializable, path : String? = nil, cache : Bool = true)
+      # Save to backend first
       @@current_backend.save(object, path)
+
+      # Update cache if enabled
+      if cache
+        cache_key = "#{object.class.name}:#{object.sepia_id}"
+        CacheManager.instance.put(cache_key, object)
+      end
     end
 
     # Saves a Container object using the current backend.
     #
-    # Delegates to the current storage backend's save method.
+    # Automatically caches the object for faster retrieval. Set `cache: false`
+    # to disable caching for this operation.
     #
     # ### Parameters
     #
     # - *object* : The Container object to save
     # - *path* : Optional custom save path
+    # - *cache* : Whether to cache the object (default: true)
     #
     # ### Example
     #
     # ```
     # board = Board.new("My Board")
-    # Sepia::Storage.save(board) # Uses current backend
+    # Sepia::Storage.save(board) # Save with caching (default)
+    # Sepia::Storage.save(board, cache: false) # Save without caching
     # ```
-    def save(object : Container, path : String? = nil)
+    def save(object : Container, path : String? = nil, cache : Bool = true)
+      # Save to backend first
       @@current_backend.save(object, path)
+
+      # Update cache if enabled
+      if cache
+        cache_key = "#{object.class.name}:#{object.sepia_id}"
+        CacheManager.instance.put(cache_key, object)
+      end
     end
 
+    
     # Loads an object using the current backend.
     #
-    # Generic method that loads an object of the specified class.
-    # The type parameter ensures type safety without requiring casting.
+    # First checks the cache for the object. If not found, loads from backend
+    # and automatically caches the result for future retrievals. Set `cache: false`
+    # to disable caching for this operation.
     #
     # ### Parameters
     #
     # - *object_class* : The class of object to load
     # - *id* : The object's unique identifier
     # - *path* : Optional custom load path
+    # - *cache* : Whether to use cache (default: true)
     #
     # ### Returns
     #
@@ -176,20 +238,48 @@ module Sepia
     # ### Example
     #
     # ```
-    # # Load with explicit type
+    # # Load with caching (default)
     # doc = Sepia::Storage.load(MyDocument, "doc-uuid")
+    #
+    # # Load without caching
+    # doc = Sepia::Storage.load(MyDocument, "doc-uuid", cache: false)
     #
     # # Type is inferred, no casting needed
     # puts doc.content # doc is typed as MyDocument
     # ```
-    def load(object_class : T.class, id : String, path : String? = nil) : T forall T
-      @@current_backend.load(object_class, id, path).as(T)
+    def load(object_class : T.class, id : String, path : String? = nil, cache : Bool = true) : T forall T
+      if cache
+        cache_key = "#{object_class.name}:#{id}"
+
+        # Try cache first
+        cached_object = CacheManager.instance.get(cache_key)
+        if cached_object
+          return cached_object.as(T)
+        end
+
+        # Load from backend and cache the result
+        loaded_object = @@current_backend.load(object_class, id, path).as(T)
+        CacheManager.instance.put(cache_key, loaded_object)
+        loaded_object
+      else
+        # Load directly from backend without caching
+        @@current_backend.load(object_class, id, path).as(T)
+      end
     end
 
-    def delete(object : Serializable | Container)
+    
+    def delete(object : Serializable | Container, cache : Bool = true)
+      # Remove from cache first if enabled
+      if cache
+        cache_key = "#{object.class.name}:#{object.sepia_id}"
+        CacheManager.instance.remove(cache_key)
+      end
+
+      # Delete from backend
       @@current_backend.delete(object)
     end
 
+    
     # Legacy path property (only works with FileStorage)
     def path : String
       if @@current_backend.is_a?(FileStorage)
@@ -205,6 +295,23 @@ module Sepia
       else
         raise "path property is only available with FileStorage backend"
       end
+    end
+
+    # Class methods with cache integration (caching is default)
+    def self.save(object : Serializable, path : String? = nil, cache : Bool = true)
+      INSTANCE.save(object, path, cache)
+    end
+
+    def self.save(object : Container, path : String? = nil, cache : Bool = true)
+      INSTANCE.save(object, path, cache)
+    end
+
+    def self.load(object_class : T.class, id : String, path : String? = nil, cache : Bool = true) : T forall T
+      INSTANCE.load(object_class, id, path, cache)
+    end
+
+    def self.delete(object : Serializable | Container, cache : Bool = true)
+      INSTANCE.delete(object, cache)
     end
 
     # Discovery API - delegates to current backend
@@ -233,7 +340,14 @@ module Sepia
       @@current_backend.import_data(data)
     end
 
-    def self.delete(class_name : String, id : String)
+    def self.delete(class_name : String, id : String, cache : Bool = true)
+      # Remove from cache first if enabled
+      if cache
+        cache_key = "#{class_name}:#{id}"
+        CacheManager.instance.remove(cache_key)
+      end
+
+      # Delete from backend
       @@current_backend.delete(class_name, id)
     end
 

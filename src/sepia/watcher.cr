@@ -2,6 +2,7 @@ require "fswatch"
 require "set"
 require "./storage_backend"
 require "./path_resolver"
+require "./cache_manager"
 
 module Sepia
   # File system event types for Sepia objects.
@@ -225,10 +226,56 @@ module Sepia
       session.on_change do |fswatch_event|
         sepia_event = convert_fswatch_event(fswatch_event)
         if sepia_event
+          # Automatically invalidate cache entry for this event
+          invalidate_cache_for_event(sepia_event)
+
           block.call(sepia_event)
           @event_count += 1
         end
       end
+    end
+
+    # Create standardized cache key for an event
+    #
+    # ### Parameters
+    #
+    # - *event* : The Sepia event to create a cache key for
+    #
+    # ### Returns
+    #
+    # Cache key string in format "ClassName:object_id"
+    #
+    # ### Example
+    #
+    # ```
+    # key = cache_key_for_event(event)
+    # # => "MyDocument:doc-123"
+    # ```
+    private def cache_key_for_event(event : Event) : String
+      "#{event.object_class}:#{event.object_id}"
+    end
+
+    # Invalidate cache entry for a Sepia event
+    #
+    # This method automatically invalidates the corresponding cache entry
+    # when a file system event is detected, ensuring cache consistency.
+    #
+    # ### Parameters
+    #
+    # - *event* : The Sepia event that triggered cache invalidation
+    #
+    # ### Returns
+    #
+    # `true` if cache entry was invalidated, `false` if it didn't exist
+    #
+    # ### Example
+    #
+    # ```
+    # invalidate_cache_for_event(event)
+    # ```
+    private def invalidate_cache_for_event(event : Event) : Bool
+      cache_key = cache_key_for_event(event)
+      CacheManager.instance.invalidate(cache_key)
     end
 
     # Convert fswatch events to Sepia events
