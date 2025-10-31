@@ -16,7 +16,7 @@ class TestDocument < Sepia::Object
 
   def to_sepia : String
     {
-      "title" => @title,
+      "title"   => @title,
       "content" => @content,
     }.to_json
   end
@@ -52,7 +52,6 @@ begin
   puts `find #{storage_dir} -type f`
 
   puts "File structure test completed successfully!"
-
 rescue ex
   puts "Error: #{ex.message}"
   puts ex.backtrace.join("\n")

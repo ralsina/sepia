@@ -17,7 +17,7 @@ class TestDocument < Sepia::Object
 
   def to_sepia : String
     {
-      "title" => @title,
+      "title"   => @title,
       "content" => @content,
     }.to_json
   end
@@ -134,7 +134,6 @@ begin
   else
     puts "❌ Final Watcher test FAILED: Expected at least 3 events, got #{received_events.size}"
   end
-
 rescue ex
   puts "Error: #{ex.message}"
   puts ex.backtrace.join("\n")

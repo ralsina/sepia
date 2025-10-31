@@ -11,5 +11,8 @@ main: src/sepia.cr
 license: MIT
 
 dependencies:
+  # fswatch is optional - when not available, Sepia will use a no-op fallback
+  # For static builds or when fswatch is unavailable, comment out this dependency
+  # and compile with: crystal build -D no_fswatch
   fswatch:
     github: bcardiff/crystal-fswatch

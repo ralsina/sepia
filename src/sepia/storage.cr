@@ -116,17 +116,17 @@ module Sepia
     #
     # # Configure filesystem storage with custom watcher settings
     # Sepia::Storage.configure(:filesystem, {
-    #   "path" => "./app_data",
+    #   "path"  => "./app_data",
     #   "watch" => {
     #     "recursive" => true,
-    #     "latency" => 0.1
-    #   }
+    #     "latency"   => 0.1,
+    #   },
     # })
     #
     # # Configure in-memory storage
     # Sepia::Storage.configure(:memory)
     # ```
-    def self.configure(backend : Symbol, config = {} of String => String | Bool | Hash)
+    def self.configure(backend : Symbol, config : Hash(String, String | Bool | Hash(String, String)) = {} of String => String)
       case backend
       when :filesystem
         path = config["path"]? || Dir.tempdir
@@ -174,7 +174,7 @@ module Sepia
     #
     # ```
     # doc = MyDocument.new("Hello")
-    # Sepia::Storage.save(doc) # Save with caching (default)
+    # Sepia::Storage.save(doc)               # Save with caching (default)
     # Sepia::Storage.save(doc, cache: false) # Save without caching
     # ```
     def save(object : Serializable, path : String? = nil, cache : Bool = true)
@@ -203,7 +203,7 @@ module Sepia
     #
     # ```
     # board = Board.new("My Board")
-    # Sepia::Storage.save(board) # Save with caching (default)
+    # Sepia::Storage.save(board)               # Save with caching (default)
     # Sepia::Storage.save(board, cache: false) # Save without caching
     # ```
     def save(object : Container, path : String? = nil, cache : Bool = true)
@@ -217,7 +217,6 @@ module Sepia
       end
     end
 
-    
     # Loads an object using the current backend.
     #
     # First checks the cache for the object. If not found, loads from backend
@@ -267,7 +266,6 @@ module Sepia
       end
     end
 
-    
     def delete(object : Serializable | Container, cache : Bool = true)
       # Remove from cache first if enabled
       if cache
@@ -279,7 +277,6 @@ module Sepia
       @@current_backend.delete(object)
     end
 
-    
     # Legacy path property (only works with FileStorage)
     def path : String
       if @@current_backend.is_a?(FileStorage)

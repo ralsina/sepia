@@ -12,6 +12,25 @@ Since this is a Crystal library, there's no traditional build process. Use these
 - **Format code**: `crystal tool format`
 - **Check dependencies**: `shards check`
 
+### Build Options
+
+**Standard build (with fswatch support):**
+```bash
+crystal build src/your_app.cr
+# or
+crystal run src/your_app.cr
+```
+
+**Static builds or without fswatch:**
+For static builds or when fswatch is not available, compile with the `no_fswatch` flag:
+```bash
+crystal build src/your_app.cr -D no_fswatch
+# or
+crystal run src/your_app.cr -D no_fswatch
+```
+
+When using `no_fswatch`, the file system watcher will be a no-op implementation that doesn't monitor external changes. This allows the library to work in environments where fswatch cannot be compiled statically.
+
 ## Architecture Overview
 
 Sepia is a file-system-based serialization library with two core modules:

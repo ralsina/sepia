@@ -127,7 +127,7 @@ module Sepia
     # # Enable watcher with custom settings
     # storage = FileStorage.new("./data", watch: {
     #   recursive: true,
-    #   latency: 0.1
+    #   latency:   0.1,
     # })
     # ```
     def initialize(@path : String = Dir.tempdir, watch : Bool | Hash = false)
@@ -159,7 +159,7 @@ module Sepia
         @watcher = Watcher.new(self)
 
         # Set up automatic cache invalidation callback
-        @watcher.not_nil!.on_change do |event|
+        @watcher.not_nil!.on_change do |_|
           # Cache invalidation is handled automatically by the watcher
           # This callback can be used for additional logging or custom logic
         end

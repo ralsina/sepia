@@ -404,9 +404,8 @@ describe Sepia::Watcher do
           event.object_class.should eq("TestClass")
           event.object_id.should eq("test-id")
           (event.type == Sepia::EventType::Created ||
-           event.type == Sepia::EventType::Modified).should be_true
+            event.type == Sepia::EventType::Modified).should be_true
         end
-
       ensure
         # Cleanup - ALWAYS stop the watcher
         if watcher

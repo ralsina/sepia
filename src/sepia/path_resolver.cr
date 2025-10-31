@@ -7,14 +7,14 @@ module Sepia
   #
   # ### Example
   #
-  # ```crystal
+  # ```
   # # Given a file path like "/data/MyDocument/uuid-123"
   # resolver = Sepia::PathResolver.new("/data")
   #
   # info = resolver.resolve_path("/data/MyDocument/uuid-123")
-  # info.class_name    # => "MyDocument"
-  # info.object_id     # => "uuid-123"
-  # info.full_path     # => "/data/MyDocument/uuid-123"
+  # info.class_name # => "MyDocument"
+  # info.object_id  # => "uuid-123"
+  # info.full_path  # => "/data/MyDocument/uuid-123"
   # ```
   class PathResolver
     # Information about a resolved Sepia object path
@@ -40,7 +40,7 @@ module Sepia
 
       # Load the actual Sepia object from storage using a given class
       #
-      # ```crystal
+      # ```
       # obj = info.object(TestDocument)
       # if obj
       #   puts "Loaded #{obj.class.name} with ID #{obj.sepia_id}"
@@ -64,7 +64,7 @@ module Sepia
 
     # Creates a new PathResolver
     #
-    # ```crystal
+    # ```
     # resolver = PathResolver.new("/data/sepia")
     # resolver = PathResolver.new(Sepia::Storage.instance.path)
     # ```
@@ -73,10 +73,10 @@ module Sepia
 
     # Resolve a file system path to Sepia object information
     #
-    # ```crystal
+    # ```
     # info = resolver.resolve_path("/data/MyDocument/uuid-123")
-    # info.class_name    # => "MyDocument"
-    # info.object_id     # => "uuid-123"
+    # info.class_name # => "MyDocument"
+    # info.object_id  # => "uuid-123"
     # ```
     def resolve_path(full_path : String) : ObjectInfo?
       # Normalize paths
@@ -112,7 +112,7 @@ module Sepia
     #
     # This is a convenience method that combines resolve_path and object loading
     #
-    # ```crystal
+    # ```
     # obj = resolver.resolve_and_load("/data/MyDocument/uuid-123", TestDocument)
     # if obj
     #   puts "Loaded: #{obj.class.name} (#{obj.sepia_id})"
@@ -129,7 +129,7 @@ module Sepia
     #
     # Returns an array of ObjectInfo for all found objects
     #
-    # ```crystal
+    # ```
     # resolver = PathResolver.new("/data")
     # objects = resolver.list_all_objects
     # objects.each do |info|
@@ -164,7 +164,7 @@ module Sepia
 
     # Check if a path is a valid Sepia object path
     #
-    # ```crystal
+    # ```
     # if resolver.valid_sepia_path?("/data/MyDocument/uuid-123")
     #   puts "This is a valid Sepia object path"
     # end

@@ -56,7 +56,6 @@ begin
   event_channel.close
 
   puts "E2E test completed successfully!"
-
 rescue ex
   puts "Error: #{ex.message}"
   puts ex.backtrace.join("\n")

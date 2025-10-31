@@ -17,7 +17,7 @@ class TestDocument < Sepia::Object
 
   def to_sepia : String
     {
-      "title" => @title,
+      "title"   => @title,
       "content" => @content,
     }.to_json
   end
@@ -93,7 +93,6 @@ begin
   event_channel.close
 
   puts "Simple Sepia watcher test completed successfully!"
-
 rescue ex
   puts "Error: #{ex.message}"
   puts ex.backtrace.join("\n")
