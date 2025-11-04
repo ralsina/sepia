@@ -758,7 +758,7 @@ describe "Sepia Event Logging" do
       events[0].metadata["action"].should eq("create")
 
       events[1].event_type.should eq(Sepia::LogEventType::Updated)
-      events[1].generation.should eq(2)
+      events[1].generation.should eq(1)  # First generation (save-api-test-123.1)
       events[1].metadata["user"].should eq("bob")
       events[1].metadata["action"].should eq("force_update")
     end

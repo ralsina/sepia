@@ -403,13 +403,19 @@ module Sepia
         # Load the specific generation requested
         Sepia::Storage::INSTANCE.load(self, id, path)
       else
-        # Base ID requested - try to load latest generation first
-        latest_obj = latest(id)
-        if latest_obj
-          latest_obj
-        else
-          # No generations exist, load the base object
+        # Base ID requested
+        if path
+          # Custom path - generations not supported, load directly
           Sepia::Storage::INSTANCE.load(self, id, path)
+        else
+          # Standard path - try to load latest generation first
+          latest_obj = latest(id)
+          if latest_obj
+            latest_obj
+          else
+            # No generations exist, load the base object
+            Sepia::Storage::INSTANCE.load(self, id, path)
+          end
         end
       end
     end

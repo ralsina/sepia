@@ -113,12 +113,12 @@ describe "Generation Bug Investigation" do
     puts "Gen 2 doc content: #{gen2_doc.content}"
     puts "Original doc content: #{doc.content}"
 
-    base_doc.content.should eq("version 1")
+    base_doc.content.should eq("version 3")  # Base returns latest generation (transparent)
     gen1_doc.content.should eq("version 2")
-    gen2_doc.content.should eq("version 3")
+    gen2_doc.content.should eq("version 3")  # Latest generation content
 
     # Test generation properties
-    base_doc.generation.should eq(0)
+    base_doc.generation.should eq(2)  # Transparent load returns latest generation
     gen1_doc.generation.should eq(1)
     gen2_doc.generation.should eq(2)
 
