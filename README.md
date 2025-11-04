@@ -171,6 +171,160 @@ The watcher automatically filters out operations performed by Sepia itself to pr
 - Events are processed asynchronously in background fibers
 - Multiple rapid changes may be batched or reordered
 
+## Event Logging
+
+Sepia includes a comprehensive event logging system that tracks object lifecycle events and user activities. This is particularly useful for collaborative applications, audit trails, and activity feeds.
+
+### Key Concepts
+
+- **Event Types**: Created, Updated, Deleted, Activity
+- **Per-Object Storage**: Events are stored in JSON Lines format alongside object data
+- **Metadata Support**: Attach custom context to events (user, reason, etc.)
+- **Class-Level Control**: Enable/disable logging per class type
+- **Activity Logging**: Log user actions that aren't object persistence events
+
+### Enabling Event Logging
+
+Event logging is disabled by default. Enable it for specific classes:
+
+```crystal
+class Document < Sepia::Object
+  include Sepia::Serializable
+  sepia_log_events true  # Enable logging for this class
+
+  property content : String
+
+  def initialize(@content = "")
+  end
+
+  def to_sepia : String
+    @content
+  end
+
+  def self.from_sepia(json : String) : self
+    new(json)
+  end
+end
+
+class Project < Sepia::Object
+  include Sepia::Container
+  sepia_log_events true  # Enable logging for containers too
+
+  property name : String
+  property boards : Array(Board)
+
+  def initialize(@name = "")
+    @boards = [] of Board
+  end
+end
+```
+
+### Automatic Event Logging
+
+When event logging is enabled, Sepia automatically logs lifecycle events:
+
+```crystal
+# Create and save (logs Created event)
+doc = Document.new("Hello World")
+doc.save(metadata: {"user" => "alice", "reason" => "initial_creation"})
+
+# Update and save (logs Updated event)
+doc.content = "Hello Updated World"
+doc.save(metadata: {"user" => "bob", "reason" => "content_edit"})
+
+# Delete (logs Deleted event)
+Sepia::Storage.delete(doc, metadata: {"user" => "admin", "reason" => "cleanup"})
+```
+
+### Activity Logging
+
+Log user activities that aren't related to object persistence:
+
+```crystal
+# Log arbitrary activities on objects
+doc.log_activity("highlighted", {"color" => "yellow", "user" => "alice"})
+doc.log_activity("shared", {"platform" => "slack", "user" => "bob"})
+
+# Log activities on containers too
+project.log_activity("lane_created", {"lane_name" => "Review", "user" => "charlie"})
+project.log_activity("color_changed")  # Simple version without metadata
+```
+
+### Querying Events
+
+Access the event history for any object:
+
+```crystal
+# Get all events for an object
+events = Sepia::Storage.object_events(Document, doc.sepia_id)
+
+# Events are ordered by timestamp (newest first)
+events.each do |event|
+  puts "#{event.timestamp}: #{event.event_type}"
+  puts "  Generation: #{event.generation}"
+  puts "  Metadata: #{event.metadata}"
+end
+
+# Filter by event type
+created_events = events.select(&.event_type.created?)
+activity_events = events.select(&.event_type.activity?)
+```
+
+### Event Structure
+
+Each event contains:
+
+```crystal
+event = Sepia::LogEvent.new(
+  event_type: Sepia::LogEventType::Updated,
+  generation: 2,
+  metadata: {"user" => "alice", "reason" => "edit"}
+)
+
+event.timestamp    # => Time when the event occurred
+event.event_type   # => Created, Updated, Deleted, or Activity
+event.generation   # => Object generation number (0 for activities)
+event.metadata     # => Hash(String, String) of custom context
+```
+
+### On-Disk Format
+
+Events are stored in JSON Lines format in `.events/` directories:
+
+```
+./_data
+├── Document
+│   └── doc-123
+│       └── .events
+│           └── doc-123.jsonl    # One JSON event per line
+└── Project
+    └── proj-456
+        └── .events
+            └── proj-456.jsonl
+```
+
+Event file format:
+```json
+{"ts":"2025-01-15T10:30:45Z","type":"created","gen":1,"meta":{"user":"alice"}}
+{"ts":"2025-01-15T10:31:20Z","type":"activity","gen":0,"meta":{"action":"highlighted","color":"yellow"}}
+{"ts":"2025-01-15T10:32:10Z","type":"updated","gen":2,"meta":{"user":"bob","reason":"edit"}}
+```
+
+### Use Cases
+
+- **Activity Feeds**: Show recent user actions in collaborative apps
+- **Audit Trails**: Track who changed what and when
+- **Debugging**: Understand the sequence of operations on objects
+- **Analytics**: Analyze usage patterns and collaboration metrics
+
+### Important Notes
+
+- Event logging is opt-in per class to avoid unnecessary storage overhead
+- Metadata values are automatically converted to strings for consistent storage
+- Events are persisted alongside object data and survive garbage collection
+- Activity events don't affect object generation numbers
+- The system is designed to be extensible for future enhancements
+
 ## Generation Tracking for Optimistic Concurrency Control
 
 Sepia supports generation tracking to enable optimistic concurrency control and versioning of objects. This is particularly useful for collaborative applications where multiple users might edit the same data.

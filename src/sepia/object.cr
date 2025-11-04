@@ -131,6 +131,64 @@ module Sepia
       self.class.exists?("#{base_id}#{self.class.generation_separator}#{expected_generation + 1}")
     end
 
+    # Saves the object to storage with optional metadata.
+    #
+    # This is a convenience method that delegates to the global Storage API.
+    # It automatically detects whether to create a new object or update an existing one.
+    #
+    # ### Parameters
+    #
+    # - *metadata* : Optional JSON-serializable metadata for event logging
+    #
+    # ### Returns
+    #
+    # The object itself (for method chaining)
+    #
+    # ### Example
+    #
+    # ```
+    # note = Note.new("Hello World")
+    # note.sepia_id = "my-note"
+    #
+    # # Simple save
+    # note.save
+    #
+    # # Save with metadata
+    # note.save(metadata: {"user" => "alice"})
+    # ```
+    def save(metadata = nil) : self
+      Sepia::Storage.save(self, metadata: metadata)
+      self
+    end
+
+    # Saves the object with forced new generation.
+    #
+    # This method always creates a new version regardless of whether the object
+    # already exists in storage. Equivalent to save_with_generation but follows
+    # the same method signature pattern as save().
+    #
+    # ### Parameters
+    #
+    # - *force_new_generation* : Always increment generation (set to true)
+    # - *metadata* : Optional JSON-serializable metadata for event logging
+    #
+    # ### Returns
+    #
+    # The object itself (for method chaining)
+    #
+    # ### Example
+    #
+    # ```
+    # note = Note.new("Hello World")
+    # note.sepia_id = "my-note"
+    #
+    # # Always creates new version
+    # note.save(force_new_generation: true, metadata: {"user" => "alice"})
+    # ```
+    def save(*, force_new_generation : Bool, metadata = nil)
+      Sepia::Storage.save(self, metadata: metadata, force_new_generation: force_new_generation)
+    end
+
     # Creates a new version of this object with an incremented generation number.
     #
     # Returns a new object instance with the same attributes but a new ID
@@ -144,14 +202,14 @@ module Sepia
     #
     # NOTE: This method requires the class to implement `to_sepia` and `from_sepia`
     # for Serializable objects. For Container objects, override this method.
-    def save_with_generation : self
+    def save_with_generation(metadata = nil) : self
       new_id = "#{base_id}#{self.class.generation_separator}#{generation + 1}"
 
       # Check if we can use serialization (works for Serializable objects)
       if self.responds_to?(:to_sepia) && self.class.responds_to?(:from_sepia)
         new_obj = self.class.from_sepia(self.to_sepia)
         new_obj.sepia_id = new_id
-        new_obj.save
+        Sepia::Storage.save(new_obj, metadata: metadata)
         new_obj
       else
         # For Container objects, this method needs to be overridden
@@ -217,7 +275,7 @@ module Sepia
           if filename == base_id
             # Legacy object without generation
             begin
-              obj = self.load(filename)
+              obj = Sepia::Storage.load(self, filename)
               versions << obj
             rescue
               # Skip invalid files
@@ -226,7 +284,7 @@ module Sepia
             gen_part = filename[base_id.size + generation_separator.size..-1]
             if gen_part.matches?(/^\d+$/)
               begin
-                obj = self.load(filename)
+                obj = Sepia::Storage.load(self, filename)
                 versions << obj
               rescue
                 # Skip invalid files
@@ -239,7 +297,7 @@ module Sepia
         gen = 0
         loop do
           begin
-            obj = self.load("#{base_id}#{generation_separator}#{gen}")
+            obj = Sepia::Storage.load(self, "#{base_id}#{generation_separator}#{gen}")
             versions << obj
             gen += 1
           rescue
@@ -250,7 +308,7 @@ module Sepia
         # Also check base_id without generation (generation 0)
         if versions.empty?
           begin
-            obj = self.load(base_id)
+            obj = Sepia::Storage.load(self, base_id)
             versions << obj
           rescue
             # Not found
@@ -319,23 +377,47 @@ module Sepia
       Sepia::Storage::INSTANCE.save(self, path)
     end
 
-    # Loads an object from storage.
+    # Loads an object from storage with transparent generation handling.
     #
-    # Deserializes and returns an object of the specified class with the given ID.
-    # For Serializable objects, uses the class's `from_sepia` method.
-    # For Container objects, reconstructs the object from its directory structure.
+    # **Generation-transparent loading:**
+    # - If you specify a generation (e.g., "note-123.2"), loads that specific generation
+    # - If you specify base ID only (e.g., "note-123"), automatically loads the latest generation
+    # - If no generations exist, loads the base object
     #
-    # The optional `path` parameter specifies where to load the object from.
+    # This makes generations completely transparent - users get the latest content
+    # by default without needing to think about versioning.
     #
     # ```
-    # # Load from canonical location
+    # # Load the latest version automatically (most common case)
     # doc = MyDocument.load("doc-uuid")
     #
-    # # Load from specific path
+    # # Load a specific generation (rare, for version control)
+    # old_doc = MyDocument.load("doc-uuid.1")
+    #
+    # # Load from custom path (still respects latest generation)
     # doc = MyDocument.load("doc-uuid", "/custom/path")
     # ```
     def self.load(id : String, path : String? = nil) : self
-      Sepia::Storage::INSTANCE.load(self, id, path)
+      # Check if a specific generation was requested
+      if id.includes?(generation_separator)
+        # Load the specific generation requested
+        Sepia::Storage::INSTANCE.load(self, id, path)
+      else
+        # Base ID requested
+        if path
+          # Custom path - generations not supported, load directly
+          Sepia::Storage::INSTANCE.load(self, id, path)
+        else
+          # Standard path - try to load latest generation first
+          latest_obj = latest(id)
+          if latest_obj
+            latest_obj
+          else
+            # No generations exist, load the base object
+            Sepia::Storage::INSTANCE.load(self, id, path)
+          end
+        end
+      end
     end
 
     # Deletes the object from storage.

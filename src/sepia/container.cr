@@ -1,4 +1,5 @@
 require "json"
+require "./event_logger"
 
 module Sepia
   # Module for objects that contain other Sepia objects.
@@ -73,6 +74,62 @@ module Sepia
     macro included
       include JSON::Serializable
       Sepia.register_class_type({{@type.name.stringify}}, true)
+
+      # Add class property for event logging configuration
+      #
+      # This property controls whether events for this class should be logged.
+      # Set to true to enable event logging for all instances of this class.
+      #
+      # ### Example
+      #
+      # ```
+      # class MyProject < Sepia::Object
+      #   include Sepia::Container
+      #   sepia_log_events true
+      # end
+      #
+      # MyProject.sepia_log_events # => true
+      # ```
+      class_property sepia_log_events : Bool = false
+
+      # Enable event logging for this class.
+      #
+      # This macro configures whether instances of this class should have
+      # their save operations logged to the event system.
+      #
+      # ### Example
+      #
+      # ```
+      # class Project < Sepia::Object
+      #   include Sepia::Container
+      #   sepia_log_events true # Enable logging for this class
+      # end
+      # ```
+      macro sepia_log_events_enabled
+        @@sepia_log_events = true
+      end
+
+      # Disable event logging for this class.
+      #
+      # This macro configures whether instances of this class should have
+      # their save operations logged to the event system.
+      #
+      # ### Example
+      #
+      # ```
+      # class Project < Sepia::Object
+      #   include Sepia::Container
+      #   sepia_log_events false # Disable logging for this class
+      # end
+      # ```
+      macro sepia_log_events_disabled
+        @@sepia_log_events = false
+      end
+
+      # Legacy macro for backward compatibility
+      macro sepia_log_events(enabled)
+        sepia_log_events_enabled
+      end
     end
 
     # Serializes only primitive properties to JSON.
@@ -195,10 +252,25 @@ module Sepia
     end
 
     private def save_value(path, value : Serializable?, name)
-      # Saves a Serializable object by saving it and then creating a symlink
-      # to its canonical location within the container's directory.
+      # Creates a reference to a Serializable object within the container's directory.
+      #
+      # SMART SAVE BEHAVIOR: Objects are only saved if they don't already exist
+      # in storage. This prevents duplicate saves and unnecessary I/O operations
+      # when users save both individual objects and their containers.
+      #
+      # Example workflow:
+      # note.save           # Saves note (gen 1)
+      # list.notes << note
+      # list.save           # Smart: note not saved again, just reference created
+      #
+      # note.content = "Updated"
+      # note.save           # Saves note (gen 2)
+      # list.save           # Smart: note not saved again
       if obj = value
-        obj.save
+        # Smart save: only save if object doesn't exist in storage yet
+        unless Sepia::Storage.exists?(obj.class, obj.sepia_id)
+          obj.save
+        end
 
         # Check if we're using InMemoryStorage
         if Sepia::Storage.backend.is_a?(InMemoryStorage)
@@ -216,8 +288,15 @@ module Sepia
     private def save_value(path, value : Container?, name)
       # Saves a nested Container object by creating a subdirectory for it
       # and recursively calling `save_references` on it.
+      #
+      # SMART SAVE BEHAVIOR: Container is only saved if it doesn't already
+      # exist in storage. This prevents duplicate saves and maintains
+      # consistency with Serializable object handling.
       if container = value
-        container.save # <-- THE FIX
+        # Smart save: only save if container doesn't exist in storage yet
+        unless Sepia::Storage.exists?(container.class, container.sepia_id)
+          container.save
+        end
         container_path = File.join(path, name)
         FileUtils.mkdir_p(container_path)
         container.save_references(container_path)
@@ -226,6 +305,10 @@ module Sepia
 
     private def save_value(path, value : Enumerable(Sepia::Object)?, name)
       # Saves an Enumerable (e.g., Array, Set) of Serializable or Container objects.
+      #
+      # SMART SAVE BEHAVIOR: Each object in the enumerable is only saved if it
+      # doesn't already exist in storage. The recursive save_value calls will
+      # handle the existence checking automatically.
       if array = value
         return if array.empty?
         array_dir = File.join(path, name)
@@ -533,6 +616,64 @@ module Sepia
         end
       end
       loaded_hash
+    end
+
+    # Logs an activity event for this container.
+    #
+    # This method allows containers to log arbitrary activities that are not
+    # related to object persistence (save/delete operations). Activities
+    # are stored in the container's event log alongside other events.
+    #
+    # ### Parameters
+    #
+    # - *action* : Description of the activity (e.g., "moved_lane", "edited")
+    # - *metadata* : Optional metadata for the activity (caller's responsibility for JSON serializability)
+    #
+    # ### Example
+    #
+    # ```
+    # board.log_activity("lane_created", {"lane_name" => "Review", "user" => "alice"})
+    #
+    # # Simple version
+    # board.log_activity("color_changed")
+    # ```
+    def log_activity(action : String, metadata)
+      # Combine action with metadata
+      activity_metadata = {"action" => action}.merge(metadata)
+
+      # Log the activity event if this class has logging enabled
+      if self.class.responds_to?(:sepia_log_events) && self.class.sepia_log_events
+        # Get the current generation for this object
+        current_generation = EventLogger.current_generation(self.class, self.sepia_id)
+        EventLogger.append_event(self, LogEventType::Activity, current_generation, activity_metadata)
+      end
+    end
+
+    # Logs an activity event for this object (without metadata).
+    #
+    # This method allows objects to log arbitrary activities that are not
+    # related to object persistence (save/delete operations). Activities
+    # are stored in the object's event log alongside other events.
+    #
+    # ### Parameters
+    #
+    # - *action* : Description of the activity (e.g., "moved_lane", "edited")
+    #
+    # ### Example
+    #
+    # ```
+    # board.log_activity("color_changed")
+    # ```
+    def log_activity(action : String)
+      # Create metadata with just the action
+      activity_metadata = {"action" => action}
+
+      # Log the activity event if this class has logging enabled
+      if self.class.responds_to?(:sepia_log_events) && self.class.sepia_log_events
+        # Get the current generation for this object
+        current_generation = EventLogger.current_generation(self.class, self.sepia_id)
+        EventLogger.append_event(self, LogEventType::Activity, current_generation, activity_metadata)
+      end
     end
   end
 end
