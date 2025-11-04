@@ -309,6 +309,7 @@ describe Sepia::Container do
 
     it "has the correct nested container" do
       box = MyBox.new
+      box.nested_box.sepia_id = "nested_box"
       box.nested_box.nested_thing.sepia_id = "NestedThingID"
       box.nested_box.nested_thing.name = "NestedThingName"
       box.save
@@ -530,6 +531,38 @@ describe Sepia::Container do
       symlink_path = File.join(container_path, "nilable_thing")
 
       File.symlink?(symlink_path).should be_false
+    end
+
+    it "uses smart save behavior to avoid duplicate saves" do
+      # Create individual objects
+      thing1 = MyThing.new("First Thing")
+      thing1.sepia_id = "thing1"
+      thing2 = MyThing.new("Second Thing")
+      thing2.sepia_id = "thing2"
+
+      # Save individual objects first
+      thing1.save
+      thing2.save
+
+      # Count events before container save
+      initial_events = Sepia::Storage.object_events(MyThing, "thing1").size
+
+      # Create container with references to objects
+      box = MyBox.new
+      box.my_things.clear  # Remove default my_thing
+      box.my_things << thing1 << thing2
+      box.sepia_id = "test-box"
+
+      # Save container (should NOT save individual objects again)
+      box.save
+
+      # Check that individual objects weren't saved again
+      final_events = Sepia::Storage.object_events(MyThing, "thing1").size
+      final_events.should eq(initial_events)  # No duplicate saves
+
+      # Verify container was saved and references exist
+      loaded_box = MyBox.load("test-box").as(MyBox)
+      loaded_box.my_things.size.should eq(2)
     end
   end
 end
