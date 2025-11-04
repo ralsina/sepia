@@ -1,3 +1,5 @@
+require "./event_logger"
+
 module Sepia
   # Module for objects that serialize to a single file.
   #
@@ -76,6 +78,62 @@ module Sepia
     # by the including class. The methods raise helpful error messages
     # if not implemented.
     macro included
+      # Add class property for event logging configuration
+      #
+      # This property controls whether events for this class should be logged.
+      # Set to true to enable event logging for all instances of this class.
+      #
+      # ### Example
+      #
+      # ```
+      # class MyDocument < Sepia::Object
+      #   include Sepia::Serializable
+      #   sepia_log_events true
+      # end
+      #
+      # MyDocument.sepia_log_events # => true
+      # ```
+      class_property sepia_log_events : Bool = false
+
+      # Enable event logging for this class.
+      #
+      # This macro configures whether instances of this class should have
+      # their save operations logged to the event system.
+      #
+      # ### Example
+      #
+      # ```
+      # class Document < Sepia::Object
+      #   include Sepia::Serializable
+      #   sepia_log_events true # Enable logging for this class
+      # end
+      # ```
+      macro sepia_log_events_enabled
+        @@sepia_log_events = true
+      end
+
+      # Disable event logging for this class.
+      #
+      # This macro configures whether instances of this class should have
+      # their save operations logged to the event system.
+      #
+      # ### Example
+      #
+      # ```
+      # class Document < Sepia::Object
+      #   include Sepia::Serializable
+      #   sepia_log_events false # Disable logging for this class
+      # end
+      # ```
+      macro sepia_log_events_disabled
+        @@sepia_log_events = false
+      end
+
+      # Legacy macro for backward compatibility
+      macro sepia_log_events(enabled)
+        sepia_log_events_enabled
+      end
+
       # Serializes the object to a string.
       #
       # This method must be implemented by classes including `Serializable`.
@@ -159,6 +217,64 @@ module Sepia
     # ```
     def sepia_references : Enumerable(Sepia::Object)
       [] of Sepia::Object
+    end
+
+    # Logs an activity event for this object.
+    #
+    # This method allows objects to log arbitrary activities that are not
+    # related to object persistence (save/delete operations). Activities
+    # are stored in the object's event log alongside other events.
+    #
+    # ### Parameters
+    #
+    # - *action* : Description of the activity (e.g., "moved_lane", "edited")
+    # - *metadata* : Optional metadata for the activity (values will be converted to strings)
+    #
+    # ### Example
+    #
+    # ```
+    # note.log_activity("moved_lane", {"from" => "In Progress", "to" => "Done", "user" => "alice"})
+    #
+    # # Simple version
+    # note.log_activity("edited")
+    # ```
+    def log_activity(action : String, metadata)
+      # Combine action with metadata
+      activity_metadata = {"action" => action}.merge(metadata)
+
+      # Log the activity event if this class has logging enabled
+      if self.class.responds_to?(:sepia_log_events) && self.class.sepia_log_events
+        # Get the current generation for this object
+        current_generation = EventLogger.current_generation(self.class, self.sepia_id)
+        EventLogger.append_event(self, LogEventType::Activity, current_generation, activity_metadata)
+      end
+    end
+
+    # Logs an activity event for this object (without metadata).
+    #
+    # This method allows objects to log arbitrary activities that are not
+    # related to object persistence (save/delete operations). Activities
+    # are stored in the object's event log alongside other events.
+    #
+    # ### Parameters
+    #
+    # - *action* : Description of the activity (e.g., "moved_lane", "edited")
+    #
+    # ### Example
+    #
+    # ```
+    # note.log_activity("edited")
+    # ```
+    def log_activity(action : String)
+      # Create metadata with just the action
+      activity_metadata = {"action" => action}
+
+      # Log the activity event if this class has logging enabled
+      if self.class.responds_to?(:sepia_log_events) && self.class.sepia_log_events
+        # Get the current generation for this object
+        current_generation = EventLogger.current_generation(self.class, self.sepia_id)
+        EventLogger.append_event(self, LogEventType::Activity, current_generation, activity_metadata)
+      end
     end
   end
 end
