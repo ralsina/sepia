@@ -62,7 +62,7 @@ crystal build src/your_app.cr
 - Requires libfswatch to be installed
 - Not ideal for static builds
 
-#### 2. inotify (Linux-only)
+#### 2. inotify (Linux)
 Linux-native inotify monitoring using the inotify.cr library.
 
 ```bash
@@ -79,18 +79,6 @@ crystal build src/your_app.cr -D inotify
 - Linux-only platform support
 - Requires inotify.cr library (already included)
 
-#### 3. No-op (Disabled)
-Completely disables filesystem monitoring.
-
-```bash
-crystal build src/your_app.cr -D no_fswatch
-```
-
-**Use cases:**
-- Static builds where file watching is not needed
-- Environments where external dependencies are prohibited
-- Server applications that only use manual cache invalidation
-
 ### Static Builds
 
 For optimal static compilation, use the inotify backend:
@@ -105,7 +93,7 @@ crystal build src/your_app.cr -D inotify --release --static
 - **Linux servers**: Use `-D inotify` for better performance and static builds
 - **Development on macOS/Linux**: Use default fswatch for cross-platform compatibility
 - **Static builds**: Use `-D inotify` to avoid libfswatch dependency issues
-- **Container/CI environments**: Use `-D no_fswatch` if file monitoring is not required
+- **Container/CI environments**: Use default fswatch, or `-D inotify` on Linux
 
 ## Garbage Collection
 

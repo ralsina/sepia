@@ -1,8 +1,6 @@
 {% begin %}
   {% if flag?(:inotify) %}
     require "inotify"
-  {% elsif flag?(:no_fswatch) %}
-    # No watcher backend
   {% else %}
     require "fswatch"
   {% end %}
@@ -283,82 +281,6 @@ module Sepia
           path: full_path,
           object_info: object_info
         )
-      end
-    end
-  {% elsif flag?(:no_fswatch) %}
-    # No-op file system watcher implementation for when fswatch is not available.
-    #
-    # This is a fallback implementation that provides the same API as the real Watcher
-    # but doesn't actually monitor any file system changes. This allows the library
-    # to compile and run in environments where fswatch is not available (e.g., static builds).
-    #
-    # ### Build Instructions
-    #
-    # To use this fallback implementation, compile with the `no_fswatch` flag:
-    #
-    # ```bash
-    # crystal build src/your_app.cr -D no_fswatch
-    # ```
-    #
-    # ### Limitations
-    #
-    # - No external change detection
-    # - Cache invalidation must be done manually
-    # - All callback methods are no-ops
-    # - `watcher_running?` will always return `false`
-    class Watcher
-      # Fallback properties for when fswatch is not available
-      getter storage : FileStorage
-      getter path_resolver : PathResolver
-      property running : Bool = false
-      getter callback_block : (Event ->)?
-      @callback_block : (Event ->)?
-
-      def callback
-        @callback_block
-      end
-
-      # No-op class methods for internal file tracking
-      def self.internal_file?(path : String) : Bool
-        false
-      end
-
-      def self.add_internal_file(path : String) : Nil
-        # No-op
-      end
-
-      def self.remove_internal_file(path : String) : Nil
-        # No-op
-      end
-
-      def initialize(@storage : FileStorage)
-        @path_resolver = PathResolver.new(@storage.path)
-      end
-
-      # Register a callback (no-op in fallback mode)
-      def on_change(&block : Event ->)
-        # Store callback but never call it since we can't watch
-        @callback_block = block
-      end
-
-      # Start watching (no-op in fallback mode)
-      def start
-        @running = true
-      end
-
-      # Stop watching (no-op in fallback mode)
-      def stop
-        @running = false
-      end
-
-      # Check if running (always false in fallback mode after proper initialization)
-      def running?
-        @running
-      end
-
-      # Event counter (always 0 in fallback mode)
-      def event_count
-        0
       end
     end
   {% else %}
