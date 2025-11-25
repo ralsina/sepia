@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.17.1">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia::WeakCache(T) - Sepia main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="Sepia/Sepia" data-name="sepia">
+      <a href="../Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/BackendNotSupportedError" data-name="sepia::backendnotsupportederror">
+      <a href="../Sepia/BackendNotSupportedError.html">BackendNotSupportedError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/Backup" data-name="sepia::backup">
+      <a href="../Sepia/Backup.html">Backup</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupFile" data-name="sepia::backup::backupfile">
+      <a href="../Sepia/Backup/BackupFile.html">BackupFile</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupManifest" data-name="sepia::backup::backupmanifest">
+      <a href="../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupStatistics" data-name="sepia::backup::backupstatistics">
+      <a href="../Sepia/Backup/BackupStatistics.html">BackupStatistics</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupVerificationResult" data-name="sepia::backup::backupverificationresult">
+      <a href="../Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/Configuration" data-name="sepia::backup::configuration">
+      <a href="../Sepia/Backup/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectReference" data-name="sepia::backup::objectreference">
+      <a href="../Sepia/Backup/ObjectReference.html">ObjectReference</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectType" data-name="sepia::backup::objecttype">
+      <a href="../Sepia/Backup/ObjectType.html">ObjectType</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCorruptionError" data-name="sepia::backupcorruptionerror">
+      <a href="../Sepia/BackupCorruptionError.html">BackupCorruptionError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCreationError" data-name="sepia::backupcreationerror">
+      <a href="../Sepia/BackupCreationError.html">BackupCreationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupError" data-name="sepia::backuperror">
+      <a href="../Sepia/BackupError.html">BackupError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/CacheManager" data-name="sepia::cachemanager">
+      <a href="../Sepia/CacheManager.html">CacheManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/CacheManager/Stats" data-name="sepia::cachemanager::stats">
+      <a href="../Sepia/CacheManager/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="../Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Event" data-name="sepia::event">
+      <a href="../Sepia/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLogger" data-name="sepia::eventlogger">
+      <a href="../Sepia/EventLogger.html">EventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLoggerBackend" data-name="sepia::eventloggerbackend">
+      <a href="../Sepia/EventLoggerBackend.html">EventLoggerBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventType" data-name="sepia::eventtype">
+      <a href="../Sepia/EventType.html">EventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="../Sepia/FileStorage.html">FileStorage</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage/WatcherConfig" data-name="sepia::filestorage::watcherconfig">
+      <a href="../Sepia/FileStorage/WatcherConfig.html">WatcherConfig</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="../Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="../Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEvent" data-name="sepia::logevent">
+      <a href="../Sepia/LogEvent.html">LogEvent</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEventType" data-name="sepia::logeventtype">
+      <a href="../Sepia/LogEventType.html">LogEventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/MemoryLimiter" data-name="sepia::memorylimiter">
+      <a href="../Sepia/MemoryLimiter.html">MemoryLimiter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/MemoryStats" data-name="sepia::memorylimiter::memorystats">
+      <a href="../Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/PressureLevel" data-name="sepia::memorylimiter::pressurelevel">
+      <a href="../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="../Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/PathResolver" data-name="sepia::pathresolver">
+      <a href="../Sepia/PathResolver.html">PathResolver</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/PathResolver/ObjectInfo" data-name="sepia::pathresolver::objectinfo">
+      <a href="../Sepia/PathResolver/ObjectInfo.html">ObjectInfo</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/PerFileEventLogger" data-name="sepia::perfileeventlogger">
+      <a href="../Sepia/PerFileEventLogger.html">PerFileEventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="../Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="../Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="../Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Watcher" data-name="sepia::watcher">
+      <a href="../Sepia/Watcher.html">Watcher</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="Sepia/Sepia/WeakCache" data-name="sepia::weakcache(t)">
+      <a href="../Sepia/WeakCache.html">WeakCache</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/WeakCache/Stats" data-name="sepia::weakcache::stats">
+      <a href="../Sepia/WeakCache/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    class
+  </span> Sepia::<wbr>WeakCache(T)
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Sepia/WeakCache.html">Sepia::WeakCache(T)</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Memory-aware cache using weak references.</p>
+<p>This cache holds weak references to objects, allowing the garbage
+collector to reclaim memory when needed. Automatically cleans up
+dead references and provides memory pressure monitoring.</p>
+<p>Uses Crystal's built-in WeakRef class for proper weak reference behavior.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">weak_cache <span class="o">=</span> <span class="t">WeakCache</span>(<span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>).new
+
+<span class="c"># Store an object</span>
+weak_cache.put(<span class="s">&quot;doc-123&quot;</span>, my_document)
+
+<span class="c"># Retrieve an object (may return nil if GC collected it)</span>
+doc <span class="o">=</span> weak_cache.get(<span class="s">&quot;doc-123&quot;</span>)
+
+<span class="c"># Cleanup dead references</span>
+weak_cache.cleanup</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L27" target="_blank">
+        sepia/weak_cache.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28cleanup_interval%3ATime%3A%3ASpan%3D60.seconds%29-class-method" class="signature"><strong>.new</strong>(cleanup_interval : Time::Span = <span class="n">60</span>.seconds)</a>
+        
+          <div class="summary"><p>Creates a new weak cache.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#cleanup%3AInt32-instance-method" class="signature"><strong>#cleanup</strong> : Int32</a>
+        
+          <div class="summary"><p>Removes all dead references from the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#cleanup_interval%3ATime%3A%3ASpan-instance-method" class="signature"><strong>#cleanup_interval</strong> : Time::Span</a>
+        
+          <div class="summary"><p>Interval for automatic cleanup (in seconds)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#clear%3AVoid-instance-method" class="signature"><strong>#clear</strong> : Void</a>
+        
+          <div class="summary"><p>Clears all entries from the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#force_cleanup%3AVoid-instance-method" class="signature"><strong>#force_cleanup</strong> : Void</a>
+        
+          <div class="summary"><p>Forces cleanup regardless of interval.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get%28key%3AString%29%3AT%7CNil-instance-method" class="signature"><strong>#get</strong>(key : String) : T | Nil</a>
+        
+          <div class="summary"><p>Retrieves an object from the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#has_key%3F%28key%3AString%29%3ABool-instance-method" class="signature"><strong>#has_key?</strong>(key : String) : Bool</a>
+        
+          <div class="summary"><p>Checks if a key exists in the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#live_keys%3AArray%28String%29-instance-method" class="signature"><strong>#live_keys</strong> : Array(String)</a>
+        
+          <div class="summary"><p>Returns all live keys in the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#live_objects%3AArray%28T%29-instance-method" class="signature"><strong>#live_objects</strong> : Array(T)</a>
+        
+          <div class="summary"><p>Returns all live objects in the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#memory_pressure%3AFloat64-instance-method" class="signature"><strong>#memory_pressure</strong> : Float64</a>
+        
+          <div class="summary"><p>Gets the memory pressure level.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#memory_usage%3AInt64-instance-method" class="signature"><strong>#memory_usage</strong> : Int64</a>
+        
+          <div class="summary"><p>Estimates memory usage of live objects in the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#needs_cleanup%3F%3ABool-instance-method" class="signature"><strong>#needs_cleanup?</strong> : Bool</a>
+        
+          <div class="summary"><p>Checks if cleanup is needed based on interval or pressure.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#put%28key%3AString%2Cobject%3AT%29%3AVoid-instance-method" class="signature"><strong>#put</strong>(key : String, object : T) : Void</a>
+        
+          <div class="summary"><p>Stores an object in the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#remove%28key%3AString%29%3ABool-instance-method" class="signature"><strong>#remove</strong>(key : String) : Bool</a>
+        
+          <div class="summary"><p>Removes a specific key from the weak cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#stats%3AStats-instance-method" class="signature"><strong>#stats</strong> : Stats</a>
+        
+          <div class="summary"><p>Returns cache statistics including dead reference count.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+  </div>
+
+  
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(cleanup_interval:Time::Span=60.seconds)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(cleanup_interval : Time::Span = <span class="n">60</span>.seconds)
+
+        <a class="method-permalink" href="#new%28cleanup_interval%3ATime%3A%3ASpan%3D60.seconds%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new weak cache.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>cleanup_interval</em> : How often to run automatic cleanup (default: 60 seconds)</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache <span class="o">=</span> <span class="t">WeakCache</span>(<span class="t">MyClass</span>).new(cleanup_interval: <span class="n">30</span>.seconds)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L77" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="cleanup:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>cleanup</strong> : Int32
+
+        <a class="method-permalink" href="#cleanup%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Removes all dead references from the weak cache.</p>
+<p>This should be called periodically to clean up references to
+objects that have been garbage collected.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>The number of dead references that were removed.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">removed <span class="o">=</span> weak_cache.cleanup
+puts <span class="s">&quot;Cleaned up </span><span class="i">#{</span>removed<span class="i">}</span><span class="s"> dead references&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L227" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="cleanup_interval:Time::Span-instance-method">
+      <div class="signature">
+        
+        def <strong>cleanup_interval</strong> : Time::Span
+
+        <a class="method-permalink" href="#cleanup_interval%3ATime%3A%3ASpan-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Interval for automatic cleanup (in seconds)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L64" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="clear:Void-instance-method">
+      <div class="signature">
+        
+        def <strong>clear</strong> : Void
+
+        <a class="method-permalink" href="#clear%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Clears all entries from the weak cache.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">weak_cache.clear
+puts weak_cache.stats.size <span class="c"># =&gt; 0</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L204" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="force_cleanup:Void-instance-method">
+      <div class="signature">
+        
+        def <strong>force_cleanup</strong> : Void
+
+        <a class="method-permalink" href="#force_cleanup%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Forces cleanup regardless of interval.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">weak_cache.force_cleanup</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L255" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get(key:String):T|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>get</strong>(key : String) : T | Nil
+
+        <a class="method-permalink" href="#get%28key%3AString%29%3AT%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Retrieves an object from the weak cache.</p>
+<p>Returns <code>nil</code> if the key doesn't exist, the object was garbage
+collected, or the weak reference is dead.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>The cached object or <code>nil</code>.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">doc <span class="o">=</span> weak_cache.get(<span class="s">&quot;doc-123&quot;</span>)
+puts doc.title <span class="k">if</span> doc</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L129" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="has_key?(key:String):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>has_key?</strong>(key : String) : Bool
+
+        <a class="method-permalink" href="#has_key%3F%28key%3AString%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if a key exists in the weak cache.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if the key exists and reference is alive, <code>false</code> otherwise.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">if</span> weak_cache.has_key?(<span class="s">&quot;doc-123&quot;</span>)
+  puts <span class="s">&quot;Object is cached and alive&quot;</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L162" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="live_keys:Array(String)-instance-method">
+      <div class="signature">
+        
+        def <strong>live_keys</strong> : Array(String)
+
+        <a class="method-permalink" href="#live_keys%3AArray%28String%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns all live keys in the weak cache.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Array of keys with alive references.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">live_keys <span class="o">=</span> weak_cache.live_keys
+puts <span class="s">&quot;</span><span class="i">#{</span>live_keys.size<span class="i">}</span><span class="s"> objects still cached&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L271" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="live_objects:Array(T)-instance-method">
+      <div class="signature">
+        
+        def <strong>live_objects</strong> : Array(T)
+
+        <a class="method-permalink" href="#live_objects%3AArray%28T%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns all live objects in the weak cache.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Array of objects with alive references.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">live_objects <span class="o">=</span> weak_cache.live_objects
+puts <span class="s">&quot;</span><span class="i">#{</span>live_objects.size<span class="i">}</span><span class="s"> objects still cached&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L291" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="memory_pressure:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>memory_pressure</strong> : Float64
+
+        <a class="method-permalink" href="#memory_pressure%3AFloat64-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the memory pressure level.</p>
+<p>Returns a value between 0.0 (no pressure) and 1.0 (high pressure)
+based on the ratio of dead references to total references.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Memory pressure level as a float between 0.0 and 1.0.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">pressure <span class="o">=</span> weak_cache.memory_pressure
+puts <span class="s">&quot;Memory pressure: </span><span class="i">#{</span>(pressure <span class="o">*</span> <span class="n">100</span>).round(<span class="n">1</span>)<span class="i">}</span><span class="s">%&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L356" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="memory_usage:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>memory_usage</strong> : Int64
+
+        <a class="method-permalink" href="#memory_usage%3AInt64-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Estimates memory usage of live objects in the weak cache.</p>
+<p>This is a rough estimation based on the number of live objects.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Estimated memory usage in bytes.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">bytes <span class="o">=</span> weak_cache.memory_usage
+puts <span class="s">&quot;Weak cache uses approximately </span><span class="i">#{</span>bytes <span class="o">/</span> <span class="n">1024</span><span class="i">}</span><span class="s"> KB&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L334" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="needs_cleanup?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>needs_cleanup?</strong> : Bool
+
+        <a class="method-permalink" href="#needs_cleanup%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if cleanup is needed based on interval or pressure.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if cleanup is recommended, <code>false</code> otherwise.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">if</span> weak_cache.needs_cleanup?
+  weak_cache.cleanup
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L379" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="put(key:String,object:T):Void-instance-method">
+      <div class="signature">
+        
+        def <strong>put</strong>(key : String, object : T) : Void
+
+        <a class="method-permalink" href="#put%28key%3AString%2Cobject%3AT%29%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Stores an object in the weak cache.</p>
+<p>The object is stored via weak reference and may be garbage collected
+if there are no strong references to it elsewhere.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key</li>
+<li><em>object</em> : The object to cache</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">weak_cache.put(<span class="s">&quot;doc-123&quot;</span>, my_document)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L99" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="remove(key:String):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>remove</strong>(key : String) : Bool
+
+        <a class="method-permalink" href="#remove%28key%3AString%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Removes a specific key from the weak cache.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key to remove</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if the key was removed, <code>false</code> if it didn't exist.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">weak_cache.remove(<span class="s">&quot;doc-123&quot;</span>)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L184" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="stats:Stats-instance-method">
+      <div class="signature">
+        
+        def <strong>stats</strong> : <a href="../Sepia/WeakCache/Stats.html">Stats</a>
+
+        <a class="method-permalink" href="#stats%3AStats-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns cache statistics including dead reference count.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Current cache statistics.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">puts weak_cache.stats
+<span class="c"># =&gt; {size: 45, dead_refs: 3, cleanups: 12, total_added: 156}</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L311" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+</body>
+</html>

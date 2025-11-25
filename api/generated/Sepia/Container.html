@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.17.1">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia::Container - Sepia main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="Sepia/Sepia" data-name="sepia">
+      <a href="../Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/BackendNotSupportedError" data-name="sepia::backendnotsupportederror">
+      <a href="../Sepia/BackendNotSupportedError.html">BackendNotSupportedError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/Backup" data-name="sepia::backup">
+      <a href="../Sepia/Backup.html">Backup</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupFile" data-name="sepia::backup::backupfile">
+      <a href="../Sepia/Backup/BackupFile.html">BackupFile</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupManifest" data-name="sepia::backup::backupmanifest">
+      <a href="../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupStatistics" data-name="sepia::backup::backupstatistics">
+      <a href="../Sepia/Backup/BackupStatistics.html">BackupStatistics</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupVerificationResult" data-name="sepia::backup::backupverificationresult">
+      <a href="../Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/Configuration" data-name="sepia::backup::configuration">
+      <a href="../Sepia/Backup/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectReference" data-name="sepia::backup::objectreference">
+      <a href="../Sepia/Backup/ObjectReference.html">ObjectReference</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectType" data-name="sepia::backup::objecttype">
+      <a href="../Sepia/Backup/ObjectType.html">ObjectType</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCorruptionError" data-name="sepia::backupcorruptionerror">
+      <a href="../Sepia/BackupCorruptionError.html">BackupCorruptionError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCreationError" data-name="sepia::backupcreationerror">
+      <a href="../Sepia/BackupCreationError.html">BackupCreationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupError" data-name="sepia::backuperror">
+      <a href="../Sepia/BackupError.html">BackupError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/CacheManager" data-name="sepia::cachemanager">
+      <a href="../Sepia/CacheManager.html">CacheManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/CacheManager/Stats" data-name="sepia::cachemanager::stats">
+      <a href="../Sepia/CacheManager/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" current" data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="../Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Event" data-name="sepia::event">
+      <a href="../Sepia/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLogger" data-name="sepia::eventlogger">
+      <a href="../Sepia/EventLogger.html">EventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLoggerBackend" data-name="sepia::eventloggerbackend">
+      <a href="../Sepia/EventLoggerBackend.html">EventLoggerBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventType" data-name="sepia::eventtype">
+      <a href="../Sepia/EventType.html">EventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="../Sepia/FileStorage.html">FileStorage</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage/WatcherConfig" data-name="sepia::filestorage::watcherconfig">
+      <a href="../Sepia/FileStorage/WatcherConfig.html">WatcherConfig</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="../Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="../Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEvent" data-name="sepia::logevent">
+      <a href="../Sepia/LogEvent.html">LogEvent</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEventType" data-name="sepia::logeventtype">
+      <a href="../Sepia/LogEventType.html">LogEventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/MemoryLimiter" data-name="sepia::memorylimiter">
+      <a href="../Sepia/MemoryLimiter.html">MemoryLimiter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/MemoryStats" data-name="sepia::memorylimiter::memorystats">
+      <a href="../Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/PressureLevel" data-name="sepia::memorylimiter::pressurelevel">
+      <a href="../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="../Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/PathResolver" data-name="sepia::pathresolver">
+      <a href="../Sepia/PathResolver.html">PathResolver</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/PathResolver/ObjectInfo" data-name="sepia::pathresolver::objectinfo">
+      <a href="../Sepia/PathResolver/ObjectInfo.html">ObjectInfo</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/PerFileEventLogger" data-name="sepia::perfileeventlogger">
+      <a href="../Sepia/PerFileEventLogger.html">PerFileEventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="../Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="../Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="../Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Watcher" data-name="sepia::watcher">
+      <a href="../Sepia/Watcher.html">Watcher</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/WeakCache" data-name="sepia::weakcache(t)">
+      <a href="../Sepia/WeakCache.html">WeakCache</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/WeakCache/Stats" data-name="sepia::weakcache::stats">
+      <a href="../Sepia/WeakCache/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    module
+  </span> Sepia::<wbr>Container
+
+</h1>
+
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Module for objects that contain other Sepia objects.</p>
+<p>The <code><a href="../Sepia/Container.html">Container</a></code> module enables objects to contain nested Serializable or
+Container objects. Containers serialize as directories on disk, with
+contained objects stored as files, subdirectories, or symlinks.</p>
+<p>⚠️ <strong>WARNING</strong>: The Container API and on-disk format are subject to change.
+Data migrations will be required when upgrading Sepia versions.</p>
+<h3><a id="key-features" class="anchor" href="#key-features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Key Features</h3>
+<ul>
+<li><strong>Automatic JSON Serialization</strong>: Primitive properties are automatically
+serialized to a <code>data.json</code> file</li>
+<li><strong>Nested Object Storage</strong>: Contained Sepia objects are stored as references</li>
+<li><strong>Complex Structure Support</strong>: Handles Arrays, Hashes, Sets, and nilable references</li>
+<li><strong>Symlink References</strong>: Serializable objects are stored as symlinks to avoid duplication</li>
+</ul>
+<h3><a id="directory-structure" class="anchor" href="#directory-structure">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Directory Structure</h3>
+<pre><code class="language-crystal">container_id/
+  ├── data.json           # Primitive properties (automatic)
+  ├── simple_array/       # Array of primitives
+  │   ├── 0000_value1
+  │   └── 0001_value2
+  ├── object_array/       # Array of Sepia objects
+  │   ├── 0000 -&gt; ../../ClassName/id1
+  │   └── 0001 -&gt; ../../ClassName/id2
+  ├── nested_object/      # Single Sepia object
+  │   └── 0000 -&gt; ../../OtherClass/id
+  └── complex_hash/       # Hash with mixed types
+      ├── key1/value1     # Primitive value
+      └── key2 -&gt; ../../RefClass/id  # Sepia object reference</code></pre>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Project</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+
+  <span class="c"># Primitive properties - automatically serialized</span>
+  property name : <span class="t">String</span>
+  property created_at : <span class="t">Time</span>
+  property tags : <span class="t">Array</span>(<span class="t">String</span>)
+
+  <span class="c"># Sepia object references - stored as symlinks</span>
+  owner : <span class="t">User</span>?
+  tasks : <span class="t">Array</span>(<span class="t">Task</span>)
+  metadata : <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">Document</span>)?
+
+  <span class="k">def</span> <span class="m">initialize</span>(@name <span class="o">=</span> <span class="s">&quot;&quot;</span>)
+    @created_at <span class="o">=</span> <span class="t">Time</span>.utc
+    @tags <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>
+    @tasks <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">Task</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+project <span class="o">=</span> <span class="t">Project</span>.new(<span class="s">&quot;My Project&quot;</span>)
+project.owner <span class="o">=</span> user            <span class="c"># User object</span>
+project.tasks <span class="o">&lt;&lt;</span> task1 <span class="o">&lt;&lt;</span> task2 <span class="c"># Task objects</span>
+project.save                    <span class="c"># Creates directory structure</span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L69" target="_blank">
+        sepia/container.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#load_enumerable_of_containers%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method" class="signature"><strong>#load_enumerable_of_containers</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U</a>
+        
+          <div class="summary"><p>Loads an enumerable of containers from a directory of subdirectories.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load_enumerable_of_references%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method" class="signature"><strong>#load_enumerable_of_references</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U</a>
+        
+          <div class="summary"><p>Loads an enumerable of serializable objects from a directory of symlinks.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load_hash_of_containers%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method" class="signature"><strong>#load_hash_of_containers</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U</a>
+        
+          <div class="summary"><p>Loads a hash of containers from a directory of subdirectories.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load_hash_of_references%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method" class="signature"><strong>#load_hash_of_references</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U</a>
+        
+          <div class="summary"><p>Loads a hash of serializable objects from a directory of symlinks.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load_references%28path%3AString%29-instance-method" class="signature"><strong>#load_references</strong>(path : String)</a>
+        
+          <div class="summary"><p>Loads all references (Serializable, Container, Enumerable of either) from the container's path.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#log_activity%28action%3AString%2Cmetadata%29-instance-method" class="signature"><strong>#log_activity</strong>(action : String, metadata)</a>
+        
+          <div class="summary"><p>Logs an activity event for this container.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#log_activity%28action%3AString%29-instance-method" class="signature"><strong>#log_activity</strong>(action : String)</a>
+        
+          <div class="summary"><p>Logs an activity event for this object (without metadata).</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#restore_properties_from_json%28json_data%3AString%29-instance-method" class="signature"><strong>#restore_properties_from_json</strong>(json_data : String)</a>
+        
+          <div class="summary"><p>Restore primitive properties from JSON without creating a new instance</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#save_references%28path%3AString%29-instance-method" class="signature"><strong>#save_references</strong>(path : String)</a>
+        
+          <div class="summary"><p>Saves all references (Serializable, Container, Enumerable of either) to the container's path.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#sepia_references%3AEnumerable%28Sepia%3A%3AObject%29-instance-method" class="signature"><strong>#sepia_references</strong> : Enumerable(Sepia::Object)</a>
+        
+          <div class="summary"><p>Returns all Sepia objects referenced by this container.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_filtered_json%3AString-instance-method" class="signature"><strong>#to_filtered_json</strong> : String</a>
+        
+          <div class="summary"><p>Serializes only primitive properties to JSON.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <div class="methods-inherited">
+    
+  </div>
+
+  
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="load_enumerable_of_containers(path:String,name:String,collection_type:T.class,item_type:U.class)forallT,U-instance-method">
+      <div class="signature">
+        
+        def <strong>load_enumerable_of_containers</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U
+
+        <a class="method-permalink" href="#load_enumerable_of_containers%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads an enumerable of containers from a directory of subdirectories.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L638" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load_enumerable_of_references(path:String,name:String,collection_type:T.class,item_type:U.class)forallT,U-instance-method">
+      <div class="signature">
+        
+        def <strong>load_enumerable_of_references</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U
+
+        <a class="method-permalink" href="#load_enumerable_of_references%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads an enumerable of serializable objects from a directory of symlinks.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L606" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load_hash_of_containers(path:String,name:String,collection_type:T.class,item_type:U.class)forallT,U-instance-method">
+      <div class="signature">
+        
+        def <strong>load_hash_of_containers</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U
+
+        <a class="method-permalink" href="#load_hash_of_containers%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads a hash of containers from a directory of subdirectories.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L677" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load_hash_of_references(path:String,name:String,collection_type:T.class,item_type:U.class)forallT,U-instance-method">
+      <div class="signature">
+        
+        def <strong>load_hash_of_references</strong>(path : String, name : String, collection_type : <span class="t">T</span>.<span class="k">class</span>, item_type : <span class="t">U</span>.<span class="k">class</span>) forall T, U
+
+        <a class="method-permalink" href="#load_hash_of_references%28path%3AString%2Cname%3AString%2Ccollection_type%3AT.class%2Citem_type%3AU.class%29forallT%2CU-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads a hash of serializable objects from a directory of symlinks.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L658" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load_references(path:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>load_references</strong>(path : String)
+
+        <a class="method-permalink" href="#load_references%28path%3AString%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads all references (Serializable, Container, Enumerable of either)
+from the container's path.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L420" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="log_activity(action:String,metadata)-instance-method">
+      <div class="signature">
+        
+        def <strong>log_activity</strong>(action : String, metadata)
+
+        <a class="method-permalink" href="#log_activity%28action%3AString%2Cmetadata%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Logs an activity event for this container.</p>
+<p>This method allows containers to log arbitrary activities that are not
+related to object persistence (save/delete operations). Activities
+are stored in the container's event log alongside other events.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>action</em> : Description of the activity (e.g., &quot;moved_lane&quot;, &quot;edited&quot;)</li>
+<li><em>metadata</em> : Optional metadata for the activity (caller's responsibility for JSON serializability)</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">board.log_activity(<span class="s">&quot;lane_created&quot;</span>, {<span class="s">&quot;lane_name&quot;</span> <span class="o">=&gt;</span> <span class="s">&quot;Review&quot;</span>, <span class="s">&quot;user&quot;</span> <span class="o">=&gt;</span> <span class="s">&quot;alice&quot;</span>})
+
+<span class="c"># Simple version</span>
+board.log_activity(<span class="s">&quot;color_changed&quot;</span>)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L714" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="log_activity(action:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>log_activity</strong>(action : String)
+
+        <a class="method-permalink" href="#log_activity%28action%3AString%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Logs an activity event for this object (without metadata).</p>
+<p>This method allows objects to log arbitrary activities that are not
+related to object persistence (save/delete operations). Activities
+are stored in the object's event log alongside other events.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>action</em> : Description of the activity (e.g., &quot;moved_lane&quot;, &quot;edited&quot;)</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">board.log_activity(<span class="s">&quot;color_changed&quot;</span>)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L741" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="restore_properties_from_json(json_data:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>restore_properties_from_json</strong>(json_data : String)
+
+        <a class="method-permalink" href="#restore_properties_from_json%28json_data%3AString%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Restore primitive properties from JSON without creating a new instance</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L572" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="save_references(path:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>save_references</strong>(path : String)
+
+        <a class="method-permalink" href="#save_references%28path%3AString%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Saves all references (Serializable, Container, Enumerable of either)
+to the container's path.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L244" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="sepia_references:Enumerable(Sepia::Object)-instance-method">
+      <div class="signature">
+        
+        def <strong>sepia_references</strong> : Enumerable(<a href="../Sepia/Object.html">Sepia::Object</a>)
+
+        <a class="method-permalink" href="#sepia_references%3AEnumerable%28Sepia%3A%3AObject%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns all Sepia objects referenced by this container.</p>
+<p>This method automatically inspects all instance variables and collects
+any Sepia objects, including those nested in Arrays, Hashes, and Sets.
+Used by the garbage collector to track object relationships.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>An Enumerable containing all Sepia objects referenced by this container.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Team</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  property members : <span class="t">Array</span>(<span class="t">User</span>)
+  property lead : <span class="t">User</span>?
+  property projects : <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">Project</span>)
+
+  <span class="k">def</span> <span class="m">initialize</span>
+    @members <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">User</span>
+    @projects <span class="o">=</span> {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">Project</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+team <span class="o">=</span> <span class="t">Team</span>.new
+team.members <span class="o">&lt;&lt;</span> user1 <span class="o">&lt;&lt;</span> user2
+team.lead <span class="o">=</span> user3
+team.projects[<span class="s">&quot;web&quot;</span>] <span class="o">=</span> project1
+
+refs <span class="o">=</span> team.sepia_references
+<span class="c"># refs contains [user1, user2, user3, project1]</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L217" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_filtered_json:String-instance-method">
+      <div class="signature">
+        
+        def <strong>to_filtered_json</strong> : String
+
+        <a class="method-permalink" href="#to_filtered_json%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Serializes only primitive properties to JSON.</p>
+<p>This method automatically filters out any Sepia object references,
+serializing only primitive types (String, Int32, Bool, Time, etc.)
+and collections of primitives. The resulting JSON is stored in
+the container's <code>data.json</code> file.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>A JSON string containing only the primitive properties of the container.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">UserProfile</span> <span class="o">&lt;</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Object</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  property name : <span class="t">String</span>         <span class="c"># Included in JSON</span>
+  property age : <span class="t">Int32</span>           <span class="c"># Included in JSON</span>
+  property friends : <span class="t">Array</span>(<span class="t">User</span>) <span class="c"># Excluded (Sepia objects)</span>
+
+  <span class="k">def</span> <span class="m">initialize</span>(@name <span class="o">=</span> <span class="s">&quot;&quot;</span>, @age <span class="o">=</span> <span class="n">0</span>)
+    @friends <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">User</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+profile <span class="o">=</span> <span class="t">UserProfile</span>.new(<span class="s">&quot;Alice&quot;</span>, <span class="n">30</span>)
+json <span class="o">=</span> profile.to_filtered_json
+<span class="c"># json = {&quot;name&quot;:&quot;Alice&quot;,&quot;age&quot;:30,&quot;friends&quot;:[]}</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L165" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+</body>
+</html>

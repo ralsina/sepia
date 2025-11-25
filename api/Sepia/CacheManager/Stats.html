@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.17.1">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia::CacheManager::Stats - Sepia main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="Sepia/Sepia" data-name="sepia">
+      <a href="../../Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/BackendNotSupportedError" data-name="sepia::backendnotsupportederror">
+      <a href="../../Sepia/BackendNotSupportedError.html">BackendNotSupportedError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/Backup" data-name="sepia::backup">
+      <a href="../../Sepia/Backup.html">Backup</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupFile" data-name="sepia::backup::backupfile">
+      <a href="../../Sepia/Backup/BackupFile.html">BackupFile</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupManifest" data-name="sepia::backup::backupmanifest">
+      <a href="../../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupStatistics" data-name="sepia::backup::backupstatistics">
+      <a href="../../Sepia/Backup/BackupStatistics.html">BackupStatistics</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupVerificationResult" data-name="sepia::backup::backupverificationresult">
+      <a href="../../Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/Configuration" data-name="sepia::backup::configuration">
+      <a href="../../Sepia/Backup/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectReference" data-name="sepia::backup::objectreference">
+      <a href="../../Sepia/Backup/ObjectReference.html">ObjectReference</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectType" data-name="sepia::backup::objecttype">
+      <a href="../../Sepia/Backup/ObjectType.html">ObjectType</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCorruptionError" data-name="sepia::backupcorruptionerror">
+      <a href="../../Sepia/BackupCorruptionError.html">BackupCorruptionError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCreationError" data-name="sepia::backupcreationerror">
+      <a href="../../Sepia/BackupCreationError.html">BackupCreationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupError" data-name="sepia::backuperror">
+      <a href="../../Sepia/BackupError.html">BackupError</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="Sepia/Sepia/CacheManager" data-name="sepia::cachemanager">
+      <a href="../../Sepia/CacheManager.html">CacheManager</a>
+      
+        <ul>
+  
+  <li class=" current" data-id="Sepia/Sepia/CacheManager/Stats" data-name="sepia::cachemanager::stats">
+      <a href="../../Sepia/CacheManager/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="../../Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Event" data-name="sepia::event">
+      <a href="../../Sepia/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLogger" data-name="sepia::eventlogger">
+      <a href="../../Sepia/EventLogger.html">EventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLoggerBackend" data-name="sepia::eventloggerbackend">
+      <a href="../../Sepia/EventLoggerBackend.html">EventLoggerBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventType" data-name="sepia::eventtype">
+      <a href="../../Sepia/EventType.html">EventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="../../Sepia/FileStorage.html">FileStorage</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage/WatcherConfig" data-name="sepia::filestorage::watcherconfig">
+      <a href="../../Sepia/FileStorage/WatcherConfig.html">WatcherConfig</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="../../Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="../../Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEvent" data-name="sepia::logevent">
+      <a href="../../Sepia/LogEvent.html">LogEvent</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEventType" data-name="sepia::logeventtype">
+      <a href="../../Sepia/LogEventType.html">LogEventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/MemoryLimiter" data-name="sepia::memorylimiter">
+      <a href="../../Sepia/MemoryLimiter.html">MemoryLimiter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/MemoryStats" data-name="sepia::memorylimiter::memorystats">
+      <a href="../../Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/PressureLevel" data-name="sepia::memorylimiter::pressurelevel">
+      <a href="../../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="../../Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/PathResolver" data-name="sepia::pathresolver">
+      <a href="../../Sepia/PathResolver.html">PathResolver</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/PathResolver/ObjectInfo" data-name="sepia::pathresolver::objectinfo">
+      <a href="../../Sepia/PathResolver/ObjectInfo.html">ObjectInfo</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/PerFileEventLogger" data-name="sepia::perfileeventlogger">
+      <a href="../../Sepia/PerFileEventLogger.html">PerFileEventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="../../Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="../../Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="../../Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Watcher" data-name="sepia::watcher">
+      <a href="../../Sepia/Watcher.html">Watcher</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/WeakCache" data-name="sepia::weakcache(t)">
+      <a href="../../Sepia/WeakCache.html">WeakCache</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/WeakCache/Stats" data-name="sepia::weakcache::stats">
+      <a href="../../Sepia/WeakCache/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    struct
+  </span> Sepia::<wbr>CacheManager::<wbr>Stats
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Sepia/CacheManager/Stats.html">Sepia::CacheManager::Stats</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Cache statistics</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L41" target="_blank">
+        sepia/cache_manager.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28max_size%3AInt32%29-class-method" class="signature"><strong>.new</strong>(max_size : Int32)</a>
+        
+      </li>
+    
+  </ul>
+
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#evictions%3AInt64-instance-method" class="signature"><strong>#evictions</strong> : Int64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#evictions%3D%28evictions%3AInt64%29-instance-method" class="signature"><strong>#evictions=</strong>(evictions : Int64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hit_rate%3AFloat64-instance-method" class="signature"><strong>#hit_rate</strong> : Float64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hits%3AInt64-instance-method" class="signature"><strong>#hits</strong> : Int64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hits%3D%28hits%3AInt64%29-instance-method" class="signature"><strong>#hits=</strong>(hits : Int64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#invalidations%3AInt64-instance-method" class="signature"><strong>#invalidations</strong> : Int64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#invalidations%3D%28invalidations%3AInt64%29-instance-method" class="signature"><strong>#invalidations=</strong>(invalidations : Int64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#max_size%3AInt32-instance-method" class="signature"><strong>#max_size</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#max_size%3D%28max_size%3AInt32%29-instance-method" class="signature"><strong>#max_size=</strong>(max_size : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#misses%3AInt64-instance-method" class="signature"><strong>#misses</strong> : Int64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#misses%3D%28misses%3AInt64%29-instance-method" class="signature"><strong>#misses=</strong>(misses : Int64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#size%3AInt32-instance-method" class="signature"><strong>#size</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#size%3D%28size%3AInt32%29-instance-method" class="signature"><strong>#size=</strong>(size : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_s%3AString-instance-method" class="signature"><strong>#to_s</strong> : String</a>
+        
+          <div class="summary"><p>Returns a nicely readable and concise string representation of this object, typically intended for users.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+  </div>
+
+  
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(max_size:Int32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(max_size : Int32)
+
+        <a class="method-permalink" href="#new%28max_size%3AInt32%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L49" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="evictions:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>evictions</strong> : Int64
+
+        <a class="method-permalink" href="#evictions%3AInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L44" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="evictions=(evictions:Int64)-instance-method">
+      <div class="signature">
+        
+        def <strong>evictions=</strong>(evictions : Int64)
+
+        <a class="method-permalink" href="#evictions%3D%28evictions%3AInt64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L44" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hit_rate:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>hit_rate</strong> : Float64
+
+        <a class="method-permalink" href="#hit_rate%3AFloat64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L52" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hits:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>hits</strong> : Int64
+
+        <a class="method-permalink" href="#hits%3AInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L42" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hits=(hits:Int64)-instance-method">
+      <div class="signature">
+        
+        def <strong>hits=</strong>(hits : Int64)
+
+        <a class="method-permalink" href="#hits%3D%28hits%3AInt64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L42" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="invalidations:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>invalidations</strong> : Int64
+
+        <a class="method-permalink" href="#invalidations%3AInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L45" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="invalidations=(invalidations:Int64)-instance-method">
+      <div class="signature">
+        
+        def <strong>invalidations=</strong>(invalidations : Int64)
+
+        <a class="method-permalink" href="#invalidations%3D%28invalidations%3AInt64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L45" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="max_size:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>max_size</strong> : Int32
+
+        <a class="method-permalink" href="#max_size%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L47" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="max_size=(max_size:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>max_size=</strong>(max_size : Int32)
+
+        <a class="method-permalink" href="#max_size%3D%28max_size%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L47" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="misses:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>misses</strong> : Int64
+
+        <a class="method-permalink" href="#misses%3AInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L43" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="misses=(misses:Int64)-instance-method">
+      <div class="signature">
+        
+        def <strong>misses=</strong>(misses : Int64)
+
+        <a class="method-permalink" href="#misses%3D%28misses%3AInt64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L43" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="size:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>size</strong> : Int32
+
+        <a class="method-permalink" href="#size%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L46" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="size=(size:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>size=</strong>(size : Int32)
+
+        <a class="method-permalink" href="#size%3D%28size%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L46" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s:String-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong> : String
+
+        <a class="method-permalink" href="#to_s%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class Object
+            </div>
+          
+          <p>Returns a nicely readable and concise string representation of this object,
+typically intended for users.</p>
+<p>This method should usually <strong>not</strong> be overridden. It delegates to
+<code>#to_s(IO)</code> which can be overridden for custom implementations.</p>
+<p>Also see <code>#inspect</code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L57" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+</body>
+</html>

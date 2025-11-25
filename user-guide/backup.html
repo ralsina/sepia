@@ -1,0 +1,544 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Backup and Restore</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Sepia Documentation</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/quick-start.html"><strong aria-hidden="true">2.2.</strong> Quick Start</a></li><li class="chapter-item expanded "><a href="../getting-started/core-concepts.html"><strong aria-hidden="true">2.3.</strong> Core Concepts</a></li></ol></li><li class="chapter-item expanded "><a href="../user-guide/index.html"><strong aria-hidden="true">3.</strong> User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user-guide/serializable.html"><strong aria-hidden="true">3.1.</strong> Serializable Objects</a></li><li class="chapter-item expanded "><a href="../user-guide/containers.html"><strong aria-hidden="true">3.2.</strong> Container Objects</a></li><li class="chapter-item expanded "><a href="../user-guide/storage.html"><strong aria-hidden="true">3.3.</strong> Storage Management</a></li><li class="chapter-item expanded "><a href="../user-guide/generations.html"><strong aria-hidden="true">3.4.</strong> Generation Tracking</a></li><li class="chapter-item expanded "><a href="../user-guide/file-watching.html"><strong aria-hidden="true">3.5.</strong> File System Watching</a></li><li class="chapter-item expanded "><a href="../user-guide/backup.html" class="active"><strong aria-hidden="true">3.6.</strong> Backup and Restore</a></li></ol></li><li class="chapter-item expanded "><a href="../api/index.html"><strong aria-hidden="true">4.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../api/core.html"><strong aria-hidden="true">4.1.</strong> Core Modules</a></li><li class="chapter-item expanded "><a href="../api/storage.html"><strong aria-hidden="true">4.2.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="../api/utilities.html"><strong aria-hidden="true">4.3.</strong> Utilities</a></li><li class="chapter-item expanded "><a href="../api/generated.html"><strong aria-hidden="true">4.4.</strong> Generated API Docs</a></li></ol></li><li class="chapter-item expanded "><a href="../advanced/index.html"><strong aria-hidden="true">5.</strong> Advanced Topics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../advanced/garbage-collection.html"><strong aria-hidden="true">5.1.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="../advanced/performance.html"><strong aria-hidden="true">5.2.</strong> Performance Considerations</a></li><li class="chapter-item expanded "><a href="../advanced/troubleshooting.html"><strong aria-hidden="true">5.3.</strong> Troubleshooting</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">6.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/document-management.html"><strong aria-hidden="true">6.1.</strong> Document Management</a></li><li class="chapter-item expanded "><a href="../examples/configuration-management.html"><strong aria-hidden="true">6.2.</strong> Configuration Management</a></li><li class="chapter-item expanded "><a href="../examples/collaborative-apps.html"><strong aria-hidden="true">6.3.</strong> Collaborative Applications</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="backup-and-restore"><a class="header" href="#backup-and-restore">Backup and Restore</a></h1>
+<p>Sepia provides comprehensive backup functionality that allows you to create tar archives of object trees, inspect backup contents, and verify backup integrity.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Sepia's backup system enables you to:</p>
+<ul>
+<li>Create complete backups of object trees with all relationships</li>
+<li>Inspect backup contents without restoring</li>
+<li>Verify backup integrity and structure</li>
+<li>Preserve symlinks and object relationships</li>
+<li>Generate human-readable metadata</li>
+</ul>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<h3 id="creating-backups"><a class="header" href="#creating-backups">Creating Backups</a></h3>
+<h4 id="backup-multiple-objects"><a class="header" href="#backup-multiple-objects">Backup Multiple Objects</a></h4>
+<pre><code class="language-crystal"># Backup a list of root objects
+root_objects = [document1, project1, user_profile]
+backup_path = Sepia::Backup.create(root_objects, &quot;project_backup.tar&quot;)
+puts &quot;Backup created: #{backup_path}&quot;
+</code></pre>
+<h4 id="backup-from-storage"><a class="header" href="#backup-from-storage">Backup from Storage</a></h4>
+<pre><code class="language-crystal"># Backup specific objects from storage
+objects = [
+  Sepia::Storage.get(Document, &quot;doc1&quot;),
+  Sepia::Storage.get(Project, &quot;proj1&quot;)
+]
+backup_path = Sepia::Storage.backup(objects, &quot;selected_backup.tar&quot;)
+
+# Backup a single object
+backup_path = Sepia::Storage.backup(document, &quot;single_doc_backup.tar&quot;)
+
+# Backup all objects in storage
+backup_path = Sepia::Storage.backup_all(&quot;complete_backup.tar&quot;)
+</code></pre>
+<h4 id="backup-from-individual-objects"><a class="header" href="#backup-from-individual-objects">Backup from Individual Objects</a></h4>
+<pre><code class="language-crystal"># Simple backup to specific path
+document.backup_to(&quot;doc_backup.tar&quot;)
+
+# Backup with auto-generated filename (includes timestamp)
+backup_path = document.create_backup()  # e.g., &quot;document_abc123_20251125.tar&quot;
+
+# Backup to custom directory
+document.backup_to(&quot;backups/docs/doc_backup.tar&quot;)
+</code></pre>
+<h3 id="inspecting-backups"><a class="header" href="#inspecting-backups">Inspecting Backups</a></h3>
+<h4 id="list-backup-contents"><a class="header" href="#list-backup-contents">List Backup Contents</a></h4>
+<pre><code class="language-crystal">manifest = Sepia::Backup.list_contents(&quot;project_backup.tar&quot;)
+
+puts &quot;Backup created at: #{manifest.created_at}&quot;
+puts &quot;Version: #{manifest.version}&quot;
+puts &quot;Root objects: #{manifest.root_objects.size}&quot;
+
+manifest.root_objects.each do |root_obj|
+  puts &quot;  - #{root_obj.class_name}/#{root_obj.object_id} (#{root_obj.object_type})&quot;
+end
+
+puts &quot;All objects by class:&quot;
+manifest.all_objects.each do |class_name, objects|
+  puts &quot;  - #{class_name}: #{objects.size} objects&quot;
+end
+</code></pre>
+<h4 id="get-backup-metadata"><a class="header" href="#get-backup-metadata">Get Backup Metadata</a></h4>
+<pre><code class="language-crystal">metadata = Sepia::Backup.get_metadata(&quot;project_backup.tar&quot;)
+# Returns the same manifest as list_contents()
+</code></pre>
+<h4 id="verify-backup-integrity"><a class="header" href="#verify-backup-integrity">Verify Backup Integrity</a></h4>
+<pre><code class="language-crystal">result = Sepia::Backup.verify(&quot;project_backup.tar&quot;)
+
+puts &quot;Backup is #{result.valid ? &quot;valid&quot; : &quot;invalid&quot;}&quot;
+puts &quot;Total objects: #{result.statistics.total_objects}&quot;
+puts &quot;Serializable objects: #{result.statistics.serializable_objects}&quot;
+puts &quot;Container objects: #{result.statistics.container_objects}&quot;
+puts &quot;Object classes: #{result.statistics.classes.size}&quot;
+
+if result.errors.empty?
+  puts &quot;No verification errors&quot;
+else
+  puts &quot;Verification errors:&quot;
+  result.errors.each { |error| puts &quot;  - #{error}&quot; }
+end
+</code></pre>
+<h2 id="backup-archive-structure"><a class="header" href="#backup-archive-structure">Backup Archive Structure</a></h2>
+<p>Sepia backups are standard tar archives with this structure:</p>
+<pre><code>backup.sepia.tar
+├── metadata.json     # Backup manifest with object information
+├── README           # Human-readable backup information
+└── objects/         # All objects organized by class and ID
+    ├── ClassName/object_id        # Serializable objects (files)
+    └── ClassName/object_id/       # Container objects (directories)
+        ├── data.json
+        └── references/
+</code></pre>
+<h3 id="metadatajson-format"><a class="header" href="#metadatajson-format">metadata.json Format</a></h3>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;created_at&quot;: &quot;2025-11-25T17:30:00Z&quot;,
+  &quot;root_objects&quot;: [
+    {
+      &quot;class_name&quot;: &quot;Document&quot;,
+      &quot;object_id&quot;: &quot;doc-123&quot;,
+      &quot;relative_path&quot;: &quot;objects/Document/doc-123&quot;,
+      &quot;object_type&quot;: &quot;Serializable&quot;
+    }
+  ],
+  &quot;all_objects&quot;: {
+    &quot;Document&quot;: [
+      {
+        &quot;class_name&quot;: &quot;Document&quot;,
+        &quot;object_id&quot;: &quot;doc-123&quot;,
+        &quot;relative_path&quot;: &quot;objects/Document/doc-123&quot;,
+        &quot;object_type&quot;: &quot;Serializable&quot;
+      }
+    ],
+    &quot;Project&quot;: [...]
+  }
+}
+</code></pre>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<p>Sepia supports simple configuration for backup creation:</p>
+<pre><code class="language-crystal">config = Sepia::Backup::Configuration.new
+
+# Configure symlink handling
+config.follow_symlinks = false  # Default: preserves symlinks as-is
+
+# Create backup with configuration
+backup_path = Sepia::Backup.create(root_objects, &quot;backup.tar&quot;, config)
+</code></pre>
+<h3 id="configuration-presets"><a class="header" href="#configuration-presets">Configuration Presets</a></h3>
+<pre><code class="language-crystal"># Fast backup (no compression, minimal verification)
+fast_config = Sepia::Backup::Configuration.fast
+
+# Minimal backup (basic functionality only)
+minimal_config = Sepia::Backup::Configuration.minimal
+
+# Archive backup (maximum preservation)
+archive_config = Sepia::Backup::Configuration.archive
+
+backup_path = Sepia::Backup.create(root_objects, &quot;archive.tar&quot;, archive_config)
+</code></pre>
+<h2 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h2>
+<h3 id="application-backup"><a class="header" href="#application-backup">Application Backup</a></h3>
+<pre><code class="language-crystal">class BackupService
+  def backup_user_data(user : User)
+    # Backup all objects related to a user
+    root_objects = [user] + user.documents + user.projects
+
+    timestamp = Time.utc.to_s(&quot;%Y%m%d_%H%M%S&quot;)
+    backup_path = &quot;backups/user_#{user.id}_#{timestamp}.tar&quot;
+
+    backup_path = Sepia::Backup.create(root_objects, backup_path)
+
+    # Verify backup was successful
+    result = Sepia::Backup.verify(backup_path)
+    unless result.valid
+      raise &quot;Backup verification failed&quot;
+    end
+
+    backup_path
+  end
+end
+</code></pre>
+<h3 id="project-export"><a class="header" href="#project-export">Project Export</a></h3>
+<pre><code class="language-crystal">def export_project(project : Project)
+  # Create backup of entire project tree
+  root_objects = [project] + find_all_related_objects(project)
+
+  export_path = &quot;exports/#{project.name}_export.tar&quot;
+  backup_path = Sepia::Backup.create(root_objects, export_path)
+
+  puts &quot;Project exported to: #{backup_path}&quot;
+
+  # Show what's in the export
+  manifest = Sepia::Backup.list_contents(backup_path)
+  puts &quot;Export contains #{manifest.all_objects.values.map(&amp;.size).sum} objects&quot;
+end
+</code></pre>
+<h3 id="data-migration"><a class="header" href="#data-migration">Data Migration</a></h3>
+<pre><code class="language-crystal">def migrate_data(source_storage, target_storage)
+  # 1. Backup current data
+  all_objects = source_storage.list_all_objects
+  backup_path = Sepia::Backup.create(all_objects, &quot;migration_backup.tar&quot;)
+
+  # 2. Transfer data to new storage
+  all_objects.each do |obj|
+    target_storage.save(obj)
+  end
+
+  # 3. Verify migration
+  result = Sepia::Backup.verify(backup_path)
+  puts &quot;Migration completed, backup verified: #{result.valid ? &quot;✓&quot; : &quot;✗&quot;}&quot;
+end
+</code></pre>
+<h3 id="scheduled-backups"><a class="header" href="#scheduled-backups">Scheduled Backups</a></h3>
+<pre><code class="language-crystal">class ScheduledBackup
+  def initialize(@backup_dir : String)
+    Dir.mkdir_p(@backup_dir)
+  end
+
+  def daily_backup
+    timestamp = Time.utc.to_s(&quot;%Y%m%d&quot;)
+    backup_path = File.join(@backup_dir, &quot;daily_#{timestamp}.tar&quot;)
+
+    # Backup all objects
+    backup_path = Sepia::Storage.backup_all(backup_path)
+
+    # Keep only last 30 daily backups
+    cleanup_old_backups(&quot;daily_&quot;, 30)
+
+    backup_path
+  end
+
+  private def cleanup_old_backups(prefix : String, keep_count : Int32)
+    backups = Dir.glob(File.join(@backup_dir, &quot;#{prefix}*.tar&quot;))
+      .sort_by { |f| File.basename(f) }
+      .reverse
+
+    if backups.size &gt; keep_count
+      backups[keep_count..-1].each do |old_backup|
+        File.delete(old_backup)
+        puts &quot;Deleted old backup: #{old_backup}&quot;
+      end
+    end
+  end
+end
+</code></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<p>Sepia provides specific exception types for backup operations:</p>
+<pre><code class="language-crystal">begin
+  backup_path = Sepia::Backup.create(root_objects, &quot;backup.tar&quot;)
+rescue Sepia::BackendNotSupportedError
+  puts &quot;Backup not supported with current storage backend&quot;
+rescue Sepia::BackupCreationError
+  puts &quot;Failed to create backup: check permissions and disk space&quot;
+rescue Sepia::BackupCorruptionError
+  puts &quot;Backup file is corrupted or invalid&quot;
+rescue ex : Exception
+  puts &quot;Unexpected error: #{ex.message}&quot;
+end
+</code></pre>
+<h2 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h2>
+<h3 id="large-backups"><a class="header" href="#large-backups">Large Backups</a></h3>
+<p>For large object trees:</p>
+<ul>
+<li>Consider filtering objects to exclude unnecessary data</li>
+<li>Use streaming for very large backups</li>
+<li>Monitor disk space availability</li>
+<li>Consider compression for network transfers</li>
+</ul>
+<h3 id="backup-frequency"><a class="header" href="#backup-frequency">Backup Frequency</a></h3>
+<pre><code class="language-crystal"># Smart backup based on changes since last backup
+class SmartBackup
+  def backup_if_changed(last_backup_time : Time)
+    modified_objects = find_objects_modified_since(last_backup_time)
+
+    if modified_objects.empty?
+      puts &quot;No changes since last backup&quot;
+      return nil
+    end
+
+    backup_path = create_backup(modified_objects)
+    puts &quot;Backup created with #{modified_objects.size} modified objects&quot;
+    backup_path
+  end
+
+  private def find_objects_modified_since(time : Time)
+    # Implementation depends on your storage backend
+    # Could use file modification times or event logs
+  end
+end
+</code></pre>
+<h2 id="integration-with-external-tools"><a class="header" href="#integration-with-external-tools">Integration with External Tools</a></h2>
+<h3 id="rsync-integration"><a class="header" href="#rsync-integration">rsync Integration</a></h3>
+<pre><code class="language-crystal">backup_path = Sepia::Storage.backup_all(&quot;local_backup.tar&quot;)
+
+# Sync to remote server
+system(&quot;rsync&quot;, &quot;-av&quot;, &quot;local_backup.tar&quot;, &quot;user@server:/backups/&quot;)
+</code></pre>
+<h3 id="cloud-storage"><a class="header" href="#cloud-storage">Cloud Storage</a></h3>
+<pre><code class="language-crystal"># After creating backup, upload to cloud service
+backup_path = create_backup(objects)
+
+# Upload using system tools
+if File.exists?(backup_path)
+  system(&quot;aws&quot;, &quot;s3&quot;, &quot;cp&quot;, backup_path, &quot;s3://my-bucket/backups/&quot;)
+  system(&quot;rclone&quot;, &quot;copy&quot;, backup_path, &quot;remote:backups/&quot;)
+end
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Always verify</strong> backups after creation</li>
+<li><strong>Regular testing</strong> of restore procedures</li>
+<li><strong>Monitor disk space</strong> for backup directories</li>
+<li><strong>Use meaningful filenames</strong> with timestamps</li>
+<li><strong>Document backup procedures</strong> for your team</li>
+<li><strong>Test backup restoration</strong> in staging environments</li>
+<li><strong>Consider encryption</strong> for sensitive data backups</li>
+<li><strong>Implement cleanup</strong> strategies for old backups</li>
+</ol>
+<h2 id="restore-strategy"><a class="header" href="#restore-strategy">Restore Strategy</a></h2>
+<p>While Sepia focuses on backup creation (restore is application-specific), here's a general pattern:</p>
+<pre><code class="language-crystal">class RestoreService
+  def restore_from_backup(backup_path : String, target_storage)
+    # 1. Inspect backup contents
+    manifest = Sepia::Backup.list_contents(backup_path)
+
+    # 2. Extract backup (application-specific logic)
+    extract_and_process_backup(backup_path, target_storage, manifest)
+
+    # 3. Rebuild relationships
+    rebuild_object_relationships(manifest, target_storage)
+  end
+
+  # Implementation depends on your specific application requirements
+  private def extract_and_process_backup(backup_path, storage, manifest)
+    # Extract tar archive and process files according to your needs
+  end
+end
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../user-guide/file-watching.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../api/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../user-guide/file-watching.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../api/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

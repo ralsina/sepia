@@ -1,0 +1,1159 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Sepia Documentation</a></li><li class="chapter-item expanded "><a href="getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="getting-started/quick-start.html"><strong aria-hidden="true">2.2.</strong> Quick Start</a></li><li class="chapter-item expanded "><a href="getting-started/core-concepts.html"><strong aria-hidden="true">2.3.</strong> Core Concepts</a></li></ol></li><li class="chapter-item expanded "><a href="user-guide/index.html"><strong aria-hidden="true">3.</strong> User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user-guide/serializable.html"><strong aria-hidden="true">3.1.</strong> Serializable Objects</a></li><li class="chapter-item expanded "><a href="user-guide/containers.html"><strong aria-hidden="true">3.2.</strong> Container Objects</a></li><li class="chapter-item expanded "><a href="user-guide/storage.html"><strong aria-hidden="true">3.3.</strong> Storage Management</a></li><li class="chapter-item expanded "><a href="user-guide/generations.html"><strong aria-hidden="true">3.4.</strong> Generation Tracking</a></li><li class="chapter-item expanded "><a href="user-guide/file-watching.html"><strong aria-hidden="true">3.5.</strong> File System Watching</a></li><li class="chapter-item expanded "><a href="user-guide/backup.html"><strong aria-hidden="true">3.6.</strong> Backup and Restore</a></li></ol></li><li class="chapter-item expanded "><a href="api/index.html"><strong aria-hidden="true">4.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="api/core.html"><strong aria-hidden="true">4.1.</strong> Core Modules</a></li><li class="chapter-item expanded "><a href="api/storage.html"><strong aria-hidden="true">4.2.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="api/utilities.html"><strong aria-hidden="true">4.3.</strong> Utilities</a></li><li class="chapter-item expanded "><a href="api/generated.html"><strong aria-hidden="true">4.4.</strong> Generated API Docs</a></li></ol></li><li class="chapter-item expanded "><a href="advanced/index.html"><strong aria-hidden="true">5.</strong> Advanced Topics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="advanced/garbage-collection.html"><strong aria-hidden="true">5.1.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="advanced/performance.html"><strong aria-hidden="true">5.2.</strong> Performance Considerations</a></li><li class="chapter-item expanded "><a href="advanced/troubleshooting.html"><strong aria-hidden="true">5.3.</strong> Troubleshooting</a></li></ol></li><li class="chapter-item expanded "><a href="examples/index.html"><strong aria-hidden="true">6.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="examples/document-management.html"><strong aria-hidden="true">6.1.</strong> Document Management</a></li><li class="chapter-item expanded "><a href="examples/configuration-management.html"><strong aria-hidden="true">6.2.</strong> Configuration Management</a></li><li class="chapter-item expanded "><a href="examples/collaborative-apps.html"><strong aria-hidden="true">6.3.</strong> Collaborative Applications</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="sepia-documentation"><a class="header" href="#sepia-documentation">Sepia Documentation</a></h1>
+<p><strong>Sepia</strong> is a file-system-based serialization library for Crystal that provides intelligent object persistence with automatic filesystem watching and backup capabilities.</p>
+<h2 id="what-is-sepia"><a class="header" href="#what-is-sepia">What is Sepia?</a></h2>
+<p>Sepia allows you to save and load Crystal objects as files and directories on the filesystem, with automatic relationship tracking and change detection. It bridges the gap between in-memory objects and persistent storage without the complexity of traditional databases.</p>
+<h2 id="key-features"><a class="header" href="#key-features">Key Features</a></h2>
+<h3 id="-file-system-storage"><a class="header" href="#-file-system-storage">🗂️ <strong>File System Storage</strong></a></h3>
+<ul>
+<li><strong>Serializable Objects</strong>: Store objects as individual files</li>
+<li><strong>Container Objects</strong>: Store complex objects as directories with nested structures</li>
+<li><strong>Automatic Relationships</strong>: Handles object references with symlinks</li>
+<li><strong>Canonical Storage</strong>: Objects stored in consistent <code>ClassName/object_id</code> structure</li>
+</ul>
+<h3 id="-file-system-watching"><a class="header" href="#-file-system-watching">👀 <strong>File System Watching</strong></a></h3>
+<ul>
+<li><strong>Real-time Monitoring</strong>: Detect external file changes automatically</li>
+<li><strong>Multiple Backends</strong>: Support for both fswatch and Linux inotify</li>
+<li><strong>Smart Filtering</strong>: Eliminates self-generated events to prevent unnecessary callbacks</li>
+<li><strong>Thread-safe</strong>: Concurrent access with proper synchronization</li>
+</ul>
+<h3 id="-backup-functionality"><a class="header" href="#-backup-functionality">💾 <strong>Backup Functionality</strong></a></h3>
+<ul>
+<li><strong>Complete Backups</strong>: Create tar archives of object trees with all relationships</li>
+<li><strong>Inspection Tools</strong>: List contents and verify backup integrity</li>
+<li><strong>API Integration</strong>: Simple backup methods from Storage and Object classes</li>
+<li><strong>Symlink Preservation</strong>: Maintains object relationships in backups</li>
+</ul>
+<h3 id="-generation-tracking"><a class="header" href="#-generation-tracking">🔄 <strong>Generation Tracking</strong></a></h3>
+<ul>
+<li><strong>Optimistic Concurrency</strong>: Prevents lost updates with generation numbers</li>
+<li><strong>Conflict Detection</strong>: Identifies concurrent modifications</li>
+<li><strong>Automatic Merging</strong>: Smart handling of object relationships</li>
+</ul>
+<h2 id="why-use-sepia"><a class="header" href="#why-use-sepia">Why Use Sepia?</a></h2>
+<ul>
+<li><strong>Simple Setup</strong>: No database servers or migrations required</li>
+<li><strong>Human-readable</strong>: Objects stored as plain files and directories</li>
+<li><strong>Development-friendly</strong>: Easy to debug, backup, and version control</li>
+<li><strong>Real-time Updates</strong>: Automatic detection of external file changes</li>
+<li><strong>Backup Ready</strong>: Built-in backup and restore capabilities</li>
+<li><strong>Crystal Native</strong>: Designed specifically for the Crystal ecosystem</li>
+</ul>
+<h2 id="quick-example"><a class="header" href="#quick-example">Quick Example</a></h2>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+
+# Define a simple document
+class Document &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property title : String
+  property content : String
+
+  def initialize(@title = &quot;&quot;, @content = &quot;&quot;)
+  end
+
+  def to_sepia : String
+    &quot;#{@title}\n#{@content}&quot;
+  end
+
+  def self.from_sepia(sepia_string : String) : self
+    lines = sepia_string.split('\n', 2)
+    new(lines[0]? || &quot;&quot;, lines[1]? || &quot;&quot;)
+  end
+end
+
+# Configure storage
+Sepia::Storage.configure(:filesystem, {&quot;path&quot; =&gt; &quot;./data&quot;})
+
+# Create and save a document
+doc = Document.new(&quot;My First Document&quot;, &quot;Hello, Sepia!&quot;)
+doc.save  # Automatically generates sepia_id
+
+# Load it back
+loaded = Sepia::Storage.get(Document, doc.sepia_id)
+puts loaded.title  # &quot;My First Document&quot;
+</code></pre>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<p>Add this to your application's <code>shard.yml</code>:</p>
+<pre><code class="language-yaml">dependencies:
+  sepia:
+    github: ralsina/sepia
+</code></pre>
+<p>Then run:</p>
+<pre><code class="language-bash">shards install
+</code></pre>
+<h2 id="documentation-structure"><a class="header" href="#documentation-structure">Documentation Structure</a></h2>
+<p>This documentation is organized into several sections:</p>
+<ul>
+<li><strong>Getting Started</strong>: Introduction, installation, and basic concepts</li>
+<li><strong>User Guide</strong>: Comprehensive usage examples and feature explanations</li>
+<li><strong>API Reference</strong>: Detailed API documentation</li>
+<li><strong>Advanced Topics</strong>: Performance, troubleshooting, and advanced usage</li>
+<li><strong>Examples</strong>: Real-world usage patterns and examples</li>
+</ul>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<ul>
+<li>Crystal 1.16.3 or higher</li>
+<li>Optional: fswatch shard for cross-platform file system watching</li>
+<li>Optional: inotify.cr shard for Linux-native file system monitoring</li>
+</ul>
+<hr />
+<p><strong>Sepia</strong> makes file system persistence simple, reliable, and intelligent for Crystal applications.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<p>Welcome to Sepia! This guide will help you get up and running with Sepia's file-system-based object persistence.</p>
+<h2 id="what-youll-learn"><a class="header" href="#what-youll-learn">What You'll Learn</a></h2>
+<p>In this section, you'll learn:</p>
+<ul>
+<li>How to install Sepia in your Crystal project</li>
+<li>Basic concepts and terminology</li>
+<li>How to create your first persistent objects</li>
+<li>How to organize your data structures</li>
+</ul>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<p>Before you begin, make sure you have:</p>
+<ul>
+<li>Crystal 1.16.3 or higher installed</li>
+<li>Basic understanding of Crystal classes and modules</li>
+<li>A code editor or IDE</li>
+</ul>
+<h2 id="core-concepts"><a class="header" href="#core-concepts">Core Concepts</a></h2>
+<p>Sepia provides two main modules for object persistence:</p>
+<h3 id="serializable-objects"><a class="header" href="#serializable-objects">Serializable Objects</a></h3>
+<p>Objects that serialize to a single file on disk. Perfect for simple data structures like documents, configurations, or settings.</p>
+<h3 id="container-objects"><a class="header" href="#container-objects">Container Objects</a></h3>
+<p>Objects that serialize as directories containing other objects. Great for complex data structures with relationships like project hierarchies, user profiles, or configuration systems.</p>
+<h3 id="storage-backends"><a class="header" href="#storage-backends">Storage Backends</a></h3>
+<p>Sepia supports multiple storage backends:</p>
+<ul>
+<li><strong>Filesystem</strong> (default): Stores objects in local directories</li>
+<li><strong>Memory</strong>: Keeps objects in RAM (useful for testing)</li>
+</ul>
+<h3 id="generation-tracking"><a class="header" href="#generation-tracking">Generation Tracking</a></h3>
+<p>Sepia tracks object versions to prevent conflicts when multiple processes modify the same data.</p>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<ol>
+<li><a href="getting-started/installation.html">Installation</a> - Add Sepia to your project</li>
+<li><a href="getting-started/quick-start.html">Quick Start</a> - Create your first persistent objects</li>
+<li><a href="getting-started/core-concepts.html">Core Concepts</a> - Understand the fundamentals</li>
+</ol>
+<p>Let's start with <a href="getting-started/installation.html">Installation</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation-1"><a class="header" href="#installation-1">Installation</a></h1>
+<p>This guide will help you install Sepia in your Crystal project and set up the necessary dependencies.</p>
+<h2 id="adding-sepia-to-your-project"><a class="header" href="#adding-sepia-to-your-project">Adding Sepia to Your Project</a></h2>
+<h3 id="using-shards"><a class="header" href="#using-shards">Using Shards</a></h3>
+<ol>
+<li>Add Sepia to your <code>shard.yml</code> file:</li>
+</ol>
+<pre><code class="language-yaml">dependencies:
+  sepia:
+    github: ralsina/sepia
+</code></pre>
+<ol start="2">
+<li>Run the installation command:</li>
+</ol>
+<pre><code class="language-bash">shards install
+</code></pre>
+<ol start="3">
+<li>Require Sepia in your Crystal code:</li>
+</ol>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+</code></pre>
+<h3 id="optional-dependencies"><a class="header" href="#optional-dependencies">Optional Dependencies</a></h3>
+<p>Sepia includes optional dependencies for enhanced functionality:</p>
+<h4 id="file-system-watching"><a class="header" href="#file-system-watching">File System Watching</a></h4>
+<p>For cross-platform file system monitoring:</p>
+<pre><code class="language-yaml">dependencies:
+  sepia:
+    github: ralsina/sepia
+  fswatch:
+    github: bcardiff/crystal-fswatch
+</code></pre>
+<p>For Linux-native monitoring (recommended for Linux):</p>
+<pre><code class="language-yaml">dependencies:
+  sepia:
+    github: ralsina/sepia
+  inotify:
+    github: petoem/inotify.cr
+</code></pre>
+<h4 id="static-builds"><a class="header" href="#static-builds">Static Builds</a></h4>
+<p>If you're building a static binary, you can compile without fswatch:</p>
+<pre><code class="language-bash">crystal build src/your_app.cr -D no_fswatch
+</code></pre>
+<p>Sepia will automatically use a no-op fallback for file watching when fswatch is not available.</p>
+<h2 id="basic-configuration"><a class="header" href="#basic-configuration">Basic Configuration</a></h2>
+<p>After installation, configure Sepia to use your preferred storage backend:</p>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+
+# Use the default filesystem backend
+Sepia::Storage.configure(:filesystem, {&quot;path&quot; =&gt; &quot;./data&quot;})
+
+# Or use in-memory storage (useful for testing)
+Sepia::Storage.configure(:memory)
+</code></pre>
+<h2 id="verifying-installation"><a class="header" href="#verifying-installation">Verifying Installation</a></h2>
+<p>Create a simple test to verify Sepia is working:</p>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+
+class TestObject &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property name : String
+
+  def initialize(@name = &quot;&quot;)
+  end
+
+  def to_sepia : String
+    @name
+  end
+
+  def self.from_sepia(sepia_string : String) : self
+    new(sepia_string)
+  end
+end
+
+# Configure storage
+Sepia::Storage.configure(:filesystem, {&quot;path&quot; =&gt; &quot;./test_data&quot;})
+
+# Create and save an object
+obj = TestObject.new(&quot;Hello Sepia!&quot;)
+obj.save
+
+puts &quot;Sepia is working! Object saved with ID: #{obj.sepia_id}&quot;
+</code></pre>
+<p>Run this with:</p>
+<pre><code class="language-bash">crystal run test_installation.cr
+</code></pre>
+<p>If successful, you should see output similar to:</p>
+<pre><code>Sepia is working! Object saved with ID: test-object-123e4567-e89b-12d3-a456-426614174000
+</code></pre>
+<h2 id="next-steps-1"><a class="header" href="#next-steps-1">Next Steps</a></h2>
+<p>Now that Sepia is installed, let's move on to the <a href="getting-started/quick-start.html">Quick Start</a> guide to create your first persistent objects!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
+<p>This guide will get you up and running with Sepia in just a few minutes. We'll create a simple document management system to demonstrate the core concepts.</p>
+<h2 id="step-1-define-your-objects"><a class="header" href="#step-1-define-your-objects">Step 1: Define Your Objects</a></h2>
+<p>Let's create a simple <code>Document</code> class that can be saved and loaded:</p>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+
+class Document &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property title : String
+  property content : String
+
+  def initialize(@title = &quot;&quot;, @content = &quot;&quot;)
+  end
+
+  def to_sepia : String
+    &quot;#{@title}\n#{@content}&quot;
+  end
+
+  def self.from_sepia(sepia_string : String) : self
+    lines = sepia_string.split('\n', 2)
+    new(lines[0]? || &quot;&quot;, lines[1]? || &quot;&quot;)
+  end
+end
+</code></pre>
+<h2 id="step-2-configure-storage"><a class="header" href="#step-2-configure-storage">Step 2: Configure Storage</a></h2>
+<pre><code class="language-crystal"># Configure Sepia to use the filesystem backend
+Sepia::Storage.configure(:filesystem, {&quot;path&quot; =&gt; &quot;./data&quot;})
+</code></pre>
+<h2 id="step-3-save-and-load-objects"><a class="header" href="#step-3-save-and-load-objects">Step 3: Save and Load Objects</a></h2>
+<pre><code class="language-crystal"># Create a new document
+doc = Document.new(&quot;My First Document&quot;, &quot;Hello, Sepia!&quot;)
+doc.save  # Automatically generates a unique ID
+
+puts &quot;Document saved with ID: #{doc.sepia_id}&quot;
+
+# Load it back
+loaded_doc = Sepia::Storage.get(Document, doc.sepia_id).as(Document)
+puts &quot;Loaded title: #{loaded_doc.title}&quot;
+puts &quot;Loaded content: #{loaded_doc.content}&quot;
+</code></pre>
+<h2 id="step-4-try-container-objects"><a class="header" href="#step-4-try-container-objects">Step 4: Try Container Objects</a></h2>
+<p>Container objects can contain other objects. Let's create a <code>Folder</code>:</p>
+<pre><code class="language-crystal">class Folder &lt; Sepia::Object
+  include Sepia::Container
+
+  property name : String
+  property description : String?
+  property documents : Array(Document)
+
+  def initialize(@name = &quot;&quot;, @description = nil)
+    @documents = [] of Document
+  end
+end
+
+# Create a folder with documents
+folder = Folder.new(&quot;Important Docs&quot;, &quot;My important documents&quot;)
+
+doc1 = Document.new(&quot;Meeting Notes&quot;, &quot;Discussed project timeline&quot;)
+doc1.sepia_id = &quot;meeting-notes&quot;
+doc1.save
+
+doc2 = Document.new(&quot;Todo List&quot;, &quot;- Review code\n- Write docs&quot;)
+doc2.sepia_id = &quot;todo-list&quot;
+doc2.save
+
+folder.documents &lt;&lt; doc1 &lt;&lt; doc2
+folder.sepia_id = &quot;important-docs&quot;
+folder.save
+
+puts &quot;Folder saved with #{folder.documents.size} documents&quot;
+</code></pre>
+<h2 id="step-5-file-system-watching"><a class="header" href="#step-5-file-system-watching">Step 5: File System Watching</a></h2>
+<p>Sepia can detect when files are changed externally:</p>
+<pre><code class="language-crystal"># Set up a watcher
+storage = Sepia::Storage.backend.as(Sepia::FileStorage)
+watcher = Sepia::Watcher.new(storage)
+
+watcher.on_change do |event|
+  puts &quot;Detected change: #{event.type} - #{event.object_class}:#{event.object_id}&quot;
+
+  # Reload the object if it was modified
+  if event.type.modified?
+    begin
+      obj = Sepia::Storage.load(event.object_class.constantize(typeof(Object)), event.object_id)
+      puts &quot;Reloaded: #{obj}&quot;
+    rescue ex
+      puts &quot;Failed to reload: #{ex.message}&quot;
+    end
+  end
+end
+
+# Start watching
+watcher.start
+
+# Now try editing one of the document files manually:
+# ./data/Document/meeting-notes
+# You should see the watcher detect the change!
+
+# Stop watching when done
+# watcher.stop
+</code></pre>
+<h2 id="step-6-backup-your-data"><a class="header" href="#step-6-backup-your-data">Step 6: Backup Your Data</a></h2>
+<p>Sepia makes it easy to create backups:</p>
+<pre><code class="language-crystal"># Backup a specific object
+backup_path = doc.backup_to(&quot;my_document_backup.tar&quot;)
+puts &quot;Backup created: #{backup_path}&quot;
+
+# Backup multiple objects
+backup_path = Sepia::Storage.backup([doc1, doc2, folder], &quot;project_backup.tar&quot;)
+puts &quot;Project backup created: #{backup_path}&quot;
+
+# Inspect backup contents
+manifest = Sepia::Backup.list_contents(&quot;project_backup.tar&quot;)
+puts &quot;Backup contains #{manifest.all_objects.values.map(&amp;.size).sum} objects&quot;
+
+# Verify backup integrity
+result = Sepia::Backup.verify(&quot;project_backup.tar&quot;)
+puts &quot;Backup is #{result.valid ? &quot;valid&quot; : &quot;invalid&quot;}&quot;
+</code></pre>
+<h2 id="complete-example"><a class="header" href="#complete-example">Complete Example</a></h2>
+<p>Here's a complete working example:</p>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+
+class Document &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property title : String
+  property content : String
+
+  def initialize(@title = &quot;&quot;, @content = &quot;&quot;)
+  end
+
+  def to_sepia : String
+    &quot;#{@title}\n#{@content}&quot;
+  end
+
+  def self.from_sepia(sepia_string : String) : self
+    lines = sepia_string.split('\n', 2)
+    new(lines[0]? || &quot;&quot;, lines[1]? || &quot;&quot;)
+  end
+end
+
+# Configure storage
+Sepia::Storage.configure(:filesystem, {&quot;path&quot; =&gt; &quot;./quickstart_data&quot;})
+
+# Create and save a document
+doc = Document.new(&quot;Welcome to Sepia&quot;, &quot;This is your first persistent object!&quot;)
+doc.save
+
+puts &quot;✅ Document saved!&quot;
+puts &quot;   Title: #{doc.title}&quot;
+puts &quot;   ID: #{doc.sepia_id}&quot;
+
+# Load it back
+loaded = Sepia::Storage.get(Document, doc.sepia_id).as(Document)
+puts &quot;✅ Document loaded!&quot;
+puts &quot;   Title: #{loaded.title}&quot;
+
+# Create a backup
+backup_path = doc.backup_to(&quot;welcome_backup.tar&quot;)
+puts &quot;✅ Backup created: #{backup_path}&quot;
+
+puts &quot;\n🎉 Quick start completed!&quot;
+</code></pre>
+<p>Save this as <code>quickstart.cr</code> and run:</p>
+<pre><code class="language-bash">crystal run quickstart.cr
+</code></pre>
+<h2 id="whats-next"><a class="header" href="#whats-next">What's Next?</a></h2>
+<p>Now that you have the basics, explore these topics:</p>
+<ul>
+<li><a href="getting-started/../user-guide/serializable.html">Serializable Objects</a> - Deep dive into file-based objects</li>
+<li><a href="getting-started/../user-guide/containers.html">Container Objects</a> - Learn about complex object structures</li>
+<li><a href="getting-started/../user-guide/file-watching.html">File System Watching</a> - Build reactive applications</li>
+<li><a href="getting-started/../user-guide/backup.html">Backup and Restore</a> - Data protection strategies</li>
+</ul>
+<p>Happy coding with Sepia! 🚀</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="core-concepts-1"><a class="header" href="#core-concepts-1">Core Concepts</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="user-guide"><a class="header" href="#user-guide">User Guide</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="serializable-objects-1"><a class="header" href="#serializable-objects-1">Serializable Objects</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="container-objects-1"><a class="header" href="#container-objects-1">Container Objects</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="storage-management"><a class="header" href="#storage-management">Storage Management</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="generation-tracking-1"><a class="header" href="#generation-tracking-1">Generation Tracking</a></h1>
+<p>Generation tracking enables optimistic concurrency control and versioning of objects. This is particularly useful for collaborative applications where multiple users might edit the same data.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Generation tracking allows you to:</p>
+<ul>
+<li>Track multiple versions of the same object</li>
+<li>Detect concurrent modifications</li>
+<li>Implement optimistic locking</li>
+<li>Maintain a complete history of changes</li>
+<li>Recover previous versions when needed</li>
+</ul>
+<h2 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h2>
+<h3 id="id-format"><a class="header" href="#id-format">ID Format</a></h3>
+<p>Objects are stored with IDs in the format: <code>{base_id}.{generation}</code></p>
+<ul>
+<li><code>base_id</code>: The unique identifier (typically a UUID)</li>
+<li><code>generation</code>: Version number starting from 0</li>
+</ul>
+<p>Example files on disk:</p>
+<pre><code>data/
+  └── Note/
+      ├── note-123e4567-e89b-12d3-a456-426614174000.0
+      ├── note-123e4567-e89b-12d3-a456-426614174000.1
+      └── note-123e4567-e89b-12d3-a456-426614174000.2
+</code></pre>
+<h3 id="atomic-operations"><a class="header" href="#atomic-operations">Atomic Operations</a></h3>
+<p>Each <code>save_with_generation</code> creates a new file, ensuring:</p>
+<ul>
+<li>No data corruption during writes</li>
+<li>Previous versions remain intact</li>
+<li>Easy rollback to any version</li>
+</ul>
+<h2 id="api-reference"><a class="header" href="#api-reference">API Reference</a></h2>
+<h3 id="instance-methods"><a class="header" href="#instance-methods">Instance Methods</a></h3>
+<h4 id="generation--int32"><a class="header" href="#generation--int32"><code>generation : Int32</code></a></h4>
+<p>Returns the generation number extracted from the object's ID.</p>
+<pre><code class="language-crystal">note = Note.load(&quot;note-xxx.2&quot;)
+note.generation  # =&gt; 2
+</code></pre>
+<h4 id="base_id--string"><a class="header" href="#base_id--string"><code>base_id : String</code></a></h4>
+<p>Returns the base ID without the generation suffix.</p>
+<pre><code class="language-crystal">note = Note.load(&quot;note-xxx.2&quot;)
+note.base_id  # =&gt; &quot;note-xxx&quot;
+</code></pre>
+<h4 id="save_with_generation--self"><a class="header" href="#save_with_generation--self"><code>save_with_generation : self</code></a></h4>
+<p>Creates a new version with incremented generation number.</p>
+<pre><code class="language-crystal">note = Note.load(&quot;note-xxx.1&quot;)
+new_note = note.save_with_generation
+new_note.sepia_id  # =&gt; &quot;note-xxx.2&quot;
+</code></pre>
+<h4 id="staleexpected_generation--int32--bool"><a class="header" href="#staleexpected_generation--int32--bool"><code>stale?(expected_generation : Int32) : Bool</code></a></h4>
+<p>Checks if a newer version exists.</p>
+<pre><code class="language-crystal">note = Note.load(&quot;note-xxx.1&quot;)
+note.stale?(1)  # Returns true if note-xxx.2 exists
+</code></pre>
+<h3 id="class-methods"><a class="header" href="#class-methods">Class Methods</a></h3>
+<h4 id="latestbase_id--string--self"><a class="header" href="#latestbase_id--string--self"><code>latest(base_id : String) : self?</code></a></h4>
+<p>Returns the newest version of an object.</p>
+<pre><code class="language-crystal">latest = Note.latest(&quot;note-xxx&quot;)
+latest.generation  # Highest generation number
+</code></pre>
+<h4 id="versionsbase_id--string--arrayself"><a class="header" href="#versionsbase_id--string--arrayself"><code>versions(base_id : String) : Array(self)</code></a></h4>
+<p>Returns all versions sorted by generation.</p>
+<pre><code class="language-crystal">versions = Note.versions(&quot;note-xxx&quot;)
+versions.map(&amp;.generation)  # =&gt; [0, 1, 2, ...]
+</code></pre>
+<h4 id="existsid--string--bool"><a class="header" href="#existsid--string--bool"><code>exists?(id : String) : Bool</code></a></h4>
+<p>Checks if an object with the given ID exists.</p>
+<pre><code class="language-crystal">Note.exists?(&quot;note-xxx.1&quot;)  # =&gt; true
+Note.exists?(&quot;note-xxx.99&quot;) # =&gt; false
+</code></pre>
+<h2 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h2>
+<h3 id="collaborative-editing"><a class="header" href="#collaborative-editing">Collaborative Editing</a></h3>
+<pre><code class="language-crystal">class Document &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property content : String
+  property last_modified : Time
+
+  # ... implement to_sepia/from_sepia
+end
+
+# When a user opens a document
+doc = Document.load(&quot;doc-123.3&quot;)
+user_generation = doc.generation
+
+# When saving
+if doc.stale?(user_generation)
+  # Show merge dialog
+  latest = Document.latest(doc.base_id)
+  # Merge content
+else
+  doc.save_with_generation
+end
+</code></pre>
+<h3 id="version-history"><a class="header" href="#version-history">Version History</a></h3>
+<pre><code class="language-crystal"># Show document history
+versions = Document.versions(&quot;doc-123&quot;)
+versions.each do |version|
+  puts &quot;Version #{version.generation}: #{version.last_modified}&quot;
+end
+
+# Restore specific version
+doc = Document.load(&quot;doc-123.2&quot;)
+current = doc.save_with_generation  # Creates version 3 from version 2
+</code></pre>
+<h3 id="audit-trail"><a class="header" href="#audit-trail">Audit Trail</a></h3>
+<pre><code class="language-crystal">class LogEntry &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property action : String
+  property user_id : String
+  property timestamp : Time
+  property data : String
+
+  # ... serialization methods
+end
+
+# Each log change creates a new version
+entry = LogEntry.new(&quot;update&quot;, &quot;user1&quot;, Time.now, data_json)
+entry.save_with_generation
+
+# Query all changes
+all_changes = LogEntry.versions(&quot;log-entry-456&quot;)
+</code></pre>
+<h2 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h2>
+<h3 id="storage-usage"><a class="header" href="#storage-usage">Storage Usage</a></h3>
+<ul>
+<li>Each version consumes additional disk space</li>
+<li>Consider cleanup strategies for old versions</li>
+</ul>
+<h3 id="lookup-performance"><a class="header" href="#lookup-performance">Lookup Performance</a></h3>
+<ul>
+<li><code>latest()</code> scans all files to find highest generation</li>
+<li>Consider caching for frequently accessed objects</li>
+</ul>
+<h3 id="cleanup-strategies"><a class="header" href="#cleanup-strategies">Cleanup Strategies</a></h3>
+<pre><code class="language-crystal"># Keep only last N versions
+def keep_recent_versions(base_id, max_versions = 10)
+  versions = MyClass.versions(base_id)
+  if versions.size &gt; max_versions
+    versions[0..-(max_versions+1)].each(&amp;:delete)
+  end
+end
+
+# Keep versions newer than date
+def keep_recent_by_date(base_id, cutoff_date = Time.now - 30.days)
+  versions = MyClass.versions(base_id)
+  versions.select { |v| v.saved_at &lt; cutoff_date }.each(&amp;:delete)
+end
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Always check for staleness</strong> before saving in collaborative scenarios</li>
+<li><strong>Use meaningful base IDs</strong> that reflect the object's identity</li>
+<li><strong>Implement cleanup</strong> for long-running applications</li>
+<li><strong>Handle merge conflicts</strong> gracefully with user-friendly UI</li>
+<li><strong>Consider using GenerationInfo module</strong> to include generation data in JSON</li>
+</ol>
+<h2 id="migration-from-non-generation-ids"><a class="header" href="#migration-from-non-generation-ids">Migration from Non-Generation IDs</a></h2>
+<p>Existing objects without generation suffix automatically work:</p>
+<ul>
+<li>Treated as generation 0</li>
+<li>Can be versioned normally</li>
+<li>No migration required</li>
+</ul>
+<pre><code class="language-crystal"># Old code still works
+old_obj = MyClass.load(&quot;old-id&quot;)
+old_obj.generation  # =&gt; 0
+
+# Start versioning
+new_obj = old_obj.save_with_generation
+new_obj.generation  # =&gt; 1
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="file-system-watching-1"><a class="header" href="#file-system-watching-1">File System Watching</a></h1>
+<p>Sepia's file system watcher enables reactive applications that respond to external changes in storage. It's particularly useful for collaborative applications where multiple users or processes might modify data simultaneously.</p>
+<h2 id="backend-options"><a class="header" href="#backend-options">Backend Options</a></h2>
+<p>The file watcher supports multiple backends for cross-platform compatibility:</p>
+<h3 id="fswatch-default"><a class="header" href="#fswatch-default">fswatch (Default)</a></h3>
+<ul>
+<li><strong>Platforms</strong>: Linux, macOS, Windows</li>
+<li><strong>Requirements</strong>: libfswatch installed</li>
+<li><strong>Use case</strong>: Development and cross-platform applications</li>
+</ul>
+<h3 id="inotify"><a class="header" href="#inotify">inotify</a></h3>
+<ul>
+<li><strong>Platforms</strong>: Linux only</li>
+<li><strong>Requirements</strong>: None (uses kernel inotify)</li>
+<li><strong>Use case</strong>: Production Linux servers, static builds</li>
+</ul>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<p>The file watcher is automatically configured based on the backend you selected when building your application.</p>
+<pre><code class="language-crystal"># No additional configuration needed - uses the compiled backend
+storage = Sepia::Storage.backend.as(Sepia::FileStorage)
+watcher = Sepia::Watcher.new(storage)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="backup-and-restore"><a class="header" href="#backup-and-restore">Backup and Restore</a></h1>
+<p>Sepia provides comprehensive backup functionality that allows you to create tar archives of object trees, inspect backup contents, and verify backup integrity.</p>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>Sepia's backup system enables you to:</p>
+<ul>
+<li>Create complete backups of object trees with all relationships</li>
+<li>Inspect backup contents without restoring</li>
+<li>Verify backup integrity and structure</li>
+<li>Preserve symlinks and object relationships</li>
+<li>Generate human-readable metadata</li>
+</ul>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<h3 id="creating-backups"><a class="header" href="#creating-backups">Creating Backups</a></h3>
+<h4 id="backup-multiple-objects"><a class="header" href="#backup-multiple-objects">Backup Multiple Objects</a></h4>
+<pre><code class="language-crystal"># Backup a list of root objects
+root_objects = [document1, project1, user_profile]
+backup_path = Sepia::Backup.create(root_objects, &quot;project_backup.tar&quot;)
+puts &quot;Backup created: #{backup_path}&quot;
+</code></pre>
+<h4 id="backup-from-storage"><a class="header" href="#backup-from-storage">Backup from Storage</a></h4>
+<pre><code class="language-crystal"># Backup specific objects from storage
+objects = [
+  Sepia::Storage.get(Document, &quot;doc1&quot;),
+  Sepia::Storage.get(Project, &quot;proj1&quot;)
+]
+backup_path = Sepia::Storage.backup(objects, &quot;selected_backup.tar&quot;)
+
+# Backup a single object
+backup_path = Sepia::Storage.backup(document, &quot;single_doc_backup.tar&quot;)
+
+# Backup all objects in storage
+backup_path = Sepia::Storage.backup_all(&quot;complete_backup.tar&quot;)
+</code></pre>
+<h4 id="backup-from-individual-objects"><a class="header" href="#backup-from-individual-objects">Backup from Individual Objects</a></h4>
+<pre><code class="language-crystal"># Simple backup to specific path
+document.backup_to(&quot;doc_backup.tar&quot;)
+
+# Backup with auto-generated filename (includes timestamp)
+backup_path = document.create_backup()  # e.g., &quot;document_abc123_20251125.tar&quot;
+
+# Backup to custom directory
+document.backup_to(&quot;backups/docs/doc_backup.tar&quot;)
+</code></pre>
+<h3 id="inspecting-backups"><a class="header" href="#inspecting-backups">Inspecting Backups</a></h3>
+<h4 id="list-backup-contents"><a class="header" href="#list-backup-contents">List Backup Contents</a></h4>
+<pre><code class="language-crystal">manifest = Sepia::Backup.list_contents(&quot;project_backup.tar&quot;)
+
+puts &quot;Backup created at: #{manifest.created_at}&quot;
+puts &quot;Version: #{manifest.version}&quot;
+puts &quot;Root objects: #{manifest.root_objects.size}&quot;
+
+manifest.root_objects.each do |root_obj|
+  puts &quot;  - #{root_obj.class_name}/#{root_obj.object_id} (#{root_obj.object_type})&quot;
+end
+
+puts &quot;All objects by class:&quot;
+manifest.all_objects.each do |class_name, objects|
+  puts &quot;  - #{class_name}: #{objects.size} objects&quot;
+end
+</code></pre>
+<h4 id="get-backup-metadata"><a class="header" href="#get-backup-metadata">Get Backup Metadata</a></h4>
+<pre><code class="language-crystal">metadata = Sepia::Backup.get_metadata(&quot;project_backup.tar&quot;)
+# Returns the same manifest as list_contents()
+</code></pre>
+<h4 id="verify-backup-integrity"><a class="header" href="#verify-backup-integrity">Verify Backup Integrity</a></h4>
+<pre><code class="language-crystal">result = Sepia::Backup.verify(&quot;project_backup.tar&quot;)
+
+puts &quot;Backup is #{result.valid ? &quot;valid&quot; : &quot;invalid&quot;}&quot;
+puts &quot;Total objects: #{result.statistics.total_objects}&quot;
+puts &quot;Serializable objects: #{result.statistics.serializable_objects}&quot;
+puts &quot;Container objects: #{result.statistics.container_objects}&quot;
+puts &quot;Object classes: #{result.statistics.classes.size}&quot;
+
+if result.errors.empty?
+  puts &quot;No verification errors&quot;
+else
+  puts &quot;Verification errors:&quot;
+  result.errors.each { |error| puts &quot;  - #{error}&quot; }
+end
+</code></pre>
+<h2 id="backup-archive-structure"><a class="header" href="#backup-archive-structure">Backup Archive Structure</a></h2>
+<p>Sepia backups are standard tar archives with this structure:</p>
+<pre><code>backup.sepia.tar
+├── metadata.json     # Backup manifest with object information
+├── README           # Human-readable backup information
+└── objects/         # All objects organized by class and ID
+    ├── ClassName/object_id        # Serializable objects (files)
+    └── ClassName/object_id/       # Container objects (directories)
+        ├── data.json
+        └── references/
+</code></pre>
+<h3 id="metadatajson-format"><a class="header" href="#metadatajson-format">metadata.json Format</a></h3>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;created_at&quot;: &quot;2025-11-25T17:30:00Z&quot;,
+  &quot;root_objects&quot;: [
+    {
+      &quot;class_name&quot;: &quot;Document&quot;,
+      &quot;object_id&quot;: &quot;doc-123&quot;,
+      &quot;relative_path&quot;: &quot;objects/Document/doc-123&quot;,
+      &quot;object_type&quot;: &quot;Serializable&quot;
+    }
+  ],
+  &quot;all_objects&quot;: {
+    &quot;Document&quot;: [
+      {
+        &quot;class_name&quot;: &quot;Document&quot;,
+        &quot;object_id&quot;: &quot;doc-123&quot;,
+        &quot;relative_path&quot;: &quot;objects/Document/doc-123&quot;,
+        &quot;object_type&quot;: &quot;Serializable&quot;
+      }
+    ],
+    &quot;Project&quot;: [...]
+  }
+}
+</code></pre>
+<h2 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h2>
+<p>Sepia supports simple configuration for backup creation:</p>
+<pre><code class="language-crystal">config = Sepia::Backup::Configuration.new
+
+# Configure symlink handling
+config.follow_symlinks = false  # Default: preserves symlinks as-is
+
+# Create backup with configuration
+backup_path = Sepia::Backup.create(root_objects, &quot;backup.tar&quot;, config)
+</code></pre>
+<h3 id="configuration-presets"><a class="header" href="#configuration-presets">Configuration Presets</a></h3>
+<pre><code class="language-crystal"># Fast backup (no compression, minimal verification)
+fast_config = Sepia::Backup::Configuration.fast
+
+# Minimal backup (basic functionality only)
+minimal_config = Sepia::Backup::Configuration.minimal
+
+# Archive backup (maximum preservation)
+archive_config = Sepia::Backup::Configuration.archive
+
+backup_path = Sepia::Backup.create(root_objects, &quot;archive.tar&quot;, archive_config)
+</code></pre>
+<h2 id="use-cases-1"><a class="header" href="#use-cases-1">Use Cases</a></h2>
+<h3 id="application-backup"><a class="header" href="#application-backup">Application Backup</a></h3>
+<pre><code class="language-crystal">class BackupService
+  def backup_user_data(user : User)
+    # Backup all objects related to a user
+    root_objects = [user] + user.documents + user.projects
+
+    timestamp = Time.utc.to_s(&quot;%Y%m%d_%H%M%S&quot;)
+    backup_path = &quot;backups/user_#{user.id}_#{timestamp}.tar&quot;
+
+    backup_path = Sepia::Backup.create(root_objects, backup_path)
+
+    # Verify backup was successful
+    result = Sepia::Backup.verify(backup_path)
+    unless result.valid
+      raise &quot;Backup verification failed&quot;
+    end
+
+    backup_path
+  end
+end
+</code></pre>
+<h3 id="project-export"><a class="header" href="#project-export">Project Export</a></h3>
+<pre><code class="language-crystal">def export_project(project : Project)
+  # Create backup of entire project tree
+  root_objects = [project] + find_all_related_objects(project)
+
+  export_path = &quot;exports/#{project.name}_export.tar&quot;
+  backup_path = Sepia::Backup.create(root_objects, export_path)
+
+  puts &quot;Project exported to: #{backup_path}&quot;
+
+  # Show what's in the export
+  manifest = Sepia::Backup.list_contents(backup_path)
+  puts &quot;Export contains #{manifest.all_objects.values.map(&amp;.size).sum} objects&quot;
+end
+</code></pre>
+<h3 id="data-migration"><a class="header" href="#data-migration">Data Migration</a></h3>
+<pre><code class="language-crystal">def migrate_data(source_storage, target_storage)
+  # 1. Backup current data
+  all_objects = source_storage.list_all_objects
+  backup_path = Sepia::Backup.create(all_objects, &quot;migration_backup.tar&quot;)
+
+  # 2. Transfer data to new storage
+  all_objects.each do |obj|
+    target_storage.save(obj)
+  end
+
+  # 3. Verify migration
+  result = Sepia::Backup.verify(backup_path)
+  puts &quot;Migration completed, backup verified: #{result.valid ? &quot;✓&quot; : &quot;✗&quot;}&quot;
+end
+</code></pre>
+<h3 id="scheduled-backups"><a class="header" href="#scheduled-backups">Scheduled Backups</a></h3>
+<pre><code class="language-crystal">class ScheduledBackup
+  def initialize(@backup_dir : String)
+    Dir.mkdir_p(@backup_dir)
+  end
+
+  def daily_backup
+    timestamp = Time.utc.to_s(&quot;%Y%m%d&quot;)
+    backup_path = File.join(@backup_dir, &quot;daily_#{timestamp}.tar&quot;)
+
+    # Backup all objects
+    backup_path = Sepia::Storage.backup_all(backup_path)
+
+    # Keep only last 30 daily backups
+    cleanup_old_backups(&quot;daily_&quot;, 30)
+
+    backup_path
+  end
+
+  private def cleanup_old_backups(prefix : String, keep_count : Int32)
+    backups = Dir.glob(File.join(@backup_dir, &quot;#{prefix}*.tar&quot;))
+      .sort_by { |f| File.basename(f) }
+      .reverse
+
+    if backups.size &gt; keep_count
+      backups[keep_count..-1].each do |old_backup|
+        File.delete(old_backup)
+        puts &quot;Deleted old backup: #{old_backup}&quot;
+      end
+    end
+  end
+end
+</code></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<p>Sepia provides specific exception types for backup operations:</p>
+<pre><code class="language-crystal">begin
+  backup_path = Sepia::Backup.create(root_objects, &quot;backup.tar&quot;)
+rescue Sepia::BackendNotSupportedError
+  puts &quot;Backup not supported with current storage backend&quot;
+rescue Sepia::BackupCreationError
+  puts &quot;Failed to create backup: check permissions and disk space&quot;
+rescue Sepia::BackupCorruptionError
+  puts &quot;Backup file is corrupted or invalid&quot;
+rescue ex : Exception
+  puts &quot;Unexpected error: #{ex.message}&quot;
+end
+</code></pre>
+<h2 id="performance-considerations-1"><a class="header" href="#performance-considerations-1">Performance Considerations</a></h2>
+<h3 id="large-backups"><a class="header" href="#large-backups">Large Backups</a></h3>
+<p>For large object trees:</p>
+<ul>
+<li>Consider filtering objects to exclude unnecessary data</li>
+<li>Use streaming for very large backups</li>
+<li>Monitor disk space availability</li>
+<li>Consider compression for network transfers</li>
+</ul>
+<h3 id="backup-frequency"><a class="header" href="#backup-frequency">Backup Frequency</a></h3>
+<pre><code class="language-crystal"># Smart backup based on changes since last backup
+class SmartBackup
+  def backup_if_changed(last_backup_time : Time)
+    modified_objects = find_objects_modified_since(last_backup_time)
+
+    if modified_objects.empty?
+      puts &quot;No changes since last backup&quot;
+      return nil
+    end
+
+    backup_path = create_backup(modified_objects)
+    puts &quot;Backup created with #{modified_objects.size} modified objects&quot;
+    backup_path
+  end
+
+  private def find_objects_modified_since(time : Time)
+    # Implementation depends on your storage backend
+    # Could use file modification times or event logs
+  end
+end
+</code></pre>
+<h2 id="integration-with-external-tools"><a class="header" href="#integration-with-external-tools">Integration with External Tools</a></h2>
+<h3 id="rsync-integration"><a class="header" href="#rsync-integration">rsync Integration</a></h3>
+<pre><code class="language-crystal">backup_path = Sepia::Storage.backup_all(&quot;local_backup.tar&quot;)
+
+# Sync to remote server
+system(&quot;rsync&quot;, &quot;-av&quot;, &quot;local_backup.tar&quot;, &quot;user@server:/backups/&quot;)
+</code></pre>
+<h3 id="cloud-storage"><a class="header" href="#cloud-storage">Cloud Storage</a></h3>
+<pre><code class="language-crystal"># After creating backup, upload to cloud service
+backup_path = create_backup(objects)
+
+# Upload using system tools
+if File.exists?(backup_path)
+  system(&quot;aws&quot;, &quot;s3&quot;, &quot;cp&quot;, backup_path, &quot;s3://my-bucket/backups/&quot;)
+  system(&quot;rclone&quot;, &quot;copy&quot;, backup_path, &quot;remote:backups/&quot;)
+end
+</code></pre>
+<h2 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h2>
+<ol>
+<li><strong>Always verify</strong> backups after creation</li>
+<li><strong>Regular testing</strong> of restore procedures</li>
+<li><strong>Monitor disk space</strong> for backup directories</li>
+<li><strong>Use meaningful filenames</strong> with timestamps</li>
+<li><strong>Document backup procedures</strong> for your team</li>
+<li><strong>Test backup restoration</strong> in staging environments</li>
+<li><strong>Consider encryption</strong> for sensitive data backups</li>
+<li><strong>Implement cleanup</strong> strategies for old backups</li>
+</ol>
+<h2 id="restore-strategy"><a class="header" href="#restore-strategy">Restore Strategy</a></h2>
+<p>While Sepia focuses on backup creation (restore is application-specific), here's a general pattern:</p>
+<pre><code class="language-crystal">class RestoreService
+  def restore_from_backup(backup_path : String, target_storage)
+    # 1. Inspect backup contents
+    manifest = Sepia::Backup.list_contents(backup_path)
+
+    # 2. Extract backup (application-specific logic)
+    extract_and_process_backup(backup_path, target_storage, manifest)
+
+    # 3. Rebuild relationships
+    rebuild_object_relationships(manifest, target_storage)
+  end
+
+  # Implementation depends on your specific application requirements
+  private def extract_and_process_backup(backup_path, storage, manifest)
+    # Extract tar archive and process files according to your needs
+  end
+end
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="api-reference-1"><a class="header" href="#api-reference-1">API Reference</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="core-modules"><a class="header" href="#core-modules">Core Modules</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="storage-backends-1"><a class="header" href="#storage-backends-1">Storage Backends</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="utilities"><a class="header" href="#utilities">Utilities</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="generated-api-docs"><a class="header" href="#generated-api-docs">Generated API Docs</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="advanced-topics"><a class="header" href="#advanced-topics">Advanced Topics</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="garbage-collection"><a class="header" href="#garbage-collection">Garbage Collection</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="performance-considerations-2"><a class="header" href="#performance-considerations-2">Performance Considerations</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="document-management"><a class="header" href="#document-management">Document Management</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-management"><a class="header" href="#configuration-management">Configuration Management</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="collaborative-applications"><a class="header" href="#collaborative-applications">Collaborative Applications</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

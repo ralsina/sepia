@@ -1,0 +1,404 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Quick Start</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Sepia Documentation</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/quick-start.html" class="active"><strong aria-hidden="true">2.2.</strong> Quick Start</a></li><li class="chapter-item expanded "><a href="../getting-started/core-concepts.html"><strong aria-hidden="true">2.3.</strong> Core Concepts</a></li></ol></li><li class="chapter-item expanded "><a href="../user-guide/index.html"><strong aria-hidden="true">3.</strong> User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user-guide/serializable.html"><strong aria-hidden="true">3.1.</strong> Serializable Objects</a></li><li class="chapter-item expanded "><a href="../user-guide/containers.html"><strong aria-hidden="true">3.2.</strong> Container Objects</a></li><li class="chapter-item expanded "><a href="../user-guide/storage.html"><strong aria-hidden="true">3.3.</strong> Storage Management</a></li><li class="chapter-item expanded "><a href="../user-guide/generations.html"><strong aria-hidden="true">3.4.</strong> Generation Tracking</a></li><li class="chapter-item expanded "><a href="../user-guide/file-watching.html"><strong aria-hidden="true">3.5.</strong> File System Watching</a></li><li class="chapter-item expanded "><a href="../user-guide/backup.html"><strong aria-hidden="true">3.6.</strong> Backup and Restore</a></li></ol></li><li class="chapter-item expanded "><a href="../api/index.html"><strong aria-hidden="true">4.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../api/core.html"><strong aria-hidden="true">4.1.</strong> Core Modules</a></li><li class="chapter-item expanded "><a href="../api/storage.html"><strong aria-hidden="true">4.2.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="../api/utilities.html"><strong aria-hidden="true">4.3.</strong> Utilities</a></li><li class="chapter-item expanded "><a href="../api/generated.html"><strong aria-hidden="true">4.4.</strong> Generated API Docs</a></li></ol></li><li class="chapter-item expanded "><a href="../advanced/index.html"><strong aria-hidden="true">5.</strong> Advanced Topics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../advanced/garbage-collection.html"><strong aria-hidden="true">5.1.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="../advanced/performance.html"><strong aria-hidden="true">5.2.</strong> Performance Considerations</a></li><li class="chapter-item expanded "><a href="../advanced/troubleshooting.html"><strong aria-hidden="true">5.3.</strong> Troubleshooting</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">6.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/document-management.html"><strong aria-hidden="true">6.1.</strong> Document Management</a></li><li class="chapter-item expanded "><a href="../examples/configuration-management.html"><strong aria-hidden="true">6.2.</strong> Configuration Management</a></li><li class="chapter-item expanded "><a href="../examples/collaborative-apps.html"><strong aria-hidden="true">6.3.</strong> Collaborative Applications</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
+<p>This guide will get you up and running with Sepia in just a few minutes. We'll create a simple document management system to demonstrate the core concepts.</p>
+<h2 id="step-1-define-your-objects"><a class="header" href="#step-1-define-your-objects">Step 1: Define Your Objects</a></h2>
+<p>Let's create a simple <code>Document</code> class that can be saved and loaded:</p>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+
+class Document &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property title : String
+  property content : String
+
+  def initialize(@title = &quot;&quot;, @content = &quot;&quot;)
+  end
+
+  def to_sepia : String
+    &quot;#{@title}\n#{@content}&quot;
+  end
+
+  def self.from_sepia(sepia_string : String) : self
+    lines = sepia_string.split('\n', 2)
+    new(lines[0]? || &quot;&quot;, lines[1]? || &quot;&quot;)
+  end
+end
+</code></pre>
+<h2 id="step-2-configure-storage"><a class="header" href="#step-2-configure-storage">Step 2: Configure Storage</a></h2>
+<pre><code class="language-crystal"># Configure Sepia to use the filesystem backend
+Sepia::Storage.configure(:filesystem, {&quot;path&quot; =&gt; &quot;./data&quot;})
+</code></pre>
+<h2 id="step-3-save-and-load-objects"><a class="header" href="#step-3-save-and-load-objects">Step 3: Save and Load Objects</a></h2>
+<pre><code class="language-crystal"># Create a new document
+doc = Document.new(&quot;My First Document&quot;, &quot;Hello, Sepia!&quot;)
+doc.save  # Automatically generates a unique ID
+
+puts &quot;Document saved with ID: #{doc.sepia_id}&quot;
+
+# Load it back
+loaded_doc = Sepia::Storage.get(Document, doc.sepia_id).as(Document)
+puts &quot;Loaded title: #{loaded_doc.title}&quot;
+puts &quot;Loaded content: #{loaded_doc.content}&quot;
+</code></pre>
+<h2 id="step-4-try-container-objects"><a class="header" href="#step-4-try-container-objects">Step 4: Try Container Objects</a></h2>
+<p>Container objects can contain other objects. Let's create a <code>Folder</code>:</p>
+<pre><code class="language-crystal">class Folder &lt; Sepia::Object
+  include Sepia::Container
+
+  property name : String
+  property description : String?
+  property documents : Array(Document)
+
+  def initialize(@name = &quot;&quot;, @description = nil)
+    @documents = [] of Document
+  end
+end
+
+# Create a folder with documents
+folder = Folder.new(&quot;Important Docs&quot;, &quot;My important documents&quot;)
+
+doc1 = Document.new(&quot;Meeting Notes&quot;, &quot;Discussed project timeline&quot;)
+doc1.sepia_id = &quot;meeting-notes&quot;
+doc1.save
+
+doc2 = Document.new(&quot;Todo List&quot;, &quot;- Review code\n- Write docs&quot;)
+doc2.sepia_id = &quot;todo-list&quot;
+doc2.save
+
+folder.documents &lt;&lt; doc1 &lt;&lt; doc2
+folder.sepia_id = &quot;important-docs&quot;
+folder.save
+
+puts &quot;Folder saved with #{folder.documents.size} documents&quot;
+</code></pre>
+<h2 id="step-5-file-system-watching"><a class="header" href="#step-5-file-system-watching">Step 5: File System Watching</a></h2>
+<p>Sepia can detect when files are changed externally:</p>
+<pre><code class="language-crystal"># Set up a watcher
+storage = Sepia::Storage.backend.as(Sepia::FileStorage)
+watcher = Sepia::Watcher.new(storage)
+
+watcher.on_change do |event|
+  puts &quot;Detected change: #{event.type} - #{event.object_class}:#{event.object_id}&quot;
+
+  # Reload the object if it was modified
+  if event.type.modified?
+    begin
+      obj = Sepia::Storage.load(event.object_class.constantize(typeof(Object)), event.object_id)
+      puts &quot;Reloaded: #{obj}&quot;
+    rescue ex
+      puts &quot;Failed to reload: #{ex.message}&quot;
+    end
+  end
+end
+
+# Start watching
+watcher.start
+
+# Now try editing one of the document files manually:
+# ./data/Document/meeting-notes
+# You should see the watcher detect the change!
+
+# Stop watching when done
+# watcher.stop
+</code></pre>
+<h2 id="step-6-backup-your-data"><a class="header" href="#step-6-backup-your-data">Step 6: Backup Your Data</a></h2>
+<p>Sepia makes it easy to create backups:</p>
+<pre><code class="language-crystal"># Backup a specific object
+backup_path = doc.backup_to(&quot;my_document_backup.tar&quot;)
+puts &quot;Backup created: #{backup_path}&quot;
+
+# Backup multiple objects
+backup_path = Sepia::Storage.backup([doc1, doc2, folder], &quot;project_backup.tar&quot;)
+puts &quot;Project backup created: #{backup_path}&quot;
+
+# Inspect backup contents
+manifest = Sepia::Backup.list_contents(&quot;project_backup.tar&quot;)
+puts &quot;Backup contains #{manifest.all_objects.values.map(&amp;.size).sum} objects&quot;
+
+# Verify backup integrity
+result = Sepia::Backup.verify(&quot;project_backup.tar&quot;)
+puts &quot;Backup is #{result.valid ? &quot;valid&quot; : &quot;invalid&quot;}&quot;
+</code></pre>
+<h2 id="complete-example"><a class="header" href="#complete-example">Complete Example</a></h2>
+<p>Here's a complete working example:</p>
+<pre><code class="language-crystal">require &quot;sepia&quot;
+
+class Document &lt; Sepia::Object
+  include Sepia::Serializable
+
+  property title : String
+  property content : String
+
+  def initialize(@title = &quot;&quot;, @content = &quot;&quot;)
+  end
+
+  def to_sepia : String
+    &quot;#{@title}\n#{@content}&quot;
+  end
+
+  def self.from_sepia(sepia_string : String) : self
+    lines = sepia_string.split('\n', 2)
+    new(lines[0]? || &quot;&quot;, lines[1]? || &quot;&quot;)
+  end
+end
+
+# Configure storage
+Sepia::Storage.configure(:filesystem, {&quot;path&quot; =&gt; &quot;./quickstart_data&quot;})
+
+# Create and save a document
+doc = Document.new(&quot;Welcome to Sepia&quot;, &quot;This is your first persistent object!&quot;)
+doc.save
+
+puts &quot;✅ Document saved!&quot;
+puts &quot;   Title: #{doc.title}&quot;
+puts &quot;   ID: #{doc.sepia_id}&quot;
+
+# Load it back
+loaded = Sepia::Storage.get(Document, doc.sepia_id).as(Document)
+puts &quot;✅ Document loaded!&quot;
+puts &quot;   Title: #{loaded.title}&quot;
+
+# Create a backup
+backup_path = doc.backup_to(&quot;welcome_backup.tar&quot;)
+puts &quot;✅ Backup created: #{backup_path}&quot;
+
+puts &quot;\n🎉 Quick start completed!&quot;
+</code></pre>
+<p>Save this as <code>quickstart.cr</code> and run:</p>
+<pre><code class="language-bash">crystal run quickstart.cr
+</code></pre>
+<h2 id="whats-next"><a class="header" href="#whats-next">What's Next?</a></h2>
+<p>Now that you have the basics, explore these topics:</p>
+<ul>
+<li><a href="../user-guide/serializable.html">Serializable Objects</a> - Deep dive into file-based objects</li>
+<li><a href="../user-guide/containers.html">Container Objects</a> - Learn about complex object structures</li>
+<li><a href="../user-guide/file-watching.html">File System Watching</a> - Build reactive applications</li>
+<li><a href="../user-guide/backup.html">Backup and Restore</a> - Data protection strategies</li>
+</ul>
+<p>Happy coding with Sepia! 🚀</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../getting-started/installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../getting-started/core-concepts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../getting-started/installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../getting-started/core-concepts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

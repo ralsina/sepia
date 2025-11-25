@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.17.1">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia::CacheManager - Sepia main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="Sepia/Sepia" data-name="sepia">
+      <a href="../Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/BackendNotSupportedError" data-name="sepia::backendnotsupportederror">
+      <a href="../Sepia/BackendNotSupportedError.html">BackendNotSupportedError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/Backup" data-name="sepia::backup">
+      <a href="../Sepia/Backup.html">Backup</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupFile" data-name="sepia::backup::backupfile">
+      <a href="../Sepia/Backup/BackupFile.html">BackupFile</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupManifest" data-name="sepia::backup::backupmanifest">
+      <a href="../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupStatistics" data-name="sepia::backup::backupstatistics">
+      <a href="../Sepia/Backup/BackupStatistics.html">BackupStatistics</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupVerificationResult" data-name="sepia::backup::backupverificationresult">
+      <a href="../Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/Configuration" data-name="sepia::backup::configuration">
+      <a href="../Sepia/Backup/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectReference" data-name="sepia::backup::objectreference">
+      <a href="../Sepia/Backup/ObjectReference.html">ObjectReference</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectType" data-name="sepia::backup::objecttype">
+      <a href="../Sepia/Backup/ObjectType.html">ObjectType</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCorruptionError" data-name="sepia::backupcorruptionerror">
+      <a href="../Sepia/BackupCorruptionError.html">BackupCorruptionError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCreationError" data-name="sepia::backupcreationerror">
+      <a href="../Sepia/BackupCreationError.html">BackupCreationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupError" data-name="sepia::backuperror">
+      <a href="../Sepia/BackupError.html">BackupError</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="Sepia/Sepia/CacheManager" data-name="sepia::cachemanager">
+      <a href="../Sepia/CacheManager.html">CacheManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/CacheManager/Stats" data-name="sepia::cachemanager::stats">
+      <a href="../Sepia/CacheManager/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="../Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Event" data-name="sepia::event">
+      <a href="../Sepia/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLogger" data-name="sepia::eventlogger">
+      <a href="../Sepia/EventLogger.html">EventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLoggerBackend" data-name="sepia::eventloggerbackend">
+      <a href="../Sepia/EventLoggerBackend.html">EventLoggerBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventType" data-name="sepia::eventtype">
+      <a href="../Sepia/EventType.html">EventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="../Sepia/FileStorage.html">FileStorage</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage/WatcherConfig" data-name="sepia::filestorage::watcherconfig">
+      <a href="../Sepia/FileStorage/WatcherConfig.html">WatcherConfig</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="../Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="../Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEvent" data-name="sepia::logevent">
+      <a href="../Sepia/LogEvent.html">LogEvent</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEventType" data-name="sepia::logeventtype">
+      <a href="../Sepia/LogEventType.html">LogEventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/MemoryLimiter" data-name="sepia::memorylimiter">
+      <a href="../Sepia/MemoryLimiter.html">MemoryLimiter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/MemoryStats" data-name="sepia::memorylimiter::memorystats">
+      <a href="../Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/PressureLevel" data-name="sepia::memorylimiter::pressurelevel">
+      <a href="../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="../Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/PathResolver" data-name="sepia::pathresolver">
+      <a href="../Sepia/PathResolver.html">PathResolver</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/PathResolver/ObjectInfo" data-name="sepia::pathresolver::objectinfo">
+      <a href="../Sepia/PathResolver/ObjectInfo.html">ObjectInfo</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/PerFileEventLogger" data-name="sepia::perfileeventlogger">
+      <a href="../Sepia/PerFileEventLogger.html">PerFileEventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="../Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="../Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="../Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Watcher" data-name="sepia::watcher">
+      <a href="../Sepia/Watcher.html">Watcher</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/WeakCache" data-name="sepia::weakcache(t)">
+      <a href="../Sepia/WeakCache.html">WeakCache</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/WeakCache/Stats" data-name="sepia::weakcache::stats">
+      <a href="../Sepia/WeakCache/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    class
+  </span> Sepia::<wbr>CacheManager
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Sepia/CacheManager.html">Sepia::CacheManager</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Centralized cache manager for Sepia objects.</p>
+<p>Provides thread-safe LRU caching with configurable size limits, TTL,
+and eviction policies. Designed to work with both regular objects
+and LazyReference instances.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache <span class="o">=</span> <span class="t">CacheManager</span>.new(max_size: <span class="n">1000</span>, ttl: <span class="n">3600</span>.seconds)
+
+<span class="c"># Store an object</span>
+cache.put(<span class="s">&quot;doc-123&quot;</span>, my_document)
+
+<span class="c"># Retrieve an object</span>
+doc <span class="o">=</span> cache.get(<span class="s">&quot;doc-123&quot;</span>)
+
+<span class="c"># Cache statistics</span>
+puts cache.stats
+<span class="c"># =&gt; {hits: 45, misses: 12, size: 23, max_size: 1000}</span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L26" target="_blank">
+        sepia/cache_manager.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#instance%3ACacheManager-class-method" class="signature"><strong>.instance</strong> : CacheManager</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28max_size%3AInt32%3D1000%2Cttl%3ATime%3A%3ASpan%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(max_size : Int32 = <span class="n">1000</span>, ttl : Time::Span | Nil = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Creates a new cache manager.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+  
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#instance_getter-class-method" class="signature"><strong>.instance_getter</strong></a>
+        
+          <div class="summary"><p>Alias for convenience (thread-safe)</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+  
+
+  
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#cleanup_expired%3AInt32-instance-method" class="signature"><strong>#cleanup_expired</strong> : Int32</a>
+        
+          <div class="summary"><p>Removes all expired entries from the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#clear%3AVoid-instance-method" class="signature"><strong>#clear</strong> : Void</a>
+        
+          <div class="summary"><p>Clears all entries from the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get%28key%3AString%2Ctype%3AT.class%29%3AT%7CNilforallT-instance-method" class="signature"><strong>#get</strong>(key : String, type : <span class="t">T</span>.<span class="k">class</span>) : T | Nil forall T</a>
+        
+          <div class="summary"><p>Retrieves an object of specific type from the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get%28key%3AString%29%3AObject%7CNil-instance-method" class="signature"><strong>#get</strong>(key : String) : Object | Nil</a>
+        
+          <div class="summary"><p>Retrieves an object from the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#has_key%3F%28key%3AString%29%3ABool-instance-method" class="signature"><strong>#has_key?</strong>(key : String) : Bool</a>
+        
+          <div class="summary"><p>Checks if a key exists in the cache (excluding expired entries).</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#invalidate%28key%3AString%29%3ABool-instance-method" class="signature"><strong>#invalidate</strong>(key : String) : Bool</a>
+        
+          <div class="summary"><p>Invalidates a cache entry and updates invalidation statistics.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#keys%3AArray%28String%29-instance-method" class="signature"><strong>#keys</strong> : Array(String)</a>
+        
+          <div class="summary"><p>Returns an array of all keys currently in the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#max_size%3AInt32-instance-method" class="signature"><strong>#max_size</strong> : Int32</a>
+        
+          <div class="summary"><p>Maximum number of items in cache</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#memory_usage%3AInt64-instance-method" class="signature"><strong>#memory_usage</strong> : Int64</a>
+        
+          <div class="summary"><p>Estimates memory usage of the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#put%28key%3AString%2Cvalue%3AObject%29%3AVoid-instance-method" class="signature"><strong>#put</strong>(key : String, value : Object) : Void</a>
+        
+          <div class="summary"><p>Stores an object in the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#remove%28key%3AString%29%3ABool-instance-method" class="signature"><strong>#remove</strong>(key : String) : Bool</a>
+        
+          <div class="summary"><p>Removes a specific key from the cache.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#resize%28new_size%3AInt32%29%3AVoid-instance-method" class="signature"><strong>#resize</strong>(new_size : Int32) : Void</a>
+        
+          <div class="summary"><p>Changes the maximum cache size.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#stats%3AStats-instance-method" class="signature"><strong>#stats</strong> : Stats</a>
+        
+          <div class="summary"><p>Current cache statistics</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ttl%3ATime%3A%3ASpan%7CNil-instance-method" class="signature"><strong>#ttl</strong> : Time::Span | Nil</a>
+        
+          <div class="summary"><p>Time-to-live for cache entries (nil = no expiration)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#values%3AArray%28Object%29-instance-method" class="signature"><strong>#values</strong> : Array(Object)</a>
+        
+          <div class="summary"><p>Returns an array of all non-expired values in the cache.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+  </div>
+
+  
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="instance:CacheManager-class-method">
+      <div class="signature">
+        
+        def self.<strong>instance</strong> : <a href="../Sepia/CacheManager.html">CacheManager</a>
+
+        <a class="method-permalink" href="#instance%3ACacheManager-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L450" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(max_size:Int32=1000,ttl:Time::Span|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(max_size : Int32 = <span class="n">1000</span>, ttl : Time::Span | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#new%28max_size%3AInt32%3D1000%2Cttl%3ATime%3A%3ASpan%7CNil%3Dnil%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new cache manager.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>max_size</em> : Maximum number of items to cache (default: 1000)</li>
+<li><em>ttl</em> : Time-to-live for entries (default: nil = no expiration)</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache <span class="o">=</span> <span class="t">CacheManager</span>.new(max_size: <span class="n">500</span>, ttl: <span class="n">1</span>.hour)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L85" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+  
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="instance_getter-class-method">
+      <div class="signature">
+        
+        def self.<strong>instance_getter</strong>
+
+        <a class="method-permalink" href="#instance_getter-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Alias for convenience (thread-safe)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L462" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+  
+
+  
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="cleanup_expired:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>cleanup_expired</strong> : Int32
+
+        <a class="method-permalink" href="#cleanup_expired%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Removes all expired entries from the cache.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>The number of expired entries that were removed.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">removed <span class="o">=</span> cache.cleanup_expired
+puts <span class="s">&quot;Removed </span><span class="i">#{</span>removed<span class="i">}</span><span class="s"> expired entries&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L306" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="clear:Void-instance-method">
+      <div class="signature">
+        
+        def <strong>clear</strong> : Void
+
+        <a class="method-permalink" href="#clear%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Clears all entries from the cache.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache.clear
+puts cache.stats.size <span class="c"># =&gt; 0</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L286" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get(key:String,type:T.class):T|NilforallT-instance-method">
+      <div class="signature">
+        
+        def <strong>get</strong>(key : String, type : <span class="t">T</span>.<span class="k">class</span>) : T | Nil forall T
+
+        <a class="method-permalink" href="#get%28key%3AString%2Ctype%3AT.class%29%3AT%7CNilforallT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Retrieves an object of specific type from the cache.</p>
+<p>Generic version of <code><a href="../Sepia/CacheManager.html#get%28key%3AString%2Ctype%3AT.class%29%3AT%7CNilforallT-instance-method">#get</a></code> that returns the properly typed object.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>The cached object cast to type T or <code>nil</code> if not found/expired.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">doc <span class="o">=</span> cache.get(<span class="t">MyDocument</span>, <span class="s">&quot;doc-123&quot;</span>)
+puts doc.title <span class="k">if</span> doc</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L188" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get(key:String):Object|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>get</strong>(key : String) : <a href="../Sepia/Object.html">Object</a> | Nil
+
+        <a class="method-permalink" href="#get%28key%3AString%29%3AObject%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Retrieves an object from the cache.</p>
+<p>Returns <code>nil</code> if the key doesn't exist or the entry has expired.
+Updates the access order for LRU tracking.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>The cached object or <code>nil</code> if not found/expired.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">doc <span class="o">=</span> cache.get(<span class="s">&quot;doc-123&quot;</span>)
+puts doc.title <span class="k">if</span> doc</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L148" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="has_key?(key:String):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>has_key?</strong>(key : String) : Bool
+
+        <a class="method-permalink" href="#has_key%3F%28key%3AString%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if a key exists in the cache (excluding expired entries).</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if the key exists and hasn't expired, <code>false</code> otherwise.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">if</span> cache.has_key?(<span class="s">&quot;doc-123&quot;</span>)
+  puts <span class="s">&quot;Document is cached&quot;</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L210" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="invalidate(key:String):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>invalidate</strong>(key : String) : Bool
+
+        <a class="method-permalink" href="#invalidate%28key%3AString%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Invalidates a cache entry and updates invalidation statistics.</p>
+<p>This is similar to remove, but specifically tracks invalidations
+(e.g., from external file changes via the filesystem watcher).</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key to invalidate</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if the key was invalidated, <code>false</code> if it didn't exist.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache.invalidate(<span class="s">&quot;doc-123&quot;</span>) <span class="c"># External file changed</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L266" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="keys:Array(String)-instance-method">
+      <div class="signature">
+        
+        def <strong>keys</strong> : Array(String)
+
+        <a class="method-permalink" href="#keys%3AArray%28String%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns an array of all keys currently in the cache.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Array of cache keys (most recently used last).</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">keys <span class="o">=</span> cache.keys
+puts <span class="s">&quot;Cached objects: </span><span class="i">#{</span>keys.size<span class="i">}</span><span class="s">&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L358" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="max_size:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>max_size</strong> : Int32
+
+        <a class="method-permalink" href="#max_size%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Maximum number of items in cache</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L65" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="memory_usage:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>memory_usage</strong> : Int64
+
+        <a class="method-permalink" href="#memory_usage%3AInt64-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Estimates memory usage of the cache.</p>
+<p>This is a rough estimation based on the number of cached objects.
+Actual memory usage may vary based on object size.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Estimated memory usage in bytes.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">bytes <span class="o">=</span> cache.memory_usage
+puts <span class="s">&quot;Cache uses approximately </span><span class="i">#{</span>bytes <span class="o">/</span> <span class="n">1024</span><span class="i">}</span><span class="s"> KB&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L400" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="put(key:String,value:Object):Void-instance-method">
+      <div class="signature">
+        
+        def <strong>put</strong>(key : String, value : <a href="../Sepia/Object.html">Object</a>) : Void
+
+        <a class="method-permalink" href="#put%28key%3AString%2Cvalue%3AObject%29%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Stores an object in the cache.</p>
+<p>If the cache is full, implements LRU eviction by removing
+the least recently used items.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key (typically object ID)</li>
+<li><em>value</em> : The object to cache</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache.put(<span class="s">&quot;doc-123&quot;</span>, my_document)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L107" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="remove(key:String):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>remove</strong>(key : String) : Bool
+
+        <a class="method-permalink" href="#remove%28key%3AString%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Removes a specific key from the cache.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>key</em> : The cache key to remove</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if the key was removed, <code>false</code> if it didn't exist.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache.remove(<span class="s">&quot;doc-123&quot;</span>)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L237" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="resize(new_size:Int32):Void-instance-method">
+      <div class="signature">
+        
+        def <strong>resize</strong>(new_size : Int32) : Void
+
+        <a class="method-permalink" href="#resize%28new_size%3AInt32%29%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Changes the maximum cache size.</p>
+<p>If the new size is smaller than the current cache size,
+evicts LRU entries to fit the new limit.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>new_size</em> : The new maximum cache size</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">cache.resize(<span class="n">500</span>) <span class="c"># Reduce cache size</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L333" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="stats:Stats-instance-method">
+      <div class="signature">
+        
+        def <strong>stats</strong> : <a href="../Sepia/CacheManager/Stats.html">Stats</a>
+
+        <a class="method-permalink" href="#stats%3AStats-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Current cache statistics</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L71" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ttl:Time::Span|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>ttl</strong> : Time::Span | Nil
+
+        <a class="method-permalink" href="#ttl%3ATime%3A%3ASpan%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Time-to-live for cache entries (nil = no expiration)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L68" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="values:Array(Object)-instance-method">
+      <div class="signature">
+        
+        def <strong>values</strong> : Array(<a href="../Sepia/Object.html">Object</a>)
+
+        <a class="method-permalink" href="#values%3AArray%28Object%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns an array of all non-expired values in the cache.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Array of cached objects.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">objects <span class="o">=</span> cache.values
+puts <span class="s">&quot;Cached </span><span class="i">#{</span>objects.size<span class="i">}</span><span class="s"> objects&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L376" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+</body>
+</html>

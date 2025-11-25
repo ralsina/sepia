@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.17.1">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia::Backup - Sepia main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="Sepia/Sepia" data-name="sepia">
+      <a href="../Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/BackendNotSupportedError" data-name="sepia::backendnotsupportederror">
+      <a href="../Sepia/BackendNotSupportedError.html">BackendNotSupportedError</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="Sepia/Sepia/Backup" data-name="sepia::backup">
+      <a href="../Sepia/Backup.html">Backup</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupFile" data-name="sepia::backup::backupfile">
+      <a href="../Sepia/Backup/BackupFile.html">BackupFile</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupManifest" data-name="sepia::backup::backupmanifest">
+      <a href="../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupStatistics" data-name="sepia::backup::backupstatistics">
+      <a href="../Sepia/Backup/BackupStatistics.html">BackupStatistics</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupVerificationResult" data-name="sepia::backup::backupverificationresult">
+      <a href="../Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/Configuration" data-name="sepia::backup::configuration">
+      <a href="../Sepia/Backup/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectReference" data-name="sepia::backup::objectreference">
+      <a href="../Sepia/Backup/ObjectReference.html">ObjectReference</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectType" data-name="sepia::backup::objecttype">
+      <a href="../Sepia/Backup/ObjectType.html">ObjectType</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCorruptionError" data-name="sepia::backupcorruptionerror">
+      <a href="../Sepia/BackupCorruptionError.html">BackupCorruptionError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCreationError" data-name="sepia::backupcreationerror">
+      <a href="../Sepia/BackupCreationError.html">BackupCreationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupError" data-name="sepia::backuperror">
+      <a href="../Sepia/BackupError.html">BackupError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/CacheManager" data-name="sepia::cachemanager">
+      <a href="../Sepia/CacheManager.html">CacheManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/CacheManager/Stats" data-name="sepia::cachemanager::stats">
+      <a href="../Sepia/CacheManager/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="../Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Event" data-name="sepia::event">
+      <a href="../Sepia/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLogger" data-name="sepia::eventlogger">
+      <a href="../Sepia/EventLogger.html">EventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLoggerBackend" data-name="sepia::eventloggerbackend">
+      <a href="../Sepia/EventLoggerBackend.html">EventLoggerBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventType" data-name="sepia::eventtype">
+      <a href="../Sepia/EventType.html">EventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="../Sepia/FileStorage.html">FileStorage</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage/WatcherConfig" data-name="sepia::filestorage::watcherconfig">
+      <a href="../Sepia/FileStorage/WatcherConfig.html">WatcherConfig</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="../Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="../Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEvent" data-name="sepia::logevent">
+      <a href="../Sepia/LogEvent.html">LogEvent</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEventType" data-name="sepia::logeventtype">
+      <a href="../Sepia/LogEventType.html">LogEventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/MemoryLimiter" data-name="sepia::memorylimiter">
+      <a href="../Sepia/MemoryLimiter.html">MemoryLimiter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/MemoryStats" data-name="sepia::memorylimiter::memorystats">
+      <a href="../Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/PressureLevel" data-name="sepia::memorylimiter::pressurelevel">
+      <a href="../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="../Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/PathResolver" data-name="sepia::pathresolver">
+      <a href="../Sepia/PathResolver.html">PathResolver</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/PathResolver/ObjectInfo" data-name="sepia::pathresolver::objectinfo">
+      <a href="../Sepia/PathResolver/ObjectInfo.html">ObjectInfo</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/PerFileEventLogger" data-name="sepia::perfileeventlogger">
+      <a href="../Sepia/PerFileEventLogger.html">PerFileEventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="../Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="../Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="../Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Watcher" data-name="sepia::watcher">
+      <a href="../Sepia/Watcher.html">Watcher</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/WeakCache" data-name="sepia::weakcache(t)">
+      <a href="../Sepia/WeakCache.html">WeakCache</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/WeakCache/Stats" data-name="sepia::weakcache::stats">
+      <a href="../Sepia/WeakCache/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    class
+  </span> Sepia::<wbr>Backup
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Sepia/Backup.html">Sepia::Backup</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L19" target="_blank">
+        sepia/backup.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+
+  
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#create%28root_objects%3AArray%28Sepia%3A%3AObject%29%2Coutput_path%3AString%2Cconfig%3AConfiguration%29%3AString-class-method" class="signature"><strong>.create</strong>(root_objects : Array(Sepia::Object), output_path : String, config : Configuration) : String</a>
+        
+          <div class="summary"><p>Create backup with custom configuration</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#create%28root_objects%3AArray%28Sepia%3A%3AObject%29%2Coutput_path%3AString%29%3AString-class-method" class="signature"><strong>.create</strong>(root_objects : Array(Sepia::Object), output_path : String) : String</a>
+        
+          <div class="summary"><p>Main backup class methods</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_metadata%28backup_path%3AString%29%3ABackupManifest-class-method" class="signature"><strong>.get_metadata</strong>(backup_path : String) : BackupManifest</a>
+        
+          <div class="summary"><p>Extracts metadata from a backup file</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#list_contents%28backup_path%3AString%29%3ABackupManifest-class-method" class="signature"><strong>.list_contents</strong>(backup_path : String) : BackupManifest</a>
+        
+          <div class="summary"><p>Lists contents of a backup without restoring</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#restore%28backup_path%3AString%2Ctarget_storage_path%3AString%7CNil%3Dnil%29%3AArray%28Sepia%3A%3AObject%29-class-method" class="signature"><strong>.restore</strong>(backup_path : String, target_storage_path : String | Nil = <span class="n">nil</span>) : Array(Sepia::Object)</a>
+        
+          <div class="summary"><p>Restores objects from a backup archive</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#verify%28backup_path%3AString%29%3ABackupVerificationResult-class-method" class="signature"><strong>.verify</strong>(backup_path : String) : BackupVerificationResult</a>
+        
+          <div class="summary"><p>Verifies backup integrity and structure</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+  
+
+  
+
+
+  <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+  </div>
+
+  
+
+  
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="create(root_objects:Array(Sepia::Object),output_path:String,config:Configuration):String-class-method">
+      <div class="signature">
+        
+        def self.<strong>create</strong>(root_objects : Array(<a href="../Sepia/Object.html">Sepia::Object</a>), output_path : String, config : <a href="../Sepia/Backup/Configuration.html">Configuration</a>) : String
+
+        <a class="method-permalink" href="#create%28root_objects%3AArray%28Sepia%3A%3AObject%29%2Coutput_path%3AString%2Cconfig%3AConfiguration%29%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Create backup with custom configuration</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L212" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="create(root_objects:Array(Sepia::Object),output_path:String):String-class-method">
+      <div class="signature">
+        
+        def self.<strong>create</strong>(root_objects : Array(<a href="../Sepia/Object.html">Sepia::Object</a>), output_path : String) : String
+
+        <a class="method-permalink" href="#create%28root_objects%3AArray%28Sepia%3A%3AObject%29%2Coutput_path%3AString%29%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Main backup class methods</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L207" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_metadata(backup_path:String):BackupManifest-class-method">
+      <div class="signature">
+        
+        def self.<strong>get_metadata</strong>(backup_path : String) : <a href="../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+
+        <a class="method-permalink" href="#get_metadata%28backup_path%3AString%29%3ABackupManifest-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Extracts metadata from a backup file</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L340" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="list_contents(backup_path:String):BackupManifest-class-method">
+      <div class="signature">
+        
+        def self.<strong>list_contents</strong>(backup_path : String) : <a href="../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+
+        <a class="method-permalink" href="#list_contents%28backup_path%3AString%29%3ABackupManifest-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Lists contents of a backup without restoring</p>
+<p>This method allows applications to inspect what objects are contained in a backup
+archive without performing a full restore. It extracts and parses the metadata
+to return information about the backup contents.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>backup_path</em> : Path to the backup tar file</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>A BackupManifest containing information about the backup contents</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="c"># Inspect backup contents</span>
+manifest <span class="o">=</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Backup</span>.list_contents(<span class="s">&quot;user_backup.tar&quot;</span>)
+puts <span class="s">&quot;Backup created: </span><span class="i">#{</span>manifest.created_at<span class="i">}</span><span class="s">&quot;</span>
+puts <span class="s">&quot;Contains </span><span class="i">#{</span>manifest.all_objects.values.map(<span class="o">&amp;</span>.size).sum<span class="i">}</span><span class="s"> objects&quot;</span>
+puts <span class="s">&quot;Root objects: </span><span class="i">#{</span>manifest.root_objects.map(<span class="o">&amp;</span>.object_id).join(<span class="s">&quot;, &quot;</span>)<span class="i">}</span><span class="s">&quot;</span></code></pre>
+<h3><a id="raises" class="anchor" href="#raises">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Raises</h3>
+<ul>
+<li><code><a href="../Sepia/BackupCorruptionError.html">BackupCorruptionError</a></code> if the backup file is corrupted or missing metadata</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L282" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="restore(backup_path:String,target_storage_path:String|Nil=nil):Array(Sepia::Object)-class-method">
+      <div class="signature">
+        
+        def self.<strong>restore</strong>(backup_path : String, target_storage_path : String | Nil = <span class="n">nil</span>) : Array(<a href="../Sepia/Object.html">Sepia::Object</a>)
+
+        <a class="method-permalink" href="#restore%28backup_path%3AString%2Ctarget_storage_path%3AString%7CNil%3Dnil%29%3AArray%28Sepia%3A%3AObject%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Restores objects from a backup archive</p>
+<p>This method is left for application-specific implementations as restore
+logic varies greatly depending on business requirements, data migration
+policies, and application-specific validation rules.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>backup_path</em> : Path to the backup tar file</li>
+<li><em>target_storage_path</em> : Optional target storage path</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Array of restored Sepia::Object instances</p>
+<h3><a id="note" class="anchor" href="#note">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Note</h3>
+<p>This method raises NotImplementedError as restore functionality should be
+implemented by applications based on their specific requirements.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L451" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="verify(backup_path:String):BackupVerificationResult-class-method">
+      <div class="signature">
+        
+        def self.<strong>verify</strong>(backup_path : String) : <a href="../Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+
+        <a class="method-permalink" href="#verify%28backup_path%3AString%29%3ABackupVerificationResult-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Verifies backup integrity and structure</p>
+<p>This method checks that the backup file is well-formed and that all expected
+files are present and readable. It provides detailed information about the
+backup contents and any issues found.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>backup_path</em> : Path to the backup tar file</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>A BackupVerificationResult containing verification status and statistics</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">result <span class="o">=</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Backup</span>.verify(<span class="s">&quot;user_backup.tar&quot;</span>)
+<span class="k">if</span> result.valid
+  puts <span class="s">&quot;Backup is valid&quot;</span>
+  puts <span class="s">&quot;Contains </span><span class="i">#{</span>result.statistics.total_objects<span class="i">}</span><span class="s"> objects&quot;</span>
+<span class="k">else</span>
+  puts <span class="s">&quot;Backup has issues:&quot;</span>
+  result.errors.each { <span class="o">|</span>error<span class="o">|</span> puts <span class="s">&quot;  - </span><span class="i">#{</span>error<span class="i">}</span><span class="s">&quot;</span> }
+<span class="k">end</span></code></pre>
+<h3><a id="raises" class="anchor" href="#raises">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Raises</h3>
+<ul>
+<li><code><a href="../Sepia/BackupCorruptionError.html">BackupCorruptionError</a></code> if the backup file is severely corrupted</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L374" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+  
+
+  
+
+
+</div>
+
+</body>
+</html>

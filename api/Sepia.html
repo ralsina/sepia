@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.17.1">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia - Sepia main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="Sepia/Sepia" data-name="sepia">
+      <a href="Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/BackendNotSupportedError" data-name="sepia::backendnotsupportederror">
+      <a href="Sepia/BackendNotSupportedError.html">BackendNotSupportedError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/Backup" data-name="sepia::backup">
+      <a href="Sepia/Backup.html">Backup</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupFile" data-name="sepia::backup::backupfile">
+      <a href="Sepia/Backup/BackupFile.html">BackupFile</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupManifest" data-name="sepia::backup::backupmanifest">
+      <a href="Sepia/Backup/BackupManifest.html">BackupManifest</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupStatistics" data-name="sepia::backup::backupstatistics">
+      <a href="Sepia/Backup/BackupStatistics.html">BackupStatistics</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupVerificationResult" data-name="sepia::backup::backupverificationresult">
+      <a href="Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/Configuration" data-name="sepia::backup::configuration">
+      <a href="Sepia/Backup/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectReference" data-name="sepia::backup::objectreference">
+      <a href="Sepia/Backup/ObjectReference.html">ObjectReference</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectType" data-name="sepia::backup::objecttype">
+      <a href="Sepia/Backup/ObjectType.html">ObjectType</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCorruptionError" data-name="sepia::backupcorruptionerror">
+      <a href="Sepia/BackupCorruptionError.html">BackupCorruptionError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCreationError" data-name="sepia::backupcreationerror">
+      <a href="Sepia/BackupCreationError.html">BackupCreationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupError" data-name="sepia::backuperror">
+      <a href="Sepia/BackupError.html">BackupError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/CacheManager" data-name="sepia::cachemanager">
+      <a href="Sepia/CacheManager.html">CacheManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/CacheManager/Stats" data-name="sepia::cachemanager::stats">
+      <a href="Sepia/CacheManager/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Event" data-name="sepia::event">
+      <a href="Sepia/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLogger" data-name="sepia::eventlogger">
+      <a href="Sepia/EventLogger.html">EventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLoggerBackend" data-name="sepia::eventloggerbackend">
+      <a href="Sepia/EventLoggerBackend.html">EventLoggerBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventType" data-name="sepia::eventtype">
+      <a href="Sepia/EventType.html">EventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="Sepia/FileStorage.html">FileStorage</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage/WatcherConfig" data-name="sepia::filestorage::watcherconfig">
+      <a href="Sepia/FileStorage/WatcherConfig.html">WatcherConfig</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEvent" data-name="sepia::logevent">
+      <a href="Sepia/LogEvent.html">LogEvent</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEventType" data-name="sepia::logeventtype">
+      <a href="Sepia/LogEventType.html">LogEventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/MemoryLimiter" data-name="sepia::memorylimiter">
+      <a href="Sepia/MemoryLimiter.html">MemoryLimiter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/MemoryStats" data-name="sepia::memorylimiter::memorystats">
+      <a href="Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/PressureLevel" data-name="sepia::memorylimiter::pressurelevel">
+      <a href="Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/PathResolver" data-name="sepia::pathresolver">
+      <a href="Sepia/PathResolver.html">PathResolver</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/PathResolver/ObjectInfo" data-name="sepia::pathresolver::objectinfo">
+      <a href="Sepia/PathResolver/ObjectInfo.html">ObjectInfo</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/PerFileEventLogger" data-name="sepia::perfileeventlogger">
+      <a href="Sepia/PerFileEventLogger.html">PerFileEventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Watcher" data-name="sepia::watcher">
+      <a href="Sepia/Watcher.html">Watcher</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/WeakCache" data-name="sepia::weakcache(t)">
+      <a href="Sepia/WeakCache.html">WeakCache</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/WeakCache/Stats" data-name="sepia::weakcache::stats">
+      <a href="Sepia/WeakCache/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    module
+  </span> Sepia
+
+</h1>
+
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Sepia is a simple, file-system-based serialization library for Crystal.
+It provides two main modules: <code><a href="Sepia/Serializable.html">Sepia::Serializable</a></code> and <code><a href="Sepia/Container.html">Sepia::Container</a></code>.</p>
+<p>⚠️ <strong>WARNING: UNSTABLE API AND STORAGE FORMAT</strong></p>
+<p>Sepia is currently in active development and does not have a stable API or storage format.</p>
+<ul>
+<li><strong>The API is subject to change without notice</strong></li>
+<li><strong>Breaking changes may occur in any release</strong></li>
+<li><strong>The on-disk storage format is not stable</strong> - you will need to migrate your data stores when upgrading between versions</li>
+</ul>
+<p>Use at your own risk in production. Ensure you have proper backup and migration strategies in place.</p>
+<p>Disk Storage Strategy:</p>
+<p><strong>1. Individual Objects:</strong></p>
+<ul>
+<li>
+<p><code><a href="Sepia/Serializable.html">Sepia::Serializable</a></code> objects: Stored as individual files in a directory
+named after their class, using their <code>sepia_id</code> as the filename.</p>
+<p>Example:</p>
+</li>
+</ul>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MySerializable</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Serializable</span>
+  property value : <span class="t">String</span>
+
+  <span class="k">def</span> <span class="m">initialize</span>(@value); <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">to_sepia</span>
+    @value
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">self</span>.from_sepia(s)
+    new(s)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+my_obj <span class="o">=</span> <span class="t">MySerializable</span>.new(<span class="s">&quot;hello&quot;</span>)
+my_obj.sepia_id <span class="o">=</span> <span class="s">&quot;my_obj_id&quot;</span>
+my_obj.save</code></pre>
+<p>On-disk representation:</p>
+<pre><code class="language-text">_data/
+  └── MySerializable/
+      └── my_obj_id</code></pre>
+<ul>
+<li>
+<p><code><a href="Sepia/Container.html">Sepia::Container</a></code> objects: Stored as directories, also named after their
+class and using their <code>sepia_id</code> as the directory name.</p>
+<p>Example:</p>
+</li>
+</ul>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyContainer</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+<span class="k">end</span>
+
+my_container <span class="o">=</span> <span class="t">MyContainer</span>.new
+my_container.sepia_id <span class="o">=</span> <span class="s">&quot;my_container_id&quot;</span>
+my_container.save</code></pre>
+<p>On-disk representation:</p>
+<pre><code class="language-text">  _data/
+  └── MyContainer/
+      └── my_container_id/</code></pre>
+<p><strong>2. Nested Objects within Containers:</strong></p>
+<ul>
+<li>
+<p>Nested <code><a href="Sepia/Serializable.html">Serializable</a></code> objects: Stored as symlinks to their canonical
+<code><a href="Sepia/Serializable.html">Serializable</a></code> file.</p>
+<p>Example:</p>
+</li>
+</ul>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyContainer</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  property nested_serializable : <span class="t">MySerializable</span>
+
+  <span class="k">def</span> <span class="m">initialize</span>(@nested_serializable); <span class="k">end</span>
+<span class="k">end</span>
+
+my_serializable <span class="o">=</span> <span class="t">MySerializable</span>.new(<span class="s">&quot;nested&quot;</span>)
+my_serializable.sepia_id <span class="o">=</span> <span class="s">&quot;nested_serializable_id&quot;</span>
+my_container <span class="o">=</span> <span class="t">MyContainer</span>.new(my_serializable)
+my_container.sepia_id <span class="o">=</span> <span class="s">&quot;container_with_serializable&quot;</span>
+my_container.save</code></pre>
+<p>On-disk representation:</p>
+<pre><code class="language-text">  _data/
+  ├── MyContainer/
+  │   └── container_with_serializable/
+  │       └── nested_serializable -&gt; ../../MySerializable/nested_serializable_id
+  └── MySerializable/
+      └── nested_serializable_id</code></pre>
+<ul>
+<li>
+<p>Nested <code><a href="Sepia/Container.html">Container</a></code> objects: Stored as subdirectories, mirroring the
+object hierarchy on disk.</p>
+<p>Example:</p>
+</li>
+</ul>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyOuterContainer</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  property inner_container : <span class="t">MyContainer</span>
+
+  <span class="k">def</span> <span class="m">initialize</span>(@inner_container); <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="t">MyInnerContainer</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+<span class="k">end</span>
+
+inner <span class="o">=</span> <span class="t">MyInnerContainer</span>.new
+inner.sepia_id <span class="o">=</span> <span class="s">&quot;inner_container_id&quot;</span>
+outer <span class="o">=</span> <span class="t">MyOuterContainer</span>.new(inner)
+outer.sepia_id <span class="o">=</span> <span class="s">&quot;outer_container_id&quot;</span>
+outer.save</code></pre>
+<p>On-disk representation:</p>
+<pre><code class="language-text">  _data/
+  └── MyOuterContainer/
+      └── outer_container_id/
+          └── inner_container/</code></pre>
+<p><strong>3. Collections within Containers:</strong></p>
+<ul>
+<li>
+<p><strong>Arrays/Sets of <code><a href="Sepia/Serializable.html">Serializable</a></code> objects:</strong> Stored in a subdirectory
+named after the collection's instance variable. Each serializable object
+is symlinked into that directory using its index as the filename.</p>
+<h1><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example:</h1>
+</li>
+</ul>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyContainerWithArray</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  property serializables : <span class="t">Array</span>(<span class="t">MySerializable</span>)
+
+  <span class="k">def</span> <span class="m">initialize</span>(@serializables <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">MySerializable</span>); <span class="k">end</span>
+<span class="k">end</span>
+
+s1 <span class="o">=</span> <span class="t">MySerializable</span>.new(<span class="s">&quot;one&quot;</span>); s1.sepia_id <span class="o">=</span> <span class="s">&quot;s1_id&quot;</span>
+s2 <span class="o">=</span> <span class="t">MySerializable</span>.new(<span class="s">&quot;two&quot;</span>); s2.sepia_id <span class="o">=</span> <span class="s">&quot;s2_id&quot;</span>
+container <span class="o">=</span> <span class="t">MyContainerWithArray</span>.new([s1, s2])
+container.sepia_id <span class="o">=</span> <span class="s">&quot;array_of_serializables&quot;</span>
+container.save</code></pre>
+<p>On-disk representation:</p>
+<pre><code class="language-text">  _data/
+  ├── MyContainerWithArray/
+  │   └── array_of_serializables/
+  │       └── serializables/
+  │           ├── 0 -&gt; ../../../../MySerializable/s1_id
+  │           └── 1 -&gt; ../../../../MySerializable/s2_id
+  └── MySerializable/
+      ├── s1_id
+      └── s2_id</code></pre>
+<ul>
+<li>
+<p><strong>Arrays/Sets of <code><a href="Sepia/Container.html">Container</a></code> objects:</strong> Stored in a subdirectory
+named after the collection's instance variable. Each container object
+is stored as a subdirectory within that directory, using its index as
+the directory name.</p>
+<p>Example:</p>
+</li>
+</ul>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyContainerWithArrayOfContainers</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  property containers : <span class="t">Array</span>(<span class="t">MyContainer</span>)
+
+  <span class="k">def</span> <span class="m">initialize</span>(@containers <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">MyContainer</span>); <span class="k">end</span>
+<span class="k">end</span>
+
+c1 <span class="o">=</span> <span class="t">MyContainer</span>.new; c1.sepia_id <span class="o">=</span> <span class="s">&quot;c1_id&quot;</span>
+c2 <span class="o">=</span> <span class="t">MyContainer</span>.new; c2.sepia_id <span class="o">=</span> <span class="s">&quot;c2_id&quot;</span>
+container <span class="o">=</span> <span class="t">MyContainerWithArrayOfContainers</span>.new([c1, c2])
+container.sepia_id <span class="o">=</span> <span class="s">&quot;array_of_containers&quot;</span>
+container.save</code></pre>
+<p>On-disk representation:</p>
+<pre><code class="language-text">_data/
+  ├── MyContainerWithArrayOfContainers/
+  │   └── array_of_containers/
+  │       └── containers/
+  │           ├── 0/
+  │           └── 1/
+  └── MyContainer/
+      ├── c1_id/
+      └── c2_id/</code></pre>
+<ul>
+<li>
+<p><strong>Hashes (String keys) of <code><a href="Sepia/Serializable.html">Serializable</a></code> values:</strong> Stored in a subdirectory
+named after the hash's instance variable. Each serializable object
+is symlinked into that directory using its key as the filename.</p>
+<p>Example:</p>
+<pre><code class="language-crystal"></code></pre>
+</li>
+</ul>
+<p>class MyContainerWithHash
+include Sepia::Container
+property serializables_hash : Hash(String, MySerializable)</p>
+<p>def initialize(@serializables_hash = {} of String =&gt; MySerializable); end
+end</p>
+<p>s1 = MySerializable.new(&quot;alpha&quot;); s1.sepia_id = &quot;alpha_id&quot;
+s2 = MySerializable.new(&quot;beta&quot;); s2.sepia_id = &quot;beta_id&quot;
+container = MyContainerWithHash.new({&quot;a&quot; =&gt; s1, &quot;b&quot; =&gt; s2})
+container.sepia_id = &quot;hash_of_serializables&quot;
+container.save</p>
+<pre><code class="language-crystal">
+On-disk representation:
+
+```text
+_data/
+├── MyContainerWithHash/
+│   └── hash_of_serializables/
+│       └── serializables_hash/
+│           ├── a -&gt; ../../../../MySerializable/alpha_id
+│           └── b -&gt; ../../../../MySerializable/beta_id
+└── MySerializable/
+  ├── alpha_id
+  └── beta_id</code></pre>
+<ul>
+<li>
+<p><strong>Hashes (String keys) of <code><a href="Sepia/Container.html">Container</a></code> values:</strong> Stored in a subdirectory
+named after the hash's instance variable. Each container object
+is stored as a subdirectory within that directory, using its key as
+the directory name.</p>
+<p>Example:</p>
+</li>
+</ul>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyContainerWithHashOfContainers</span>
+  <span class="k">include</span> <span class="t">Sepia</span><span class="t">::</span><span class="t">Container</span>
+  property containers_hash : <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">MyContainer</span>)
+
+  <span class="k">def</span> <span class="m">initialize</span>(@containers_hash <span class="o">=</span> {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">MyContainer</span>); <span class="k">end</span>
+<span class="k">end</span>
+
+c1 <span class="o">=</span> <span class="t">MyContainer</span>.new; c1.sepia_id <span class="o">=</span> <span class="s">&quot;hash_c1_id&quot;</span>
+c2 <span class="o">=</span> <span class="t">MyContainer</span>.new; c2.sepia_id <span class="o">=</span> <span class="s">&quot;hash_c2_id&quot;</span>
+container <span class="o">=</span> <span class="t">MyContainerWithHashOfContainers</span>.new({<span class="s">&quot;x&quot;</span> <span class="o">=&gt;</span> c1, <span class="s">&quot;y&quot;</span> <span class="o">=&gt;</span> c2})
+container.sepia_id <span class="o">=</span> <span class="s">&quot;hash_of_containers&quot;</span>
+container.save</code></pre>
+<p>On-disk representation:</p>
+<pre><code class="language-text">_data/
+├── MyContainerWithHashOfContainers/
+│   └── hash_of_containers/
+│       └── containers_hash/
+│           ├── x/
+│           └── y/
+└── MyContainer/
+    ├── hash_c1_id/
+    └── hash_c2_id/</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia.cr#L285" target="_blank">
+        sepia.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/backup.cr#L5" target="_blank">
+        sepia/backup.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/cache_manager.cr#L4" target="_blank">
+        sepia/cache_manager.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/container.cr#L5" target="_blank">
+        sepia/container.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/event.cr#L3" target="_blank">
+        sepia/event.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/event_logger.cr#L6" target="_blank">
+        sepia/event_logger.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/file_storage.cr#L7" target="_blank">
+        sepia/file_storage.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/generation_info.cr#L1" target="_blank">
+        sepia/generation_info.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/in_memory_storage.cr#L3" target="_blank">
+        sepia/in_memory_storage.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L3" target="_blank">
+        sepia/memory_limiter.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/object.cr#L3" target="_blank">
+        sepia/object.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/path_resolver.cr#L1" target="_blank">
+        sepia/path_resolver.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/serializable.cr#L3" target="_blank">
+        sepia/serializable.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/storage.cr#L8" target="_blank">
+        sepia/storage.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/storage_backend.cr#L1" target="_blank">
+        sepia/storage_backend.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/watcher.cr#L15" target="_blank">
+        sepia/watcher.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/weak_cache.cr#L4" target="_blank">
+        sepia/weak_cache.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="VERSION">
+        <strong>VERSION</strong> = <code><span class="s">&quot;0.1.0&quot;</span></code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+  
+
+  
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#container%3F%28name%3AString%29%3ABool-class-method" class="signature"><strong>.container?</strong>(name : String) : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#register_class_type%28name%3AString%2Cis_container%3ABool%29-class-method" class="signature"><strong>.register_class_type</strong>(name : String, is_container : Bool)</a>
+        
+      </li>
+    
+  </ul>
+
+
+  
+
+  
+
+
+  <div class="methods-inherited">
+    
+  </div>
+
+  
+
+  
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="container?(name:String):Bool-class-method">
+      <div class="signature">
+        
+        def self.<strong>container?</strong>(name : String) : Bool
+
+        <a class="method-permalink" href="#container%3F%28name%3AString%29%3ABool-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia.cr#L295" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="register_class_type(name:String,is_container:Bool)-class-method">
+      <div class="signature">
+        
+        def self.<strong>register_class_type</strong>(name : String, is_container : Bool)
+
+        <a class="method-permalink" href="#register_class_type%28name%3AString%2Cis_container%3ABool%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia.cr#L291" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+  
+
+  
+
+
+</div>
+
+</body>
+</html>

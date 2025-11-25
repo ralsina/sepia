@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.17.1">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="Sepia">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="Sepia">
+  <title>Sepia::MemoryLimiter - Sepia main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          Sepia
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="Sepia/Sepia" data-name="sepia">
+      <a href="../Sepia.html">Sepia</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/BackendNotSupportedError" data-name="sepia::backendnotsupportederror">
+      <a href="../Sepia/BackendNotSupportedError.html">BackendNotSupportedError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/Backup" data-name="sepia::backup">
+      <a href="../Sepia/Backup.html">Backup</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupFile" data-name="sepia::backup::backupfile">
+      <a href="../Sepia/Backup/BackupFile.html">BackupFile</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupManifest" data-name="sepia::backup::backupmanifest">
+      <a href="../Sepia/Backup/BackupManifest.html">BackupManifest</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupStatistics" data-name="sepia::backup::backupstatistics">
+      <a href="../Sepia/Backup/BackupStatistics.html">BackupStatistics</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/BackupVerificationResult" data-name="sepia::backup::backupverificationresult">
+      <a href="../Sepia/Backup/BackupVerificationResult.html">BackupVerificationResult</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/Configuration" data-name="sepia::backup::configuration">
+      <a href="../Sepia/Backup/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectReference" data-name="sepia::backup::objectreference">
+      <a href="../Sepia/Backup/ObjectReference.html">ObjectReference</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Backup/ObjectType" data-name="sepia::backup::objecttype">
+      <a href="../Sepia/Backup/ObjectType.html">ObjectType</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCorruptionError" data-name="sepia::backupcorruptionerror">
+      <a href="../Sepia/BackupCorruptionError.html">BackupCorruptionError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupCreationError" data-name="sepia::backupcreationerror">
+      <a href="../Sepia/BackupCreationError.html">BackupCreationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/BackupError" data-name="sepia::backuperror">
+      <a href="../Sepia/BackupError.html">BackupError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/CacheManager" data-name="sepia::cachemanager">
+      <a href="../Sepia/CacheManager.html">CacheManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/CacheManager/Stats" data-name="sepia::cachemanager::stats">
+      <a href="../Sepia/CacheManager/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Container" data-name="sepia::container">
+      <a href="../Sepia/Container.html">Container</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Event" data-name="sepia::event">
+      <a href="../Sepia/Event.html">Event</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLogger" data-name="sepia::eventlogger">
+      <a href="../Sepia/EventLogger.html">EventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventLoggerBackend" data-name="sepia::eventloggerbackend">
+      <a href="../Sepia/EventLoggerBackend.html">EventLoggerBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/EventType" data-name="sepia::eventtype">
+      <a href="../Sepia/EventType.html">EventType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/FileStorage" data-name="sepia::filestorage">
+      <a href="../Sepia/FileStorage.html">FileStorage</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/FileStorage/WatcherConfig" data-name="sepia::filestorage::watcherconfig">
+      <a href="../Sepia/FileStorage/WatcherConfig.html">WatcherConfig</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/GenerationInfo" data-name="sepia::generationinfo">
+      <a href="../Sepia/GenerationInfo.html">GenerationInfo</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/InMemoryStorage" data-name="sepia::inmemorystorage">
+      <a href="../Sepia/InMemoryStorage.html">InMemoryStorage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEvent" data-name="sepia::logevent">
+      <a href="../Sepia/LogEvent.html">LogEvent</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/LogEventType" data-name="sepia::logeventtype">
+      <a href="../Sepia/LogEventType.html">LogEventType</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="Sepia/Sepia/MemoryLimiter" data-name="sepia::memorylimiter">
+      <a href="../Sepia/MemoryLimiter.html">MemoryLimiter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/MemoryStats" data-name="sepia::memorylimiter::memorystats">
+      <a href="../Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/MemoryLimiter/PressureLevel" data-name="sepia::memorylimiter::pressurelevel">
+      <a href="../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Object" data-name="sepia::object">
+      <a href="../Sepia/Object.html">Object</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/PathResolver" data-name="sepia::pathresolver">
+      <a href="../Sepia/PathResolver.html">PathResolver</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/PathResolver/ObjectInfo" data-name="sepia::pathresolver::objectinfo">
+      <a href="../Sepia/PathResolver/ObjectInfo.html">ObjectInfo</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/PerFileEventLogger" data-name="sepia::perfileeventlogger">
+      <a href="../Sepia/PerFileEventLogger.html">PerFileEventLogger</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Serializable" data-name="sepia::serializable">
+      <a href="../Sepia/Serializable.html">Serializable</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Storage" data-name="sepia::storage">
+      <a href="../Sepia/Storage.html">Storage</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/StorageBackend" data-name="sepia::storagebackend">
+      <a href="../Sepia/StorageBackend.html">StorageBackend</a>
+      
+    </li>
+  
+  <li class=" " data-id="Sepia/Sepia/Watcher" data-name="sepia::watcher">
+      <a href="../Sepia/Watcher.html">Watcher</a>
+      
+    </li>
+  
+  <li class="parent " data-id="Sepia/Sepia/WeakCache" data-name="sepia::weakcache(t)">
+      <a href="../Sepia/WeakCache.html">WeakCache</a>
+      
+        <ul>
+  
+  <li class=" " data-id="Sepia/Sepia/WeakCache/Stats" data-name="sepia::weakcache::stats">
+      <a href="../Sepia/WeakCache/Stats.html">Stats</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    class
+  </span> Sepia::<wbr>MemoryLimiter
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Sepia/MemoryLimiter.html">Sepia::MemoryLimiter</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Memory pressure detection and management system.</p>
+<p>Monitors system memory usage and provides signals for when
+caches should be purged or memory-saving measures should be taken.
+Works across different platforms (Linux, macOS, Windows).</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">limiter <span class="o">=</span> <span class="t">MemoryLimiter</span>.new(
+  warning_threshold: <span class="s">&quot;70%&quot;</span>,
+  critical_threshold: <span class="s">&quot;85%&quot;</span>,
+  check_interval: <span class="n">30</span>.seconds
+)
+
+limiter.on_warning { puts <span class="s">&quot;Memory usage is high&quot;</span> }
+limiter.on_critical { cache.clear }
+
+limiter.start_monitoring</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L24" target="_blank">
+        sepia/memory_limiter.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28warning_threshold%3AFloat64%3D0.7%2Ccritical_threshold%3AFloat64%3D0.85%2Cemergency_threshold%3AFloat64%3D0.95%2Ccheck_interval%3ATime%3A%3ASpan%3D30.seconds%29-class-method" class="signature"><strong>.new</strong>(warning_threshold : Float64 = <span class="n">0.7</span>, critical_threshold : Float64 = <span class="n">0.85</span>, emergency_threshold : Float64 = <span class="n">0.95</span>, check_interval : Time::Span = <span class="n">30</span>.seconds)</a>
+        
+          <div class="summary"><p>Creates a new memory limiter.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#check_interval%3ATime%3A%3ASpan-instance-method" class="signature"><strong>#check_interval</strong> : Time::Span</a>
+        
+          <div class="summary"><p>Monitoring interval</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#check_now%3APressureLevel-instance-method" class="signature"><strong>#check_now</strong> : PressureLevel</a>
+        
+          <div class="summary"><p>Forces an immediate memory check.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#critical%3F%3ABool-instance-method" class="signature"><strong>#critical?</strong> : Bool</a>
+        
+          <div class="summary"><p>Checks if memory pressure is at critical level or higher.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#critical_threshold%3AFloat64-instance-method" class="signature"><strong>#critical_threshold</strong> : Float64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#current_pressure%3APressureLevel-instance-method" class="signature"><strong>#current_pressure</strong> : PressureLevel</a>
+        
+          <div class="summary"><p>Gets the current memory pressure level.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#current_stats%3AMemoryStats-instance-method" class="signature"><strong>#current_stats</strong> : MemoryStats</a>
+        
+          <div class="summary"><p>Current memory statistics</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#emergency%3F%3ABool-instance-method" class="signature"><strong>#emergency?</strong> : Bool</a>
+        
+          <div class="summary"><p>Checks if memory pressure is at emergency level.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#emergency_threshold%3AFloat64-instance-method" class="signature"><strong>#emergency_threshold</strong> : Float64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#monitoring%3ABool-instance-method" class="signature"><strong>#monitoring</strong> : Bool</a>
+        
+          <div class="summary"><p>Monitoring state</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_critical%3AProc%28Nil%29%7CNil-instance-method" class="signature"><strong>#on_critical</strong> : Proc(Nil) | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_critical%3D%28on_critical%3AProc%28Nil%29%7CNil%29-instance-method" class="signature"><strong>#on_critical=</strong>(on_critical : Proc(Nil) | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_emergency%3AProc%28Nil%29%7CNil-instance-method" class="signature"><strong>#on_emergency</strong> : Proc(Nil) | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_emergency%3D%28on_emergency%3AProc%28Nil%29%7CNil%29-instance-method" class="signature"><strong>#on_emergency=</strong>(on_emergency : Proc(Nil) | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_normal%3AProc%28Nil%29%7CNil-instance-method" class="signature"><strong>#on_normal</strong> : Proc(Nil) | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_normal%3D%28on_normal%3AProc%28Nil%29%7CNil%29-instance-method" class="signature"><strong>#on_normal=</strong>(on_normal : Proc(Nil) | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_warning%3AProc%28Nil%29%7CNil-instance-method" class="signature"><strong>#on_warning</strong> : Proc(Nil) | Nil</a>
+        
+          <div class="summary"><p>Event callbacks</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on_warning%3D%28on_warning%3AProc%28Nil%29%7CNil%29-instance-method" class="signature"><strong>#on_warning=</strong>(on_warning : Proc(Nil) | Nil)</a>
+        
+          <div class="summary"><p>Event callbacks</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#start_monitoring%3AVoid-instance-method" class="signature"><strong>#start_monitoring</strong> : Void</a>
+        
+          <div class="summary"><p>Starts monitoring memory usage in the background.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#status_description%3AString-instance-method" class="signature"><strong>#status_description</strong> : String</a>
+        
+          <div class="summary"><p>Gets a human-readable description of current memory state.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#stop_monitoring%3AVoid-instance-method" class="signature"><strong>#stop_monitoring</strong> : Void</a>
+        
+          <div class="summary"><p>Stops monitoring memory usage.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#suggest_cache_size%28max_size%3AInt32%29%3AInt32-instance-method" class="signature"><strong>#suggest_cache_size</strong>(max_size : Int32) : Int32</a>
+        
+          <div class="summary"><p>Suggests cache size based on current memory pressure.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#warning%3F%3ABool-instance-method" class="signature"><strong>#warning?</strong> : Bool</a>
+        
+          <div class="summary"><p>Checks if memory pressure is at warning level or higher.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#warning_threshold%3AFloat64-instance-method" class="signature"><strong>#warning_threshold</strong> : Float64</a>
+        
+          <div class="summary"><p>Memory usage thresholds</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+  </div>
+
+  
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(warning_threshold:Float64=0.7,critical_threshold:Float64=0.85,emergency_threshold:Float64=0.95,check_interval:Time::Span=30.seconds)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(warning_threshold : Float64 = <span class="n">0.7</span>, critical_threshold : Float64 = <span class="n">0.85</span>, emergency_threshold : Float64 = <span class="n">0.95</span>, check_interval : Time::Span = <span class="n">30</span>.seconds)
+
+        <a class="method-permalink" href="#new%28warning_threshold%3AFloat64%3D0.7%2Ccritical_threshold%3AFloat64%3D0.85%2Cemergency_threshold%3AFloat64%3D0.95%2Ccheck_interval%3ATime%3A%3ASpan%3D30.seconds%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new memory limiter.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>warning_threshold</em> : Memory usage percentage for warning (default: 0.7 = 70%)</li>
+<li><em>critical_threshold</em> : Memory usage percentage for critical (default: 0.85 = 85%)</li>
+<li><em>emergency_threshold</em> : Memory usage percentage for emergency (default: 0.95 = 95%)</li>
+<li><em>check_interval</em> : How often to check memory usage (default: 30 seconds)</li>
+</ul>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">limiter <span class="o">=</span> <span class="t">MemoryLimiter</span>.new(
+  warning_threshold: <span class="n">0.75</span>,
+  critical_threshold: <span class="n">0.90</span>,
+  check_interval: <span class="n">60</span>.seconds
+)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L101" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+  
+
+  
+
+  
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="check_interval:Time::Span-instance-method">
+      <div class="signature">
+        
+        def <strong>check_interval</strong> : Time::Span
+
+        <a class="method-permalink" href="#check_interval%3ATime%3A%3ASpan-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Monitoring interval</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="check_now:PressureLevel-instance-method">
+      <div class="signature">
+        
+        def <strong>check_now</strong> : <a href="../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+
+        <a class="method-permalink" href="#check_now%3APressureLevel-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Forces an immediate memory check.</p>
+<p>Updates current statistics and triggers appropriate callbacks.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Current memory pressure level.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">pressure <span class="o">=</span> limiter.check_now
+puts <span class="s">&quot;Current pressure: </span><span class="i">#{</span>pressure<span class="i">}</span><span class="s">&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L166" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="critical?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>critical?</strong> : Bool
+
+        <a class="method-permalink" href="#critical%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if memory pressure is at critical level or higher.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if usage &gt;= critical_threshold, <code>false</code> otherwise.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">if</span> limiter.critical?
+  cache.clear
+  <span class="t">GC</span>.collect
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L223" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="critical_threshold:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>critical_threshold</strong> : Float64
+
+        <a class="method-permalink" href="#critical_threshold%3AFloat64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L65" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="current_pressure:PressureLevel-instance-method">
+      <div class="signature">
+        
+        def <strong>current_pressure</strong> : <a href="../Sepia/MemoryLimiter/PressureLevel.html">PressureLevel</a>
+
+        <a class="method-permalink" href="#current_pressure%3APressureLevel-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the current memory pressure level.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Current pressure level without forcing a new check.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">pressure <span class="o">=</span> limiter.current_pressure
+<span class="k">case</span> pressure
+<span class="k">when</span> .warning?
+  puts <span class="s">&quot;Memory usage is high&quot;</span>
+<span class="k">when</span> .critical?
+  puts <span class="s">&quot;Memory usage is critical&quot;</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L188" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="current_stats:MemoryStats-instance-method">
+      <div class="signature">
+        
+        def <strong>current_stats</strong> : <a href="../Sepia/MemoryLimiter/MemoryStats.html">MemoryStats</a>
+
+        <a class="method-permalink" href="#current_stats%3AMemoryStats-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Current memory statistics</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L72" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="emergency?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>emergency?</strong> : Bool
+
+        <a class="method-permalink" href="#emergency%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if memory pressure is at emergency level.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if usage &gt;= emergency_threshold, <code>false</code> otherwise.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">if</span> limiter.emergency?
+  raise <span class="s">&quot;Out of memory!&quot;</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L240" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="emergency_threshold:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>emergency_threshold</strong> : Float64
+
+        <a class="method-permalink" href="#emergency_threshold%3AFloat64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L66" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="monitoring:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>monitoring</strong> : Bool
+
+        <a class="method-permalink" href="#monitoring%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Monitoring state</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_critical:Proc(Nil)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>on_critical</strong> : Proc(Nil) | Nil
+
+        <a class="method-permalink" href="#on_critical%3AProc%28Nil%29%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L76" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_critical=(on_critical:Proc(Nil)|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>on_critical=</strong>(on_critical : Proc(Nil) | Nil)
+
+        <a class="method-permalink" href="#on_critical%3D%28on_critical%3AProc%28Nil%29%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L76" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_emergency:Proc(Nil)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>on_emergency</strong> : Proc(Nil) | Nil
+
+        <a class="method-permalink" href="#on_emergency%3AProc%28Nil%29%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L77" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_emergency=(on_emergency:Proc(Nil)|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>on_emergency=</strong>(on_emergency : Proc(Nil) | Nil)
+
+        <a class="method-permalink" href="#on_emergency%3D%28on_emergency%3AProc%28Nil%29%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L77" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_normal:Proc(Nil)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>on_normal</strong> : Proc(Nil) | Nil
+
+        <a class="method-permalink" href="#on_normal%3AProc%28Nil%29%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_normal=(on_normal:Proc(Nil)|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>on_normal=</strong>(on_normal : Proc(Nil) | Nil)
+
+        <a class="method-permalink" href="#on_normal%3D%28on_normal%3AProc%28Nil%29%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_warning:Proc(Nil)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>on_warning</strong> : Proc(Nil) | Nil
+
+        <a class="method-permalink" href="#on_warning%3AProc%28Nil%29%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Event callbacks</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L75" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on_warning=(on_warning:Proc(Nil)|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>on_warning=</strong>(on_warning : Proc(Nil) | Nil)
+
+        <a class="method-permalink" href="#on_warning%3D%28on_warning%3AProc%28Nil%29%7CNil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Event callbacks</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L75" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="start_monitoring:Void-instance-method">
+      <div class="signature">
+        
+        def <strong>start_monitoring</strong> : Void
+
+        <a class="method-permalink" href="#start_monitoring%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Starts monitoring memory usage in the background.</p>
+<p>Creates a fiber that periodically checks memory usage and
+triggers callbacks based on threshold levels.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">limiter.start_monitoring</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L124" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="status_description:String-instance-method">
+      <div class="signature">
+        
+        def <strong>status_description</strong> : String
+
+        <a class="method-permalink" href="#status_description%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets a human-readable description of current memory state.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Description string.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">puts limiter.status_description
+<span class="c"># =&gt; &quot;Memory usage: 2.3 GB of 8.0 GB (28.8%) - Normal&quot;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L256" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="stop_monitoring:Void-instance-method">
+      <div class="signature">
+        
+        def <strong>stop_monitoring</strong> : Void
+
+        <a class="method-permalink" href="#stop_monitoring%3AVoid-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Stops monitoring memory usage.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">limiter.stop_monitoring</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L145" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="suggest_cache_size(max_size:Int32):Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>suggest_cache_size</strong>(max_size : Int32) : Int32
+
+        <a class="method-permalink" href="#suggest_cache_size%28max_size%3AInt32%29%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Suggests cache size based on current memory pressure.</p>
+<h3><a id="parameters" class="anchor" href="#parameters">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Parameters</h3>
+<ul>
+<li><em>max_size</em> : Maximum desired cache size</li>
+</ul>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p>Recommended cache size based on memory pressure.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal">recommended <span class="o">=</span> limiter.suggest_cache_size(<span class="n">1000</span>)
+cache.resize(recommended)</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L278" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="warning?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>warning?</strong> : Bool
+
+        <a class="method-permalink" href="#warning%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if memory pressure is at warning level or higher.</p>
+<h3><a id="returns" class="anchor" href="#returns">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Returns</h3>
+<p><code>true</code> if usage &gt;= warning_threshold, <code>false</code> otherwise.</p>
+<h3><a id="example" class="anchor" href="#example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example</h3>
+<pre><code class="language-crystal"><span class="k">if</span> limiter.warning?
+  cache.cleanup
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L205" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="warning_threshold:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>warning_threshold</strong> : Float64
+
+        <a class="method-permalink" href="#warning_threshold%3AFloat64-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Memory usage thresholds</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/ralsina/sepia/blob/2021ec0bcabc2eac8285c4ed4522a360dd7bc608/src/sepia/memory_limiter.cr#L64" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+</div>
+
+</body>
+</html>
