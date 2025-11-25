@@ -16,3 +16,6 @@ dependencies:
   # and compile with: crystal build -D no_fswatch
   fswatch:
     github: bcardiff/crystal-fswatch
+  # inotify.cr for Linux-native filesystem monitoring (alternative to fswatch)
+  inotify:
+    github: petoem/inotify.cr
