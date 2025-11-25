@@ -11,6 +11,7 @@
     * [Storage Management](user-guide/storage.md)
     * [Generation Tracking](user-guide/generations.md)
     * [File System Watching](user-guide/file-watching.md)
+    * [Event Logging](user-guide/event-logging.md)
     * [Backup and Restore](user-guide/backup.md)
 * [API Reference](api/README.md)
     * [Core Modules](api/core.md)
