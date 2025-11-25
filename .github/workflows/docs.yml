@@ -22,14 +22,14 @@ on:
       - 'book/**'
       - '.github/workflows/docs.yml'
 
-# Configure environment for GitHub Pages
-environment:
-  name: github-pages
-  url: ${{ steps.deployment.outputs.page_url }}
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    # Configure environment for GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
     - name: Checkout repository
