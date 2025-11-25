@@ -3,26 +3,48 @@ require "file_utils"
 require "json"
 
 module Sepia
-  # Backup and restore functionality for Sepia object trees
-  #
-  # This module provides comprehensive backup/restore capabilities using tar archives.
-  # It preserves object relationships, symlinks, and directory structures.
-  #
-  # ### Example
-  #
-  # ```
-  # # Create backup of object tree
-  # root_objects = [document, project, user]
-  # backup_path = Sepia::Backup.create(root_objects, "backup.sepia.tar")
-  #
-  # # Restore from backup
-  # restored_objects = Sepia::Backup.restore("backup.sepia.tar")
-  # ```
+  # Backup-specific exception classes
+  class BackupError < Exception
+  end
+
+  class BackendNotSupportedError < BackupError
+  end
+
+  class BackupCreationError < BackupError
+  end
+
+  class BackupCorruptionError < BackupError
+  end
+
   class Backup
+    # Backup and restore functionality for Sepia object trees
+    #
+    # This class provides comprehensive backup/restore capabilities using tar archives.
+    # It preserves object relationships, symlinks, and directory structures.
+    #
+    # ### Example
+    #
+    # ```
+    # # Create backup of object tree
+    # root_objects = [document, project, user]
+    # backup_path = Sepia::Backup.create(root_objects, "backup.sepia.tar")
+    #
+    # # Restore from backup
+    # restored_objects = Sepia::Backup.restore("backup.sepia.tar")
+    # ```
     # Object type classification for backup purposes
     enum ObjectType
       Serializable
       Container
+    end
+
+    # Simple configuration options for backup creation
+    struct Configuration
+      # Basic backup behavior
+      property follow_symlinks : Bool = false # false preserves symlinks as-is
+
+      def initialize
+      end
     end
 
     # Represents a reference to an object in the backup
@@ -92,11 +114,9 @@ module Sepia
       property created_at : Time = Time.utc
       property root_objects : Array(ObjectReference)
       property all_objects : Hash(String, Array(ObjectReference))
-      property metadata : Hash(String, String)
 
       def initialize(@root_objects = [] of ObjectReference)
         @all_objects = Hash(String, Array(ObjectReference)).new { |h, k| h[k] = [] of ObjectReference }
-        @metadata = Hash(String, String).new
       end
 
       def add_object(class_name : String, object_ref : ObjectReference)
@@ -119,9 +139,6 @@ module Sepia
               end
             end
           end
-          json.field "metadata" do
-            @metadata.to_json(json)
-          end
         end
       end
 
@@ -139,8 +156,6 @@ module Sepia
             json.read_object do |class_name|
               manifest.all_objects[class_name] = Array(ObjectReference).from_json(json)
             end
-          when "metadata"
-            manifest.metadata = Hash(String, String).from_json(json)
           else
             json.skip
           end
@@ -190,6 +205,11 @@ module Sepia
 
     # Main backup class methods
     def self.create(root_objects : Array(Sepia::Object), output_path : String) : String
+      create(root_objects, output_path, Configuration.new)
+    end
+
+    # Create backup with custom configuration
+    def self.create(root_objects : Array(Sepia::Object), output_path : String, config : Configuration) : String
       manifest = BackupManifest.new
 
       # Add root objects to manifest
@@ -221,33 +241,215 @@ module Sepia
 
       # Collect files for backup
       storage_path = get_storage_path()
-      backup_files = collect_files_for_backup(collected_objects, storage_path)
+      backup_files = collect_files_for_backup(collected_objects, storage_path, config)
 
       # Update manifest with correct object types based on actual files
       update_manifest_object_types(manifest, backup_files)
 
       # Create tar archive
-      create_tar_archive(backup_files, manifest, output_path)
+      create_tar_archive(backup_files, manifest, output_path, config)
 
       output_path
     end
 
-    # Restores objects from a backup archive
-    def self.restore(backup_path : String, target_storage_path : String? = nil) : Array(Sepia::Object)
-      # Implementation will come in Phase 3
-      raise NotImplementedError.new("Restore functionality not yet implemented")
-    end
-
     # Lists contents of a backup without restoring
+    #
+    # This method allows applications to inspect what objects are contained in a backup
+    # archive without performing a full restore. It extracts and parses the metadata
+    # to return information about the backup contents.
+    #
+    # ### Parameters
+    #
+    # - *backup_path* : Path to the backup tar file
+    #
+    # ### Returns
+    #
+    # A BackupManifest containing information about the backup contents
+    #
+    # ### Example
+    #
+    # ```
+    # # Inspect backup contents
+    # manifest = Sepia::Backup.list_contents("user_backup.tar")
+    # puts "Backup created: #{manifest.created_at}"
+    # puts "Contains #{manifest.all_objects.values.map(&.size).sum} objects"
+    # puts "Root objects: #{manifest.root_objects.map(&.object_id).join(", ")}"
+    # ```
+    #
+    # ### Raises
+    #
+    # - `BackupCorruptionError` if the backup file is corrupted or missing metadata
     def self.list_contents(backup_path : String) : BackupManifest
-      # Implementation will come in Phase 3
-      raise NotImplementedError.new("List contents functionality not yet implemented")
+      unless File.exists?(backup_path)
+        raise BackupCorruptionError.new("Backup file does not exist: #{backup_path}")
+      end
+
+      metadata_content = extract_metadata_from_backup(backup_path)
+
+      begin
+        # Manually parse the JSON to avoid complex JSON parsing issues
+        json_data = JSON.parse(metadata_content)
+
+        # Create new manifest
+        manifest = BackupManifest.new
+
+        # Parse basic fields
+        if json_data["version"]?
+          manifest.version = json_data["version"].as_s
+        end
+
+        if json_data["created_at"]?
+          manifest.created_at = Time.parse_rfc3339(json_data["created_at"].as_s)
+        end
+
+        # Parse root objects
+        if json_data["root_objects"]?
+          json_data["root_objects"].as_a.each do |root_obj|
+            obj_ref = ObjectReference.new(
+              root_obj["class_name"].as_s,
+              root_obj["object_id"].as_s,
+              root_obj["relative_path"].as_s,
+              root_obj["object_type"].as_s == "Container" ? ObjectType::Container : ObjectType::Serializable
+            )
+            manifest.root_objects << obj_ref
+          end
+        end
+
+        # Parse all objects
+        if json_data["all_objects"]?
+          json_data["all_objects"].as_h.each do |class_name, objects|
+            objects.as_a.each do |obj_data|
+              obj_ref = ObjectReference.new(
+                obj_data["class_name"].as_s,
+                obj_data["object_id"].as_s,
+                obj_data["relative_path"].as_s,
+                obj_data["object_type"].as_s == "Container" ? ObjectType::Container : ObjectType::Serializable
+              )
+              manifest.add_object(class_name, obj_ref)
+            end
+          end
+        end
+      rescue ex
+        raise BackupCorruptionError.new("Failed to parse backup metadata: #{ex.message}")
+      end
+
+      manifest
     end
 
-    # Verifies backup integrity
+    # Extracts metadata from a backup file
+    def self.get_metadata(backup_path : String) : BackupManifest
+      list_contents(backup_path)
+    end
+
+    # Verifies backup integrity and structure
+    #
+    # This method checks that the backup file is well-formed and that all expected
+    # files are present and readable. It provides detailed information about the
+    # backup contents and any issues found.
+    #
+    # ### Parameters
+    #
+    # - *backup_path* : Path to the backup tar file
+    #
+    # ### Returns
+    #
+    # A BackupVerificationResult containing verification status and statistics
+    #
+    # ### Example
+    #
+    # ```
+    # result = Sepia::Backup.verify("user_backup.tar")
+    # if result.valid
+    #   puts "Backup is valid"
+    #   puts "Contains #{result.statistics.total_objects} objects"
+    # else
+    #   puts "Backup has issues:"
+    #   result.errors.each { |error| puts "  - #{error}" }
+    # end
+    # ```
+    #
+    # ### Raises
+    #
+    # - `BackupCorruptionError` if the backup file is severely corrupted
     def self.verify(backup_path : String) : BackupVerificationResult
-      # Implementation will come in Phase 3
-      raise NotImplementedError.new("Verify functionality not yet implemented")
+      result = BackupVerificationResult.new
+
+      # Check file exists and is readable
+      unless File.exists?(backup_path)
+        result.add_error("Backup file does not exist: #{backup_path}")
+        return result
+      end
+
+      begin
+        # Extract and verify metadata
+        manifest = list_contents(backup_path)
+
+        # Populate statistics
+        manifest.all_objects.each do |class_name, objects|
+          objects.each do |obj_ref|
+            result.statistics.add_object(class_name, obj_ref.object_type)
+          end
+        end
+
+        # Verify tar structure
+        backup_file_list = get_backup_file_list(backup_path)
+
+        # Check for expected files
+        expected_files = ["metadata.json", "README"]
+        expected_files.each do |expected_file|
+          unless backup_file_list.includes?(expected_file)
+            result.add_error("Missing expected file: #{expected_file}")
+          end
+        end
+
+        # Verify object files exist in tar
+        manifest.all_objects.each do |class_name, objects|
+          objects.each do |obj_ref|
+            expected_path = "objects/#{class_name}/#{obj_ref.object_id}"
+            if obj_ref.object_type.container?
+              # For containers, check if directory structure exists
+              container_files = backup_file_list.select { |file| file.starts_with?("#{expected_path}/") }
+              if container_files.empty?
+                result.add_error("Missing container directory structure: #{expected_path}/")
+              end
+            else
+              # For serializable objects, check if file exists
+              unless backup_file_list.includes?(expected_path)
+                result.add_error("Missing object file: #{expected_path}")
+              end
+            end
+          end
+        end
+      rescue ex : BackupCorruptionError
+        result.add_error("Backup corruption detected: #{ex.message}")
+      rescue ex
+        result.add_error("Unexpected error during verification: #{ex.message}")
+      end
+
+      result
+    end
+
+    # Restores objects from a backup archive
+    #
+    # This method is left for application-specific implementations as restore
+    # logic varies greatly depending on business requirements, data migration
+    # policies, and application-specific validation rules.
+    #
+    # ### Parameters
+    #
+    # - *backup_path* : Path to the backup tar file
+    # - *target_storage_path* : Optional target storage path
+    #
+    # ### Returns
+    #
+    # Array of restored Sepia::Object instances
+    #
+    # ### Note
+    #
+    # This method raises NotImplementedError as restore functionality should be
+    # implemented by applications based on their specific requirements.
+    def self.restore(backup_path : String, target_storage_path : String? = nil) : Array(Sepia::Object)
+      raise NotImplementedError.new("Restore functionality should be implemented by applications based on their specific requirements. Use list_contents() and verify() to analyze backups before implementing custom restore logic.")
     end
 
     # Private methods for backup implementation
@@ -262,7 +464,6 @@ module Sepia
     end
 
     private def self.collect_object_recursive(obj : Sepia::Object, collected : Hash(String, Set(String)))
-      key = "#{obj.class.name}/#{obj.sepia_id}"
       return if collected[obj.class.name]?.try(&.includes?(obj.sepia_id))
 
       collected[obj.class.name] << obj.sepia_id
@@ -309,6 +510,10 @@ module Sepia
     end
 
     private def self.collect_files_for_backup(objects : Hash(String, Set(String)), storage_path : String?) : Array(BackupFile)
+      collect_files_for_backup(objects, storage_path, Configuration.new)
+    end
+
+    private def self.collect_files_for_backup(objects : Hash(String, Set(String)), storage_path : String?, config : Configuration) : Array(BackupFile)
       backup_files = [] of BackupFile
 
       # If no storage path (InMemoryStorage), backup is not supported
@@ -376,7 +581,7 @@ module Sepia
 
     private def self.update_manifest_object_types(manifest : BackupManifest, backup_files : Array(BackupFile))
       # Update object types based on actual files found
-      manifest.all_objects.each do |class_name, object_refs|
+      manifest.all_objects.each do |_class_name, object_refs|
         object_refs.each do |obj_ref|
           # Check if this object has a directory structure (container) or is just a file (serializable)
           dir_path = "objects/#{obj_ref.class_name}/#{obj_ref.object_id}"
@@ -397,6 +602,10 @@ module Sepia
     end
 
     private def self.create_tar_archive(backup_files : Array(BackupFile), manifest : BackupManifest, output_path : String)
+      create_tar_archive(backup_files, manifest, output_path, Configuration.new)
+    end
+
+    private def self.create_tar_archive(backup_files : Array(BackupFile), manifest : BackupManifest, output_path : String, config : Configuration)
       File.open(output_path, "wb") do |file|
         Crystar::Writer.open(file) do |tar|
           # Add all object files to the archive
@@ -408,7 +617,7 @@ module Sepia
           add_metadata_to_tar(tar, manifest)
 
           # Add README file
-          add_readme_to_tar(tar)
+          add_readme_to_tar(tar, config)
         end
       end
     end
@@ -450,6 +659,10 @@ module Sepia
     end
 
     private def self.add_readme_to_tar(tar : Crystar::Writer)
+      add_readme_to_tar(tar, Configuration.new)
+    end
+
+    private def self.add_readme_to_tar(tar : Crystar::Writer, config : Configuration)
       readme_content = <<-README
 Sepia Backup Archive
 ==================
@@ -457,19 +670,18 @@ Sepia Backup Archive
 This is a Sepia object tree backup created at #{Time.utc}.
 
 Archive Structure:
-- metadata.json: Backup manifest containing object information and metadata
+- metadata.json: Backup manifest containing object information
 - objects/: All objects from the backup organized by class name and ID
   - ClassName/object_id: Serializable objects (files)
   - ClassName/object_id/: Container objects (directories with data.json and references)
 
 The backup preserves:
-- Object data and metadata
+- Object data and relationships
 - Directory structure for Container objects
 - Symlink relationships between objects
-- File permissions and timestamps
 
-To restore this backup, use:
-  Sepia::Backup.restore("backup.sepia.tar")
+To inspect this backup, use:
+  manifest = Sepia::Backup.list_contents("backup.sepia.tar")
 
 For more information, see the Sepia documentation.
 README
@@ -482,6 +694,39 @@ README
       )
       tar.write_header(header)
       tar.write(readme_content.to_slice)
+    end
+
+    # ## Private Helper Methods for Utility Functions
+
+    # Extracts metadata.json from a backup tar file using system tar command
+    private def self.extract_metadata_from_backup(backup_path : String) : String
+      # Use system tar command to extract metadata.json to stdout
+      result = IO::Memory.new
+      status = Process.run("tar", {"-xOf", backup_path, "metadata.json"}, output: result, error: result)
+
+      unless status.success?
+        raise BackupCorruptionError.new("Failed to extract metadata from backup: tar command failed (exit code: #{status.exit_code})")
+      end
+
+      metadata_content = result.to_s
+      if metadata_content.empty?
+        raise BackupCorruptionError.new("No metadata.json found in backup")
+      end
+
+      metadata_content
+    end
+
+    # Gets a list of all files in the backup tar archive using system tar command
+    private def self.get_backup_file_list(backup_path : String) : Array(String)
+      result = IO::Memory.new
+      status = Process.run("tar", {"-tf", backup_path}, output: result, error: result)
+
+      unless status.success?
+        raise BackupCorruptionError.new("Failed to list backup contents: tar command failed")
+      end
+
+      file_list = result.to_s.split('\n').map(&.strip).reject(&.empty?)
+      file_list
     end
   end
 end
