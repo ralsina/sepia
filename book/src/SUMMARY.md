@@ -16,7 +16,6 @@
     * [Core Modules](api/core.md)
     * [Storage Backends](api/storage.md)
     * [Utilities](api/utilities.md)
-    * [Generated API Docs](api/generated.md)
 * [Advanced Topics](advanced/README.md)
     * [Garbage Collection](advanced/garbage-collection.md)
     * [Performance Considerations](advanced/performance.md)
@@ -25,3 +24,7 @@
     * [Document Management](examples/document-management.md)
     * [Configuration Management](examples/configuration-management.md)
     * [Collaborative Applications](examples/collaborative-apps.md)
+
+---
+
+* [📖 Complete API Documentation](https://ralsina.github.io/sepia/api/Sepia.html) (opens in new tab)
