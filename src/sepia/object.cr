@@ -446,5 +446,94 @@ module Sepia
     def canonical_path : String
       File.join(Sepia::Storage::INSTANCE.path, self.class.name, sepia_id)
     end
+
+    # ## Backup Methods
+
+    # Creates a backup of this object and all its referenced objects.
+    #
+    # This is a convenience method that creates a backup containing this object
+    # as the root and automatically includes all objects it references.
+    #
+    # ### Parameters
+    #
+    # - *output_path* : Path where the backup tar file will be created
+    #
+    # ### Returns
+    #
+    # The path to the created backup file
+    #
+    # ### Example
+    #
+    # ```
+    # # Backup a project and all its documents
+    # project = Project.load("project-123")
+    # backup_path = project.backup_to("project_backup.tar")
+    #
+    # # Auto-generate timestamped backup name
+    # backup_path = user.backup_to("user_backup_#{Time.utc.to_unix}.tar")
+    # ```
+    #
+    # ### Raises
+    #
+    # - `Sepia::Backup::BackendNotSupportedError` if storage doesn't support backups
+    # - `Sepia::Backup::BackupCreationError` if backup creation fails
+    def backup_to(output_path : String) : String
+      Sepia::Storage.backup(self, output_path)
+    end
+
+    # Creates a backup with an auto-generated timestamped filename.
+    #
+    # Convenience method that generates a backup filename based on the object's
+    # class name and ID with a timestamp.
+    #
+    # ### Parameters
+    #
+    # - *backup_dir* : Directory where the backup will be created (defaults to current directory)
+    # - *include_timestamp* : Whether to include timestamp in filename (default: true)
+    #
+    # ### Returns
+    #
+    # The path to the created backup file
+    #
+    # ### Example
+    #
+    # ```
+    # # Create timestamped backup in current directory
+    # backup_path = document.create_backup
+    # # => "Document_doc123_backup_1703123456.tar"
+    #
+    # # Create backup in specific directory without timestamp
+    # backup_path = project.create_backup("/backups", include_timestamp: false)
+    # # => "/backups/Project_project456_backup.tar"
+    # ```
+    def create_backup(backup_dir : String = ".", include_timestamp : Bool = true) : String
+      Dir.mkdir_p(backup_dir) unless Dir.exists?(backup_dir)
+
+      base_name = "#{self.class.name}_#{sepia_id}_backup"
+      timestamp = include_timestamp ? "_#{Time.utc.to_unix}" : ""
+      filename = "#{base_name}#{timestamp}.tar"
+      output_path = File.join(backup_dir, filename)
+
+      backup_to(output_path)
+    end
+
+    # Checks if this object can be backed up with the current storage backend.
+    #
+    # ### Returns
+    #
+    # `true` if backup is supported, `false` otherwise
+    #
+    # ### Example
+    #
+    # ```
+    # if document.backup_supported?
+    #   puts "Can create backup of this document"
+    # else
+    #   puts "Switch to FileStorage to enable backup"
+    # end
+    # ```
+    def backup_supported? : Bool
+      Sepia::Storage.backup_supported?
+    end
   end
 end
