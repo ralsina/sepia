@@ -279,8 +279,24 @@ module Sepia
 
       # Atomic write: write to temp file first, then rename
       temp_path = "#{object_path}.tmp"
-      File.write(temp_path, object.to_sepia)
-      File.rename(temp_path, object_path)
+
+      # Mark files as internal to prevent filesystem watcher events
+      Watcher.add_internal_file(temp_path)
+      Watcher.add_internal_file(object_path)
+
+      begin
+        File.write(temp_path, object.to_sepia)
+        File.rename(temp_path, object_path)
+
+        # Remove final file from internal tracking after a brief delay
+        spawn do
+          sleep 0.3.seconds
+          Watcher.remove_internal_file(object_path)
+        end
+      ensure
+        # Always remove .tmp file from tracking
+        Watcher.remove_internal_file(temp_path)
+      end
     end
 
     # Saves a Container object to the filesystem.
