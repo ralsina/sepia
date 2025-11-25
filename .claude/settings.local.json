@@ -27,7 +27,9 @@
       "WebFetch(domain:github.com)",
       "Bash(shards update:*)",
       "Bash(tar:*)",
-      "Bash(gh pr create:*)"
+      "Bash(gh pr create:*)",
+      "Bash(mdbook:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []

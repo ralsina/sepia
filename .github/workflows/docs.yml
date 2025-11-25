@@ -1,4 +1,4 @@
-name: Deploy API Documentation
+name: Deploy Documentation
 
 on:
   push:
@@ -6,12 +6,14 @@ on:
     paths:
       - 'src/**'
       - 'shard.yml'
+      - 'book/**'
       - '.github/workflows/docs.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/**'
       - 'shard.yml'
+      - 'book/**'
       - '.github/workflows/docs.yml'
 
 jobs:
@@ -29,24 +31,47 @@ jobs:
       with:
         crystal: latest
 
+    - name: Install mdBook
+      run: |
+        curl -L https://github.com/rust-lang/mdBook/releases/download/v0.4.36/mdbook-v0.4.36-x86_64-unknown-linux-gnu.tar.gz | tar xz
+        sudo mv mdbook /usr/local/bin/
+
+    - name: Install mdbook-toc
+      run: |
+        curl -L https://github.com/badboy/mdbook-toc/releases/latest/download/mdbook-toc-linux.tar.gz | tar xz
+        sudo mv mdbook-toc /usr/local/bin/
+
     - name: Install dependencies
       run: shards install
 
-    - name: Generate documentation
+    - name: Generate Crystal API docs
       run: |
-        crystal docs \
-          --project-name="Sepia" \
-          --project-version="${{ github.sha }}" \
-          --source-url-pattern="https://github.com/${{ github.repository }}/blob/{refname}/{path}#L{line}" \
-          --output=docs
+        mkdir -p book/src/api/generated
+        crystal docs src/sepia.cr --project-name="Sepia" -o book/src/api/generated
 
-    - name: Deploy to GitHub Pages
+    - name: Build mdBook documentation
+      run: |
+        cd book
+        mdbook build
+
+    - name: Deploy API docs to GitHub Pages
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs
-        destination_dir: ./
+        publish_dir: ./book/src/api/generated
+        destination_dir: api
         user_name: github-actions[bot]
         user_email: github-actions[bot]@users.noreply.github.com
         commit_message: "Deploy API docs from ${{ github.sha }}"
+
+    - name: Deploy mdBook docs to GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./book/docs
+        destination_dir: ./
+        user_name: github-actions[bot]
+        user_email: github-actions[bot]@users.noreply.github.com
+        commit_message: "Deploy documentation from ${{ github.sha }}"
