@@ -20,7 +20,9 @@
       "Bash(awk:*)",
       "Bash(xargs kill:*)",
       "Bash(killall:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(git rm:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

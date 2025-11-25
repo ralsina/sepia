@@ -1,4 +1,5 @@
 require "time"
+require "./object"
 
 module Sepia
   # Centralized cache manager for Sepia objects.
@@ -82,7 +83,7 @@ module Sepia
     # cache = CacheManager.new(max_size: 500, ttl: 1.hour)
     # ```
     def initialize(@max_size : Int32 = 1000, @ttl : Time::Span? = nil)
-      @cache = Hash(String, Entry(Sepia::Object)).new
+      @cache = Hash(String, Entry(Object)).new
       @access_order = Array(String).new
       @mutex = Mutex.new
       @stats = Stats.new(@max_size)
@@ -103,10 +104,10 @@ module Sepia
     # ```
     # cache.put("doc-123", my_document)
     # ```
-    def put(key : String, value : Sepia::Object) : Void
+    def put(key : String, value : Object) : Void
       @mutex.synchronize do
         expires_at = @ttl.try { |ttl| Time.utc + ttl }
-        entry = Entry(Sepia::Object).new(value, expires_at)
+        entry = Entry(Object).new(value, expires_at)
 
         if @cache.has_key?(key)
           # Update existing entry
@@ -144,7 +145,7 @@ module Sepia
     # doc = cache.get("doc-123")
     # puts doc.title if doc
     # ```
-    def get(key : String) : Sepia::Object?
+    def get(key : String) : Object?
       @mutex.synchronize do
         entry = @cache[key]?
 
@@ -372,7 +373,7 @@ module Sepia
     # objects = cache.values
     # puts "Cached #{objects.size} objects"
     # ```
-    def values : Array(Sepia::Object)
+    def values : Array(Object)
       @mutex.synchronize do
         @access_order.compact_map do |key|
           entry = @cache[key]?
