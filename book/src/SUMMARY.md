@@ -24,7 +24,3 @@
     * [Document Management](examples/document-management.md)
     * [Configuration Management](examples/configuration-management.md)
     * [Collaborative Applications](examples/collaborative-apps.md)
-
----
-
-* [📖 Complete API Documentation](https://ralsina.github.io/sepia/api/Sepia.html) (opens in new tab)

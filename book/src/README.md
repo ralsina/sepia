@@ -1,5 +1,7 @@
 # Sepia Documentation
 
+📖 **Complete API Documentation**: <a href="https://ralsina.github.io/sepia/api/Sepia.html" target="_blank" rel="noopener noreferrer">https://ralsina.github.io/sepia/api/Sepia.html</a> (opens in new tab)
+
 **Sepia** is a file-system-based serialization library for Crystal that provides intelligent object persistence with automatic filesystem watching and backup capabilities.
 
 ## What is Sepia?
