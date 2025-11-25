@@ -20,7 +20,3 @@ limit-results = 30
 [output.html.fold]
 enable = false
 
-[preprocessor.toc]
-marker = "* toc"
-command = "mdbook-toc"
-renderer = ["html"]

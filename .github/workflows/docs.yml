@@ -36,11 +36,7 @@ jobs:
         curl -L https://github.com/rust-lang/mdBook/releases/download/v0.4.36/mdbook-v0.4.36-x86_64-unknown-linux-gnu.tar.gz | tar xz
         sudo mv mdbook /usr/local/bin/
 
-    - name: Install mdbook-toc
-      run: |
-        curl -L https://github.com/badboy/mdbook-toc/releases/latest/download/mdbook-toc-linux.tar.gz | tar xz
-        sudo mv mdbook-toc /usr/local/bin/
-
+  
     - name: Install dependencies
       run: shards install
 
@@ -70,7 +66,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./book/docs
+        publish_dir: ./book/book
         destination_dir: ./
         user_name: github-actions[bot]
         user_email: github-actions[bot]@users.noreply.github.com
