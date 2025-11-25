@@ -1,5 +1,11 @@
 name: Deploy Documentation
 
+# Set permissions for the workflow
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 on:
   push:
     branches: [ main ]
@@ -15,6 +21,11 @@ on:
       - 'shard.yml'
       - 'book/**'
       - '.github/workflows/docs.yml'
+
+# Configure environment for GitHub Pages
+environment:
+  name: github-pages
+  url: ${{ steps.deployment.outputs.page_url }}
 
 jobs:
   build-and-deploy:
@@ -50,24 +61,23 @@ jobs:
         cd book
         mdbook build
 
-    - name: Deploy API docs to GitHub Pages
+    - name: Combine documentation
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./book/src/api/generated
-        destination_dir: api
-        user_name: github-actions[bot]
-        user_email: github-actions[bot]@users.noreply.github.com
-        commit_message: "Deploy API docs from ${{ github.sha }}"
+      run: |
+        mkdir -p book/book/api
+        cp -r book/src/api/generated/* book/book/api/
 
-    - name: Deploy mdBook docs to GitHub Pages
+    - name: Setup Pages
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      uses: peaceiris/actions-gh-pages@v3
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/upload-pages-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./book/book
-        destination_dir: ./
-        user_name: github-actions[bot]
-        user_email: github-actions[bot]@users.noreply.github.com
-        commit_message: "Deploy documentation from ${{ github.sha }}"
+        path: ./book/book
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/deploy-pages@v4
