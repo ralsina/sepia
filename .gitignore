@@ -9,3 +9,11 @@ example/lib/
 # Libraries don't need dependency lock
 # Dependencies will be locked in applications that use them
 /shard.lock
+
+# Documentation build outputs
+/book/book/
+/book/src/api/generated/
+
+# Compiled binaries
+sepia
+*.bin
