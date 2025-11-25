@@ -140,9 +140,11 @@ deleted_summary = Sepia::Storage.gc(roots: [] of Sepia::Object)
 
 Sepia includes a file system watcher that can monitor changes to objects in storage and generate events when data is modified on disk. This is useful for building collaborative applications that need to react to external file changes.
 
-### ⚠️ Linux Only
+### ⚠️ Backend Requirements
 
-The file watcher feature currently only supports Linux systems with inotify support.
+The file watcher supports multiple backends for cross-platform compatibility:
+- **fswatch** (default): Cross-platform (Linux, macOS, Windows)
+- **inotify**: Linux-only for better performance and static builds
 
 ### Basic Usage
 
@@ -223,7 +225,7 @@ The watcher automatically filters out operations performed by Sepia itself to pr
 
 - The watcher only monitors the filesystem directory where Sepia stores its data
 - Temporary files (`.tmp` extensions) from atomic writes are automatically ignored
-- The watcher is Linux-only and requires inotify support
+- Backend selection affects platform compatibility and performance requirements
 - Events are processed asynchronously in background fibers
 - Multiple rapid changes may be batched or reordered
 
