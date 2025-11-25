@@ -22,7 +22,11 @@
       "Bash(killall:*)",
       "Bash(timeout:*)",
       "Bash(git rm:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git tag:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(shards update:*)",
+      "Bash(tar:*)"
     ],
     "deny": [],
     "ask": []

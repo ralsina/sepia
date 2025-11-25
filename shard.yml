@@ -19,3 +19,6 @@ dependencies:
   # inotify.cr for Linux-native filesystem monitoring (alternative to fswatch)
   inotify:
     github: petoem/inotify.cr
+  # crystar for tar archive support (backup/restore functionality)
+  crystar:
+    github: naqvis/crystar
