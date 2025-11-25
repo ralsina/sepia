@@ -190,11 +190,14 @@ module Sepia
         watcher.on_event do |inotify_event|
           sepia_event = convert_inotify_event(inotify_event)
           if sepia_event
-            # Automatically invalidate cache entry for this event
-            invalidate_cache_for_event(sepia_event)
+            # Filter out internal events before processing
+            unless internal_event?(sepia_event)
+              # Automatically invalidate cache entry for this event
+              invalidate_cache_for_event(sepia_event)
 
-            block.call(sepia_event)
-            @event_count += 1
+              block.call(sepia_event)
+              @event_count += 1
+            end
           end
         end
       end
@@ -208,6 +211,18 @@ module Sepia
       private def invalidate_cache_for_event(event : Event) : Bool
         cache_key = cache_key_for_event(event)
         CacheManager.instance.invalidate(cache_key)
+      end
+
+      # Check if an event should be filtered out as internal
+      private def internal_event?(event : Event) : Bool
+        # Check if the event path is marked as internal
+        return true if self.class.internal_file?(event.path)
+
+        # Also check parent directories for container operations
+        parent_path = File.dirname(event.path)
+        return true if self.class.internal_file?(parent_path)
+
+        false
       end
 
       # Convert inotify events to Sepia events
@@ -464,11 +479,14 @@ module Sepia
         session.on_change do |fswatch_event|
           sepia_event = convert_fswatch_event(fswatch_event)
           if sepia_event
-            # Automatically invalidate cache entry for this event
-            invalidate_cache_for_event(sepia_event)
+            # Filter out internal events before processing
+            unless internal_event?(sepia_event)
+              # Automatically invalidate cache entry for this event
+              invalidate_cache_for_event(sepia_event)
 
-            block.call(sepia_event)
-            @event_count += 1
+              block.call(sepia_event)
+              @event_count += 1
+            end
           end
         end
       end
@@ -514,6 +532,18 @@ module Sepia
       private def invalidate_cache_for_event(event : Event) : Bool
         cache_key = cache_key_for_event(event)
         CacheManager.instance.invalidate(cache_key)
+      end
+
+      # Check if an event should be filtered out as internal
+      private def internal_event?(event : Event) : Bool
+        # Check if the event path is marked as internal
+        return true if self.class.internal_file?(event.path)
+
+        # Also check parent directories for container operations
+        parent_path = File.dirname(event.path)
+        return true if self.class.internal_file?(parent_path)
+
+        false
       end
 
       # Convert fswatch events to Sepia events

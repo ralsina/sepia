@@ -1,5 +1,6 @@
 require "json"
 require "./event_logger"
+require "./watcher"
 
 module Sepia
   # Module for objects that contain other Sepia objects.
@@ -241,14 +242,32 @@ module Sepia
     # Saves all references (Serializable, Container, Enumerable of either)
     # to the container's path.
     def save_references(path : String)
-      # Save object references (existing behavior)
-      {% for ivar in @type.instance_vars %}
-        save_value(path, @{{ivar.name}}, {{ivar.name.stringify}})
-      {% end %}
-
-      # Save primitive properties to JSON
+      # Mark the container directory and data.json as internal
+      Watcher.add_internal_file(path)
       data_file = File.join(path, "data.json")
-      File.write(data_file, to_filtered_json)
+      Watcher.add_internal_file(data_file)
+
+      begin
+        # Save object references (existing behavior)
+        {% for ivar in @type.instance_vars %}
+          save_value(path, @{{ivar.name}}, {{ivar.name.stringify}})
+        {% end %}
+
+        # Save primitive properties to JSON
+        File.write(data_file, to_filtered_json)
+
+        # Remove files from internal tracking after a brief delay
+        spawn do
+          sleep 0.3.seconds
+          Watcher.remove_internal_file(path)
+          Watcher.remove_internal_file(data_file)
+        end
+      rescue ex
+        # Ensure cleanup even on error
+        Watcher.remove_internal_file(path)
+        Watcher.remove_internal_file(data_file)
+        raise ex
+      end
     end
 
     private def save_value(path, value : Serializable?, name)
@@ -280,7 +299,23 @@ module Sepia
           # Use filesystem symlinks
           symlink_path = File.join(path, name)
           obj_path = File.join(Sepia::Storage::INSTANCE.path, obj.class.name, obj.sepia_id)
-          FileUtils.ln_s(Path[obj_path].relative_to(Path[symlink_path].parent), symlink_path)
+
+          # Mark symlink as internal
+          Watcher.add_internal_file(symlink_path)
+
+          begin
+            FileUtils.ln_s(Path[obj_path].relative_to(Path[symlink_path].parent), symlink_path)
+
+            # Remove symlink from internal tracking after a brief delay
+            spawn do
+              sleep 0.3.seconds
+              Watcher.remove_internal_file(symlink_path)
+            end
+          rescue ex
+            # Ensure cleanup even on error
+            Watcher.remove_internal_file(symlink_path)
+            raise ex
+          end
         end
       end
     end
@@ -298,8 +333,21 @@ module Sepia
           container.save
         end
         container_path = File.join(path, name)
-        FileUtils.mkdir_p(container_path)
-        container.save_references(container_path)
+        Watcher.add_internal_file(container_path)
+        begin
+          FileUtils.mkdir_p(container_path)
+          container.save_references(container_path)
+
+          # Remove from internal tracking after a brief delay
+          spawn do
+            sleep 0.3.seconds
+            Watcher.remove_internal_file(container_path)
+          end
+        rescue ex
+          # Ensure cleanup even on error
+          Watcher.remove_internal_file(container_path)
+          raise ex
+        end
       end
     end
 
@@ -312,11 +360,24 @@ module Sepia
       if array = value
         return if array.empty?
         array_dir = File.join(path, name)
-        FileUtils.rm_rf(array_dir)
-        FileUtils.mkdir_p(array_dir)
+        Watcher.add_internal_file(array_dir)
+        begin
+          FileUtils.rm_rf(array_dir)
+          FileUtils.mkdir_p(array_dir)
 
-        array.each_with_index do |obj, index|
-          save_value(array_dir, obj, "#{index.to_s.rjust(4, '0')}_#{obj.sepia_id}")
+          array.each_with_index do |obj, index|
+            save_value(array_dir, obj, "#{index.to_s.rjust(4, '0')}_#{obj.sepia_id}")
+          end
+
+          # Remove from internal tracking after a brief delay
+          spawn do
+            sleep 0.3.seconds
+            Watcher.remove_internal_file(array_dir)
+          end
+        rescue ex
+          # Ensure cleanup even on error
+          Watcher.remove_internal_file(array_dir)
+          raise ex
         end
       end
     end
@@ -326,11 +387,24 @@ module Sepia
       if hash = value
         return if hash.empty?
         hash_dir = File.join(path, name)
-        FileUtils.rm_rf(hash_dir)
-        FileUtils.mkdir_p(hash_dir)
+        Watcher.add_internal_file(hash_dir)
+        begin
+          FileUtils.rm_rf(hash_dir)
+          FileUtils.mkdir_p(hash_dir)
 
-        hash.each do |key, obj|
-          save_value(hash_dir, obj, key)
+          hash.each do |key, obj|
+            save_value(hash_dir, obj, key)
+          end
+
+          # Remove from internal tracking after a brief delay
+          spawn do
+            sleep 0.3.seconds
+            Watcher.remove_internal_file(hash_dir)
+          end
+        rescue ex
+          # Ensure cleanup even on error
+          Watcher.remove_internal_file(hash_dir)
+          raise ex
         end
       end
     end

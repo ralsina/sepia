@@ -1,6 +1,7 @@
 require "file_utils"
 require "./event"
 require "./storage"
+require "./watcher"
 
 module Sepia
   # Abstract base class for event logging backends.
@@ -127,8 +128,23 @@ module Sepia
       # Ensure directory exists
       FileUtils.mkdir_p(File.dirname(event_file))
 
-      # Append event as JSON line
-      File.write(event_file, event.to_json + "\n", mode: "a")
+      # Mark event file as internal to prevent filesystem watcher events
+      Watcher.add_internal_file(event_file)
+
+      begin
+        # Append event as JSON line
+        File.write(event_file, event.to_json + "\n", mode: "a")
+
+        # Remove from internal tracking after a brief delay
+        spawn do
+          sleep 0.3.seconds
+          Watcher.remove_internal_file(event_file)
+        end
+      rescue ex
+        # Ensure cleanup even on error
+        Watcher.remove_internal_file(event_file)
+        raise ex
+      end
     end
 
     # Read all events for a specific object from its event file.
