@@ -1,0 +1,770 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Event Logging</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Sepia Documentation</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/quick-start.html"><strong aria-hidden="true">2.2.</strong> Quick Start</a></li><li class="chapter-item expanded "><a href="../getting-started/core-concepts.html"><strong aria-hidden="true">2.3.</strong> Core Concepts</a></li></ol></li><li class="chapter-item expanded "><a href="../user-guide/index.html"><strong aria-hidden="true">3.</strong> User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user-guide/serializable.html"><strong aria-hidden="true">3.1.</strong> Serializable Objects</a></li><li class="chapter-item expanded "><a href="../user-guide/containers.html"><strong aria-hidden="true">3.2.</strong> Container Objects</a></li><li class="chapter-item expanded "><a href="../user-guide/storage.html"><strong aria-hidden="true">3.3.</strong> Storage Management</a></li><li class="chapter-item expanded "><a href="../user-guide/generations.html"><strong aria-hidden="true">3.4.</strong> Generation Tracking</a></li><li class="chapter-item expanded "><a href="../user-guide/file-watching.html"><strong aria-hidden="true">3.5.</strong> File System Watching</a></li><li class="chapter-item expanded "><a href="../user-guide/event-logging.html" class="active"><strong aria-hidden="true">3.6.</strong> Event Logging</a></li><li class="chapter-item expanded "><a href="../user-guide/backup.html"><strong aria-hidden="true">3.7.</strong> Backup and Restore</a></li></ol></li><li class="chapter-item expanded "><a href="../api/index.html"><strong aria-hidden="true">4.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../api/core.html"><strong aria-hidden="true">4.1.</strong> Core Modules</a></li><li class="chapter-item expanded "><a href="../api/storage.html"><strong aria-hidden="true">4.2.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="../api/utilities.html"><strong aria-hidden="true">4.3.</strong> Utilities</a></li></ol></li><li class="chapter-item expanded "><a href="../advanced/index.html"><strong aria-hidden="true">5.</strong> Advanced Topics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../advanced/garbage-collection.html"><strong aria-hidden="true">5.1.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="../advanced/performance.html"><strong aria-hidden="true">5.2.</strong> Performance Considerations</a></li><li class="chapter-item expanded "><a href="../advanced/troubleshooting.html"><strong aria-hidden="true">5.3.</strong> Troubleshooting</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">6.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../examples/document-management.html"><strong aria-hidden="true">6.1.</strong> Document Management</a></li><li class="chapter-item expanded "><a href="../examples/configuration-management.html"><strong aria-hidden="true">6.2.</strong> Configuration Management</a></li><li class="chapter-item expanded "><a href="../examples/collaborative-apps.html"><strong aria-hidden="true">6.3.</strong> Collaborative Applications</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="event-logging-in-sepia"><a class="header" href="#event-logging-in-sepia">Event Logging in Sepia</a></h1>
+<p>Sepia provides a comprehensive event logging system that tracks object lifecycle events and user activities. This is particularly useful for collaborative applications, audit trails, and activity feeds.</p>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#key-concepts">Key Concepts</a></li>
+<li><a href="#enabling-event-logging">Enabling Event Logging</a></li>
+<li><a href="#automatic-event-logging">Automatic Event Logging</a></li>
+<li><a href="#activity-logging">Activity Logging</a></li>
+<li><a href="#querying-events">Querying Events</a></li>
+<li><a href="#event-structure">Event Structure</a></li>
+<li><a href="#on-disk-format">On-Disk Format</a></li>
+<li><a href="#generation-tracking">Generation Tracking</a></li>
+<li><a href="#storage-api">Storage API</a></li>
+<li><a href="#object-api">Object API</a></li>
+<li><a href="#use-cases">Use Cases</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#advanced-topics">Advanced Topics</a></li>
+</ul>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Sepia's event logging system captures all important actions on objects:</p>
+<ul>
+<li><strong>Lifecycle Events</strong>: Created, Updated, Deleted operations</li>
+<li><strong>Activity Events</strong>: User-defined activities that aren't object persistence</li>
+<li><strong>Metadata Support</strong>: Rich JSON-serializable context for events</li>
+<li><strong>Generation Tracking</strong>: Links events to object versions for optimistic concurrency</li>
+<li><strong>Per-Object Storage</strong>: Events stored alongside object data for easy access</li>
+</ul>
+<h2 id="key-concepts"><a class="header" href="#key-concepts">Key Concepts</a></h2>
+<h3 id="event-types"><a class="header" href="#event-types">Event Types</a></h3>
+<ul>
+<li><strong>Created</strong>: Object was created for the first time</li>
+<li><strong>Updated</strong>: Object was modified and saved</li>
+<li><strong>Deleted</strong>: Object was removed from storage</li>
+<li><strong>Activity</strong>: User-defined action (e.g., moved_lane, highlighted, shared)</li>
+</ul>
+<h3 id="metadata"><a class="header" href="#metadata">Metadata</a></h3>
+<p>All events support arbitrary JSON-serializable metadata:</p>
+<pre><code class="language-crystal"># Simple metadata
+{&quot;user&quot; =&gt; &quot;alice&quot;, &quot;reason&quot; =&gt; &quot;initial_creation&quot;}
+
+# Complex metadata
+{
+  &quot;user&quot; =&gt; &quot;alice&quot;,
+  &quot;timestamp&quot; =&gt; Time.utc,
+  &quot;changes&quot; =&gt; [&quot;title&quot;, &quot;content&quot;],
+  &quot;collaboration&quot; =&gt; {
+    &quot;session_id&quot; =&gt; &quot;abc123&quot;,
+    &quot;duration&quot; =&gt; 1800,
+    &quot;participants&quot; =&gt; [&quot;alice&quot;, &quot;bob&quot;]
+  }
+}
+</code></pre>
+<h3 id="generation-tracking"><a class="header" href="#generation-tracking">Generation Tracking</a></h3>
+<p>Events are linked to object generation numbers:</p>
+<ul>
+<li>Generation 0: Activity events (don't change object state)</li>
+<li>Generation N+1: Save operations that create new versions</li>
+<li>Current generation: Delete operations</li>
+</ul>
+<h2 id="enabling-event-logging"><a class="header" href="#enabling-event-logging">Enabling Event Logging</a></h2>
+<p>Event logging is disabled by default. Enable it per class:</p>
+<pre><code class="language-crystal">class Document &lt; Sepia::Object
+  include Sepia::Serializable
+  sepia_log_events true  # Enable logging for this class
+
+  property content : String
+
+  def initialize(@content = &quot;&quot;)
+  end
+
+  def to_sepia : String
+    @content
+  end
+
+  def self.from_sepia(json : String) : self
+    new(json)
+  end
+end
+
+class Project &lt; Sepia::Object
+  include Sepia::Container
+  sepia_log_events true  # Enable logging for containers too
+
+  property name : String
+  property boards : Array(Board)
+
+  def initialize(@name = &quot;&quot;)
+    @boards = [] of Board
+  end
+end
+</code></pre>
+<h3 id="configuration-options"><a class="header" href="#configuration-options">Configuration Options</a></h3>
+<pre><code class="language-crystal"># Enable logging
+sepia_log_events true
+
+# Disable logging
+sepia_log_events false
+
+# Alternative syntax
+sepia_log_events_enabled
+sepia_log_events_disabled
+</code></pre>
+<h2 id="automatic-event-logging"><a class="header" href="#automatic-event-logging">Automatic Event Logging</a></h2>
+<p>When event logging is enabled, Sepia automatically logs lifecycle events:</p>
+<h3 id="using-storage-api"><a class="header" href="#using-storage-api">Using Storage API</a></h3>
+<pre><code class="language-crystal"># Create and save (logs Created event)
+doc = Document.new(&quot;Hello World&quot;)
+doc.sepia_id = &quot;my-doc&quot;
+Sepia::Storage.save(doc, metadata: {&quot;user&quot; =&gt; &quot;alice&quot;, &quot;reason&quot; =&gt; &quot;initial_creation&quot;})
+
+# Update and save (logs Updated event)
+doc.content = &quot;Updated content&quot;
+Sepia::Storage.save(doc, metadata: {&quot;user&quot; =&gt; &quot;bob&quot;, &quot;reason&quot; =&gt; &quot;content_edit&quot;})
+
+# Delete (logs Deleted event)
+Sepia::Storage.delete(doc, metadata: {&quot;user&quot; =&gt; &quot;admin&quot;, &quot;reason&quot; =&gt; &quot;cleanup&quot;})
+</code></pre>
+<h3 id="using-object-api"><a class="header" href="#using-object-api">Using Object API</a></h3>
+<pre><code class="language-crystal"># Create and save
+doc = Document.new(&quot;Hello World&quot;)
+doc.sepia_id = &quot;my-doc&quot;
+doc.save(metadata: {&quot;user&quot; =&gt; &quot;alice&quot;})  # Smart save (auto-detects new vs existing)
+
+# Update with forced generation
+doc.content = &quot;Updated content&quot;
+doc.save(force_new_generation: true, metadata: {&quot;user&quot; =&gt; &quot;bob&quot;})
+
+# Or use the legacy method
+new_doc = doc.save_with_generation(metadata: {&quot;user&quot; =&gt; &quot;charlie&quot;})
+</code></pre>
+<h2 id="activity-logging"><a class="header" href="#activity-logging">Activity Logging</a></h2>
+<p>Log user activities that aren't related to object persistence:</p>
+<h3 id="basic-activity-logging"><a class="header" href="#basic-activity-logging">Basic Activity Logging</a></h3>
+<pre><code class="language-crystal"># Log activities on any object
+doc.log_activity(&quot;highlighted&quot;, {&quot;color&quot; =&gt; &quot;yellow&quot;, &quot;user&quot; =&gt; &quot;alice&quot;})
+doc.log_activity(&quot;shared&quot;, {&quot;platform&quot; =&gt; &quot;slack&quot;, &quot;user&quot; =&gt; &quot;bob&quot;})
+
+# Log activities on containers too
+project.log_activity(&quot;lane_created&quot;, {&quot;lane_name&quot; =&gt; &quot;Review&quot;, &quot;user&quot; =&gt; &quot;charlie&quot;})
+project.log_activity(&quot;color_changed&quot;)  # Simple version without metadata
+</code></pre>
+<h3 id="rich-activity-examples"><a class="header" href="#rich-activity-examples">Rich Activity Examples</a></h3>
+<pre><code class="language-crystal"># Complex activity with structured metadata
+note.log_activity(&quot;moved&quot;, {
+  &quot;from_lane&quot; =&gt; &quot;In Progress&quot;,
+  &quot;to_lane&quot; =&gt; &quot;Done&quot;,
+  &quot;user&quot; =&gt; &quot;alice&quot;,
+  &quot;timestamp&quot; =&gt; Time.utc,
+  &quot;drag_duration&quot; =&gt; 2.5,
+  &quot;collaborators&quot; =&gt; [&quot;bob&quot;, &quot;charlie&quot;]
+})
+
+# Activity with arrays and objects
+board.log_activity(&quot;restructured&quot;, {
+  &quot;action&quot; =&gt; &quot;lane_reorder&quot;,
+  &quot;user&quot; =&gt; &quot;alice&quot;,
+  &quot;changes&quot; =&gt; [
+    {&quot;lane&quot; =&gt; &quot;Todo&quot;, &quot;old_index&quot; =&gt; 0, &quot;new_index&quot; =&gt; 1},
+    {&quot;lane&quot; =&gt; &quot;Done&quot;, &quot;old_index&quot; =&gt; 2, &quot;new_index&quot; =&gt; 0}
+  ],
+  &quot;affected_items&quot; =&gt; 5
+})
+</code></pre>
+<h2 id="querying-events"><a class="header" href="#querying-events">Querying Events</a></h2>
+<p>Access the event history for any object:</p>
+<h3 id="basic-querying"><a class="header" href="#basic-querying">Basic Querying</a></h3>
+<pre><code class="language-crystal"># Get all events for an object
+events = Sepia::Storage.object_events(Document, &quot;my-doc&quot;)
+
+# Events are ordered by timestamp (newest first)
+events.each do |event|
+  puts &quot;#{event.timestamp}: #{event.event_type}&quot;
+  puts &quot;  Generation: #{event.generation}&quot;
+  puts &quot;  Metadata: #{event.metadata}&quot;
+end
+</code></pre>
+<h3 id="filtering-events"><a class="header" href="#filtering-events">Filtering Events</a></h3>
+<pre><code class="language-crystal"># Filter by event type
+created_events = events.select(&amp;.event_type.created?)
+updated_events = events.select(&amp;.event_type.updated?)
+activity_events = events.select(&amp;.event_type.activity?)
+deleted_events = events.select(&amp;.event_type.deleted?)
+
+# Filter by generation
+gen2_events = events.select(&amp;.generation.==(2))
+
+# Filter by metadata
+user_events = events.select { |e| e.metadata[&quot;user&quot;]? == &quot;alice&quot; }
+</code></pre>
+<h3 id="advanced-queries"><a class="header" href="#advanced-queries">Advanced Queries</a></h3>
+<pre><code class="language-crystal"># Get activities by specific user
+alice_activities = events.select do |event|
+  event.event_type.activity? &amp;&amp;
+  event.metadata[&quot;user&quot;]? == &quot;alice&quot;
+end
+
+# Get recent save operations
+recent_saves = events.select do |event|
+  event.event_type.created? || event.event_type.updated?
+end.first(5)
+
+# Get activities in time range
+today_events = events.select do |event|
+  event.timestamp &gt; Time.utc.at_beginning_of_day
+end
+</code></pre>
+<h2 id="event-structure"><a class="header" href="#event-structure">Event Structure</a></h2>
+<p>Each event contains rich information:</p>
+<pre><code class="language-crystal">event = Sepia::LogEvent.new(
+  event_type: Sepia::LogEventType::Updated,
+  generation: 2,
+  metadata: {&quot;user&quot; =&gt; &quot;alice&quot;, &quot;reason&quot; =&gt; &quot;edit&quot;}
+)
+
+event.timestamp    # =&gt; Time when the event occurred
+event.event_type   # =&gt; Created, Updated, Deleted, or Activity
+event.generation   # =&gt; Object generation number (0 for activities)
+event.metadata     # =&gt; JSON::Any with custom context
+</code></pre>
+<h3 id="accessing-metadata"><a class="header" href="#accessing-metadata">Accessing Metadata</a></h3>
+<pre><code class="language-crystal"># Simple metadata access
+user = event.metadata[&quot;user&quot;].as_s
+reason = event.metadata[&quot;reason&quot;].as_s
+
+# Complex metadata access
+changes = event.metadata[&quot;changes&quot;].as_a
+collaborators = event.metadata[&quot;collaborators&quot;].as_a.map(&amp;.as_s)
+
+# Safe access
+user = event.metadata[&quot;user&quot;]?.try(&amp;.as_s)
+count = event.metadata[&quot;count&quot;]?.try(&amp;.as_i)
+</code></pre>
+<h2 id="on-disk-format"><a class="header" href="#on-disk-format">On-Disk Format</a></h2>
+<p>Events are stored in JSON Lines format in <code>.events/</code> directories:</p>
+<h3 id="directory-structure"><a class="header" href="#directory-structure">Directory Structure</a></h3>
+<pre><code>./_data
+├── Document
+│   └── doc-123
+│       └── .events
+│           └── doc-123.jsonl    # One JSON event per line
+└── Project
+    └── proj-456
+        └── .events
+            └── proj-456.jsonl
+</code></pre>
+<h3 id="event-file-format"><a class="header" href="#event-file-format">Event File Format</a></h3>
+<p>Each line is a JSON object:</p>
+<pre><code class="language-json">{&quot;ts&quot;:&quot;2025-01-15T10:30:45Z&quot;,&quot;type&quot;:&quot;created&quot;,&quot;gen&quot;:1,&quot;meta&quot;:{&quot;user&quot;:&quot;alice&quot;,&quot;reason&quot;:&quot;initial_creation&quot;}}
+{&quot;ts&quot;:&quot;2025-01-15T10:31:20Z&quot;,&quot;type&quot;:&quot;activity&quot;,&quot;gen&quot;:1,&quot;meta&quot;:{&quot;action&quot;:&quot;highlighted&quot;,&quot;color&quot;:&quot;yellow&quot;,&quot;user&quot;:&quot;bob&quot;}}
+{&quot;ts&quot;:&quot;2025-01-15T10:32:10Z&quot;,&quot;type&quot;:&quot;updated&quot;,&quot;gen&quot;:2,&quot;meta&quot;:{&quot;user&quot;:&quot;charlie&quot;,&quot;reason&quot;:&quot;content_edit&quot;}}
+{&quot;ts&quot;:&quot;2025-01-15T10:33:00Z&quot;,&quot;type&quot;:&quot;deleted&quot;,&quot;gen&quot;:2,&quot;meta&quot;:{&quot;user&quot;:&quot;admin&quot;,&quot;reason&quot;:&quot;cleanup&quot;}}
+</code></pre>
+<h3 id="field-descriptions"><a class="header" href="#field-descriptions">Field Descriptions</a></h3>
+<ul>
+<li><strong>ts</strong>: Timestamp in RFC3339 format</li>
+<li><strong>type</strong>: Event type (created, updated, deleted, activity)</li>
+<li><strong>gen</strong>: Generation number (0 for activities, N+1 for saves, current for deletes)</li>
+<li><strong>meta</strong>: JSON metadata object (preserves original data types)</li>
+</ul>
+<h2 id="generation-tracking-1"><a class="header" href="#generation-tracking-1">Generation Tracking</a></h2>
+<p>Events are properly linked to object generation numbers:</p>
+<h3 id="generation-logic"><a class="header" href="#generation-logic">Generation Logic</a></h3>
+<pre><code class="language-crystal"># Object at generation 0 (new)
+doc.save()                    # Creates generation 1, logs Created(gen=1)
+
+# Object at generation 1 (existing)
+doc.save()                    # Creates generation 2, logs Updated(gen=2)
+doc.log_activity(&quot;highlighted&quot;)  # Logs Activity(gen=1) - uses current generation
+doc.save(force_new_generation: true)  # Creates generation 3, logs Updated(gen=3)
+
+# Delete always uses current generation
+doc.delete()                  # Logs Deleted(gen=3)
+</code></pre>
+<h3 id="timeline-example"><a class="header" href="#timeline-example">Timeline Example</a></h3>
+<pre><code>gen=1 (Created)    ← Initial save
+gen=1 (Activity)   ← Activity on generation 1
+gen=2 (Updated)    ← Save creates generation 2
+gen=2 (Activity)   ← Activity on generation 2
+gen=2 (Deleted)    ← Delete uses current generation
+</code></pre>
+<h2 id="storage-api"><a class="header" href="#storage-api">Storage API</a></h2>
+<h3 id="basic-operations"><a class="header" href="#basic-operations">Basic Operations</a></h3>
+<pre><code class="language-crystal"># Save with smart detection
+Sepia::Storage.save(object, metadata: {&quot;user&quot; =&gt; &quot;alice&quot;})
+
+# Save with forced new generation
+Sepia::Storage.save(object, force_new_generation: true, metadata: {&quot;user&quot; =&gt; &quot;bob&quot;})
+
+# Save to custom location
+Sepia::Storage.save(object, path: &quot;/custom/path&quot;, metadata: {&quot;user&quot; =&gt; &quot;charlie&quot;})
+
+# Delete with metadata
+Sepia::Storage.delete(object, metadata: {&quot;user&quot; =&gt; &quot;admin&quot;, &quot;reason&quot; =&gt; &quot;cleanup&quot;})
+</code></pre>
+<h3 id="advanced-options"><a class="header" href="#advanced-options">Advanced Options</a></h3>
+<pre><code class="language-crystal"># Disable caching
+Sepia::Storage.save(object, cache: false, metadata: {&quot;user&quot; =&gt; &quot;alice&quot;})
+
+# Custom path with metadata
+Sepia::Storage.save(object,
+  path: &quot;/archive/documents&quot;,
+  cache: false,
+  metadata: {&quot;user&quot; =&gt; &quot;archiver&quot;, &quot;auto_archived&quot; =&gt; true}
+)
+
+# Force new generation with complex metadata
+Sepia::Storage.save(object,
+  force_new_generation: true,
+  metadata: {
+    &quot;user&quot; =&gt; &quot;alice&quot;,
+    &quot;batch_id&quot; =&gt; &quot;batch_123&quot;,
+    &quot;changes&quot; =&gt; {
+      &quot;fields_modified&quot; =&gt; [&quot;title&quot;, &quot;content&quot;],
+      &quot;word_count_change&quot; =&gt; 150
+    }
+  }
+)
+</code></pre>
+<h2 id="object-api"><a class="header" href="#object-api">Object API</a></h2>
+<h3 id="simple-operations"><a class="header" href="#simple-operations">Simple Operations</a></h3>
+<pre><code class="language-crystal"># Smart save (auto-detects new vs existing)
+doc.save()
+
+# Save with metadata
+doc.save(metadata: {&quot;user&quot; =&gt; &quot;alice&quot;})
+
+# Force new generation
+doc.save(force_new_generation: true)
+
+# Force new generation with metadata
+doc.save(force_new_generation: true, metadata: {&quot;user&quot; =&gt; &quot;bob&quot;})
+</code></pre>
+<h3 id="activity-logging-1"><a class="header" href="#activity-logging-1">Activity Logging</a></h3>
+<pre><code class="language-crystal"># Simple activity
+doc.log_activity(&quot;highlighted&quot;)
+
+# Activity with metadata
+doc.log_activity(&quot;shared&quot;, {&quot;platform&quot; =&gt; &quot;slack&quot;, &quot;user&quot; =&gt; &quot;charlie&quot;})
+
+# Complex activity with rich metadata
+doc.log_activity(&quot;collaborative_edit&quot;, {
+  &quot;session_duration&quot; =&gt; 1800,
+  &quot;participants&quot; =&gt; [&quot;alice&quot;, &quot;bob&quot;, &quot;charlie&quot;],
+  &quot;changes_made&quot; =&gt; 15,
+  &quot;conflicts_resolved&quot; =&gt; 2
+})
+</code></pre>
+<h3 id="method-chaining"><a class="header" href="#method-chaining">Method Chaining</a></h3>
+<pre><code class="language-crystal"># All save methods return self for chaining
+doc.save(metadata: {&quot;user&quot; =&gt; &quot;alice&quot;})
+  .log_activity(&quot;processed&quot;, {&quot;processor&quot; =&gt; &quot;auto-summarizer&quot;})
+  .save(force_new_generation: true, metadata: {&quot;user&quot; =&gt; &quot;system&quot;})
+</code></pre>
+<h2 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h2>
+<h3 id="activity-feeds"><a class="header" href="#activity-feeds">Activity Feeds</a></h3>
+<pre><code class="language-crystal"># Get recent activity for display
+recent_activities = board_events
+  .select(&amp;.event_type.activity?)
+  .first(10)
+  .map do |event|
+    {
+      &quot;action&quot; =&gt; event.metadata[&quot;action&quot;],
+      &quot;user&quot; =&gt; event.metadata[&quot;user&quot;],
+      &quot;timestamp&quot; =&gt; event.timestamp,
+      &quot;details&quot; =&gt; event.metadata
+    }
+  end
+</code></pre>
+<h3 id="audit-trails"><a class="header" href="#audit-trails">Audit Trails</a></h3>
+<pre><code class="language-crystal"># Complete change history for compliance
+audit_trail = Sepia::Storage.object_events(Document, doc_id)
+  .map do |event|
+    {
+      &quot;timestamp&quot; =&gt; event.timestamp,
+      &quot;action&quot; =&gt; event.event_type.to_s,
+      &quot;user&quot; =&gt; event.metadata[&quot;user&quot;]?,
+      &quot;reason&quot; =&gt; event.metadata[&quot;reason&quot;]?,
+      &quot;generation&quot; =&gt; event.generation
+    }
+  end
+</code></pre>
+<h3 id="user-analytics"><a class="header" href="#user-analytics">User Analytics</a></h3>
+<pre><code class="language-crystal"># User activity patterns
+user_activities = all_events
+  .select { |e| e.metadata[&quot;user&quot;]? == &quot;alice&quot; }
+  .group_by(&amp;.timestamp.date)
+  .transform_values(&amp;.size)
+
+puts &quot;Alice's activity by day:&quot;
+user_activities.each do |date, count|
+  puts &quot;#{date}: #{count} actions&quot;
+end
+</code></pre>
+<h3 id="debugging"><a class="header" href="#debugging">Debugging</a></h3>
+<pre><code class="language-crystal"># Understand object lifecycle
+puts &quot;Document lifecycle:&quot;
+Sepia::Storage.object_events(Document, doc_id).each do |event|
+  case event.event_type
+  when .created?
+    puts &quot;  Created at #{event.timestamp} by #{event.metadata[&quot;user&quot;]}&quot;
+  when .updated?
+    puts &quot;  Updated to gen#{event.generation} at #{event.timestamp} by #{event.metadata[&quot;user&quot;]}&quot;
+  when .activity?
+    puts &quot;  Activity: #{event.metadata[&quot;action&quot;]} at #{event.timestamp}&quot;
+  when .deleted?
+    puts &quot;  Deleted at #{event.timestamp} by #{event.metadata[&quot;user&quot;]}&quot;
+  end
+end
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-enable-logging-judiciously"><a class="header" href="#1-enable-logging-judiciously">1. Enable Logging Judiciously</a></h3>
+<pre><code class="language-crystal"># ✅ DO: Enable for important user-facing objects
+class Document &lt; Sepia::Object
+  include Sepia::Serializable
+  sepia_log_events true  # Users care about document history
+end
+
+# ❌ DON'T: Enable for everything
+class CacheEntry &lt; Sepia::Object
+  include Sepia::Serializable
+  sepia_log_events false  # Internal objects don't need logging
+end
+</code></pre>
+<h3 id="2-use-structured-metadata"><a class="header" href="#2-use-structured-metadata">2. Use Structured Metadata</a></h3>
+<pre><code class="language-crystal"># ✅ GOOD: Structured, queryable metadata
+doc.log_activity(&quot;approved&quot;, {
+  &quot;approver&quot; =&gt; &quot;alice&quot;,
+  &quot;approval_level&quot; =&gt; &quot;manager&quot;,
+  &quot;criteria_met&quot; =&gt; [&quot;content_review&quot;, &quot;fact_check&quot;],
+  &quot;next_review&quot; =&gt; 7.days.from_now
+})
+
+# ❌ AVOID: Unstructured strings
+doc.log_activity(&quot;approved&quot;, &quot;alice approved it as manager, content and facts checked, review in a week&quot;)
+</code></pre>
+<h3 id="3-choose-meaningful-actions"><a class="header" href="#3-choose-meaningful-actions">3. Choose Meaningful Actions</a></h3>
+<pre><code class="language-crystal"># ✅ GOOD: Specific, actionable events
+note.log_activity(&quot;moved_to_lane&quot;, {&quot;lane&quot; =&gt; &quot;Done&quot;})
+note.log_activity(&quot;assigned&quot;, {&quot;assignee&quot; =&gt; &quot;bob&quot;})
+note.log_activity(&quot;priority_changed&quot;, {&quot;old&quot; =&gt; &quot;high&quot;, &quot;new&quot; =&gt; &quot;urgent&quot;})
+
+# ❌ AVOID: Generic or unclear events
+note.log_activity(&quot;action&quot;, {&quot;what&quot; =&gt; &quot;something happened&quot;})
+</code></pre>
+<h3 id="4-include-context"><a class="header" href="#4-include-context">4. Include Context</a></h3>
+<pre><code class="language-crystal"># ✅ GOOD: Rich context for understanding
+note.log_activity(&quot;edited&quot;, {
+  &quot;user&quot; =&gt; &quot;alice&quot;,
+  &quot;editor&quot; =&gt; &quot;web&quot;,
+  &quot;session_duration&quot; =&gt; 120,
+  &quot;chars_added&quot; =&gt; 150,
+  &quot;chars_removed&quot; =&gt; 25,
+  &quot;auto_save&quot; =&gt; false
+})
+
+# ❌ AVOID: Minimal context
+note.log_activity(&quot;edited&quot;, {&quot;user&quot; =&gt; &quot;alice&quot;})
+</code></pre>
+<h3 id="5-use-generation-tracking"><a class="header" href="#5-use-generation-tracking">5. Use Generation Tracking</a></h3>
+<pre><code class="language-crystal"># ✅ DO: Use generation-aware operations when versioning matters
+version = document.save_with_generation(metadata: {&quot;user&quot; =&gt; &quot;alice&quot;})
+conflict_resolution = handle_conflicts_if_needed(version)
+
+# ✅ DO: Use smart save for simple updates
+document.save(metadata: {&quot;user&quot; =&gt; &quot;bob&quot;})
+</code></pre>
+<h2 id="advanced-topics"><a class="header" href="#advanced-topics">Advanced Topics</a></h2>
+<h3 id="custom-event-types"><a class="header" href="#custom-event-types">Custom Event Types</a></h3>
+<p>While Sepia provides built-in event types, you can extend the system:</p>
+<pre><code class="language-crystal"># Add custom action metadata for specialized workflows
+case study.log_activity(&quot;phase_change&quot;, {
+  &quot;action&quot; =&gt; &quot;phase_change&quot;,
+  &quot;from_phase&quot; =&gt; &quot;recruitment&quot;,
+  &quot;to_phase&quot; =&gt; &quot;interview&quot;,
+  &quot;protocol&quot; =&gt; &quot;clinical_trial_v2&quot;
+})
+</code></pre>
+<h3 id="event-filtering"><a class="header" href="#event-filtering">Event Filtering</a></h3>
+<pre><code class="language-crystal"># Create specialized queries
+module EventQueries
+  def self.user_activity(user_id : String, object_class : Class, limit = 50)
+    Sepia::Storage.object_events(object_class, &quot;*&quot;)
+      .select { |e| e.metadata[&quot;user&quot;]?.try(&amp;.to_s) == user_id }
+      .first(limit)
+  end
+
+  def self.recent_activities(hours = 24)
+    cutoff = Time.utc - hours.hours
+    # Implementation would need to scan multiple object files
+    # Consider maintaining a global activity index for performance
+  end
+end
+</code></pre>
+<h3 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h3>
+<ul>
+<li><strong>Event Storage</strong>: Events are stored as JSON Lines for efficient append-only operations</li>
+<li><strong>Query Performance</strong>: Reading events requires file I/O, consider caching frequent queries</li>
+<li><strong>Storage Size</strong>: Events are stored alongside objects, monitor disk usage for high-frequency logging</li>
+<li><strong>Indexing</strong>: For large-scale applications, consider maintaining separate indexes for common queries</li>
+</ul>
+<h3 id="migration-and-compatibility"><a class="header" href="#migration-and-compatibility">Migration and Compatibility</a></h3>
+<p>Event storage format may change between Sepia versions. When upgrading:</p>
+<ol>
+<li><strong>Backup existing event data</strong></li>
+<li><strong>Test with sample data</strong></li>
+<li><strong>Run migration tools if provided</strong></li>
+<li><strong>Verify event integrity</strong></li>
+</ol>
+<p>Current event format is stable but consider future enhancements:</p>
+<ul>
+<li>Event compression for large metadata</li>
+<li>Global activity indexes</li>
+<li>Event retention policies</li>
+<li>Cross-object event relationships</li>
+</ul>
+<hr />
+<h2 id="api-reference"><a class="header" href="#api-reference">API Reference</a></h2>
+<h3 id="core-classes"><a class="header" href="#core-classes">Core Classes</a></h3>
+<ul>
+<li><strong><code>Sepia::LogEvent</code></strong>: Individual event record</li>
+<li><strong><code>Sepia::LogEventType</code></strong>: Event type enum (Created, Updated, Deleted, Activity)</li>
+<li><strong><code>Sepia::EventLogger</code></strong>: Event storage and retrieval engine</li>
+</ul>
+<h3 id="key-methods"><a class="header" href="#key-methods">Key Methods</a></h3>
+<h4 id="storage-api-1"><a class="header" href="#storage-api-1">Storage API</a></h4>
+<pre><code class="language-crystal">Sepia::Storage.save(object, metadata?, cache?, path?, force_new_generation?)
+Sepia::Storage.delete(object, metadata?, cache?)
+Sepia::Storage.object_events(class, id) -&gt; Array(LogEvent)
+</code></pre>
+<h4 id="object-api-1"><a class="header" href="#object-api-1">Object API</a></h4>
+<pre><code class="language-crystal">object.save(metadata?)
+object.save(*, force_new_generation : Bool, metadata?)
+object.save_with_generation(metadata?)
+object.log_activity(action, metadata?)
+</code></pre>
+<h4 id="event-access"><a class="header" href="#event-access">Event Access</a></h4>
+<pre><code class="language-crystal">event.timestamp      # Time
+event.event_type     # LogEventType
+event.generation     # Int32
+event.metadata       # JSON::Any
+</code></pre>
+<p>For more detailed API documentation, see the <a href="https://crystaldoc.info/github/ralsina/sepia/">Crystal API docs</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../user-guide/file-watching.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../user-guide/backup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../user-guide/file-watching.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../user-guide/backup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
