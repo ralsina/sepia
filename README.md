@@ -39,6 +39,74 @@ Sepia supports pluggable storage backends. Two backends are currently available:
 
 You can configure the storage backend using `Sepia::Storage.configure`.
 
+## Build Options
+
+Sepia supports configurable filesystem watching backends via compile-time flags. This allows you to choose the most appropriate backend for your target platform and build requirements.
+
+### Available Backends
+
+#### 1. fswatch (Default)
+Cross-platform filesystem monitoring with external libfswatch dependency.
+
+```bash
+crystal build src/your_app.cr
+# Uses fswatch by default
+```
+
+**Pros:**
+- Cross-platform (Linux, macOS, Windows)
+- Well-tested and mature
+- Handles edge cases and recursive watching
+
+**Cons:**
+- Requires libfswatch to be installed
+- Not ideal for static builds
+
+#### 2. inotify (Linux-only)
+Linux-native inotify monitoring using the inotify.cr library.
+
+```bash
+crystal build src/your_app.cr -D inotify
+```
+
+**Pros:**
+- Better static compilation support
+- Lower memory footprint
+- No external dependencies
+- More efficient on Linux
+
+**Cons:**
+- Linux-only platform support
+- Requires inotify.cr library (already included)
+
+#### 3. No-op (Disabled)
+Completely disables filesystem monitoring.
+
+```bash
+crystal build src/your_app.cr -D no_fswatch
+```
+
+**Use cases:**
+- Static builds where file watching is not needed
+- Environments where external dependencies are prohibited
+- Server applications that only use manual cache invalidation
+
+### Static Builds
+
+For optimal static compilation, use the inotify backend:
+
+```bash
+# Static build with inotify (recommended)
+crystal build src/your_app.cr -D inotify --release --static
+```
+
+### Platform Recommendations
+
+- **Linux servers**: Use `-D inotify` for better performance and static builds
+- **Development on macOS/Linux**: Use default fswatch for cross-platform compatibility
+- **Static builds**: Use `-D inotify` to avoid libfswatch dependency issues
+- **Container/CI environments**: Use `-D no_fswatch` if file monitoring is not required
+
 ## Garbage Collection
 
 Sepia includes a mark-and-sweep garbage collector (GC) to automatically find and delete orphaned objects from storage.
