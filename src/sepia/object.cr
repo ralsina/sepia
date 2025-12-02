@@ -70,12 +70,16 @@ module Sepia
     # Use this when you need to control the object's ID, such as when
     # restoring from external data or maintaining specific naming conventions.
     #
+    # Note: Forward slashes ("/") are automatically replaced with underscores ("_")
+    # to prevent unintended subdirectory creation in the filesystem storage.
+    #
     # ```
     # obj = MyClass.new
     # obj.sepia_id = "document-2024-001"
+    # obj.sepia_id = "path/to/document" # Becomes "path_to_document"
     # ```
     def sepia_id=(id : String)
-      @sepia_id = id
+      @sepia_id = id.gsub('/', '_')
     end
 
     # Returns the generation number extracted from the object's ID.
