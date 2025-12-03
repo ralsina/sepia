@@ -1,5 +1,7 @@
 {% begin %}
-  {% if flag?(:inotify) %}
+  {% if flag?(:no_watching) %}
+    # No external dependencies when watching is disabled
+  {% elsif flag?(:inotify) %}
     require "inotify"
   {% else %}
     require "fswatch"
@@ -54,7 +56,76 @@ module Sepia
     end
   end
 
-  {% if flag?(:inotify) %}
+  {% if flag?(:no_watching) %}
+    # No-op file system watcher for Sepia objects.
+    #
+    # This implementation provides a compatible interface but doesn't
+    # actually watch for file system changes. It's useful when you want
+    # to build without file watching dependencies or when file watching
+    # is not needed.
+    #
+    # ### Build Instructions
+    #
+    # To use this implementation, compile with the `no_watching` flag:
+    #
+    # ```bash
+    # crystal build src/your_app.cr -D no_watching
+    # ```
+    #
+    # ### Platform Notes
+    #
+    # - Works on all platforms (no external dependencies)
+    # - Zero memory overhead from file system monitoring
+    # - No background threads or processes
+    # - Compatible API for code that expects a watcher
+    class Watcher
+      # Storage backend being watched (not actually watched)
+      getter storage : FileStorage
+
+      # Whether the watcher is currently running (always false)
+      property running : Bool = false
+
+      # Callback block for event handling (never called)
+      getter callback_block : (Event ->)?
+      @callback_block : (Event ->)?
+
+      # Initialize the no-op watcher
+      def initialize(@storage : FileStorage)
+      end
+
+      # Register a callback (stored but never called)
+      def on_change(&block : Event ->)
+        @callback_block = block
+      end
+
+      # Alias for callback_block to match spec expectations
+      def callback
+        @callback_block
+      end
+
+      # Start watching (no-op)
+      def start
+        # No actual watching - this is a no-op implementation
+        @running = true
+      end
+
+      # Stop watching (no-op)
+      def stop
+        # No actual stopping needed
+        @running = false
+      end
+
+      # Check if watcher is running
+      def running? : Bool
+        @running
+      end
+
+      # Get the storage backend
+      def storage
+        @storage
+      end
+    end
+  {% elsif flag?(:inotify) %}
     # File system watcher for Sepia objects using inotify.cr.
     #
     # This implementation uses Linux-native inotify for file system monitoring
