@@ -3,7 +3,7 @@ require "./event_logger"
 require "./watcher"
 
 module Sepia
-# ameba:disable Naming/BlockParameterName
+  # ameba:disable Naming/BlockParameterName
   # Module for objects that contain other Sepia objects.
   #
   # The `Container` module enables objects to contain nested Serializable or

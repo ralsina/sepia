@@ -763,7 +763,7 @@ module Sepia
         next unless File.directory?(class_dir)
 
         # Try to load objects from this class directory
-        Dir.each_child(class_dir) do |object_file|
+        Dir.each_child(class_dir) do |_|
           # For now, skip the complex object discovery and just create empty backup
           # In a real implementation, you'd want to properly load objects from storage
           # but this requires complex class introspection that's beyond the scope
