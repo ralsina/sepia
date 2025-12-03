@@ -8,15 +8,11 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'src/**'
-      - 'shard.yml'
       - 'book/**'
       - '.github/workflows/docs.yml'
   pull_request:
     branches: [ main ]
     paths:
-      - 'src/**'
-      - 'shard.yml'
       - 'book/**'
       - '.github/workflows/docs.yml'
 
@@ -30,35 +26,15 @@ jobs:
       with:
         fetch-depth: 0  # Fetch all history for accurate version info
 
-    - name: Set up Crystal
-      uses: crystal-lang/install-crystal@v1
-      with:
-        crystal: latest
-
     - name: Install mdBook
       run: |
         curl -L https://github.com/rust-lang/mdBook/releases/download/v0.4.36/mdbook-v0.4.36-x86_64-unknown-linux-gnu.tar.gz | tar xz
         sudo mv mdbook /usr/local/bin/
 
-  
-    - name: Install dependencies
-      run: shards install
-
-    - name: Generate Crystal API docs
-      run: |
-        mkdir -p book/src/api/generated
-        crystal docs src/sepia.cr --project-name="Sepia" -o book/src/api/generated
-
     - name: Build mdBook documentation
       run: |
         cd book
         mdbook build
-
-    - name: Combine documentation
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: |
-        mkdir -p book/book/api
-        cp -r book/src/api/generated/* book/book/api/
 
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
