@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Sepia Documentation</a></li><li class="chapter-item expanded "><a href="getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="getting-started/quick-start.html"><strong aria-hidden="true">2.2.</strong> Quick Start</a></li><li class="chapter-item expanded "><a href="getting-started/core-concepts.html"><strong aria-hidden="true">2.3.</strong> Core Concepts</a></li></ol></li><li class="chapter-item expanded "><a href="user-guide/index.html"><strong aria-hidden="true">3.</strong> User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user-guide/serializable.html"><strong aria-hidden="true">3.1.</strong> Serializable Objects</a></li><li class="chapter-item expanded "><a href="user-guide/containers.html"><strong aria-hidden="true">3.2.</strong> Container Objects</a></li><li class="chapter-item expanded "><a href="user-guide/storage.html"><strong aria-hidden="true">3.3.</strong> Storage Management</a></li><li class="chapter-item expanded "><a href="user-guide/generations.html"><strong aria-hidden="true">3.4.</strong> Generation Tracking</a></li><li class="chapter-item expanded "><a href="user-guide/file-watching.html"><strong aria-hidden="true">3.5.</strong> File System Watching</a></li><li class="chapter-item expanded "><a href="user-guide/event-logging.html"><strong aria-hidden="true">3.6.</strong> Event Logging</a></li><li class="chapter-item expanded "><a href="user-guide/backup.html"><strong aria-hidden="true">3.7.</strong> Backup and Restore</a></li></ol></li><li class="chapter-item expanded "><a href="advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced Topics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="advanced/garbage-collection.html"><strong aria-hidden="true">4.1.</strong> Garbage Collection</a></li><li class="chapter-item expanded "><a href="advanced/performance.html"><strong aria-hidden="true">4.2.</strong> Performance Considerations</a></li><li class="chapter-item expanded "><a href="advanced/troubleshooting.html"><strong aria-hidden="true">4.3.</strong> Troubleshooting</a></li></ol></li><li class="chapter-item expanded "><a href="examples/index.html"><strong aria-hidden="true">5.</strong> Examples</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Sepia Documentation</a></li><li class="chapter-item expanded "><a href="getting-started/index.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="getting-started/quick-start.html"><strong aria-hidden="true">2.2.</strong> Quick Start</a></li></ol></li><li class="chapter-item expanded "><a href="user-guide/index.html"><strong aria-hidden="true">3.</strong> User Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user-guide/generations.html"><strong aria-hidden="true">3.1.</strong> Generation Tracking</a></li><li class="chapter-item expanded "><a href="user-guide/file-watching.html"><strong aria-hidden="true">3.2.</strong> File System Watching</a></li><li class="chapter-item expanded "><a href="user-guide/event-logging.html"><strong aria-hidden="true">3.3.</strong> Event Logging</a></li><li class="chapter-item expanded "><a href="user-guide/backup.html"><strong aria-hidden="true">3.4.</strong> Backup and Restore</a></li></ol></li><li class="chapter-item expanded "><a href="advanced/index.html"><strong aria-hidden="true">4.</strong> Advanced Topics</a></li><li class="chapter-item expanded "><a href="examples/index.html"><strong aria-hidden="true">5.</strong> Examples</a></li><li class="chapter-item expanded "><a href="api/index.html"><strong aria-hidden="true">6.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="api/core.html"><strong aria-hidden="true">6.1.</strong> Core Modules</a></li><li class="chapter-item expanded "><a href="api/storage.html"><strong aria-hidden="true">6.2.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="api/utilities.html"><strong aria-hidden="true">6.3.</strong> Utilities</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -582,11 +582,15 @@ puts &quot;\n🎉 Quick start completed!&quot;
 <li><a href="getting-started/../user-guide/backup.html">Backup and Restore</a> - Data protection strategies</li>
 </ul>
 <p>Happy coding with Sepia! 🚀</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="core-concepts-1"><a class="header" href="#core-concepts-1">Core Concepts</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="user-guide"><a class="header" href="#user-guide">User Guide</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="serializable-objects-1"><a class="header" href="#serializable-objects-1">Serializable Objects</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="container-objects-1"><a class="header" href="#container-objects-1">Container Objects</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="storage-management"><a class="header" href="#storage-management">Storage Management</a></h1>
+<p>This section covers how to use Sepia's key features in your applications.</p>
+<h2 id="topics"><a class="header" href="#topics">Topics</a></h2>
+<ul>
+<li><strong><a href="user-guide/generations.html">Generation Tracking</a></strong> - Optimistic concurrency control and versioning</li>
+<li><strong><a href="user-guide/file-watching.html">File System Watching</a></strong> - Real-time monitoring for external changes</li>
+<li><strong><a href="user-guide/event-logging.html">Event Logging</a></strong> - Activity tracking and audit trails</li>
+<li><strong><a href="user-guide/backup.html">Backup and Restore</a></strong> - Data protection and migration</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="generation-tracking-1"><a class="header" href="#generation-tracking-1">Generation Tracking</a></h1>
 <p>Generation tracking enables optimistic concurrency control and versioning of objects. This is particularly useful for collaborative applications where multiple users might edit the same data.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
@@ -1790,9 +1794,6 @@ end
 <li><strong>Type Validation</strong> - Ensure data type consistency</li>
 <li><strong>Metadata Validation</strong> - Validate metadata content</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="garbage-collection"><a class="header" href="#garbage-collection">Garbage Collection</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="performance-considerations-4"><a class="header" href="#performance-considerations-4">Performance Considerations</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <p>This section provides real-world examples of how to use Sepia in different types of applications. Each example demonstrates specific patterns and best practices for working with Sepia's serialization and storage features.</p>
 <h2 id="available-examples"><a class="header" href="#available-examples">Available Examples</a></h2>
@@ -1854,6 +1855,17 @@ crystal run examples/document_management.cr
 <li><strong>Implementing different interfaces</strong> - Add REST APIs, web UIs, or CLIs</li>
 <li><strong>Integrating with other libraries</strong> - Combine with web frameworks, databases, or message queues</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="api-reference-2"><a class="header" href="#api-reference-2">API Reference</a></h1>
+<p>This section provides detailed documentation for all of Sepia's core modules and utilities.</p>
+<h2 id="topics-1"><a class="header" href="#topics-1">Topics</a></h2>
+<ul>
+<li><strong><a href="api/core.html">Core Modules</a></strong> - Object, Serializable, and Container modules</li>
+<li><strong><a href="api/storage.html">Storage Backends</a></strong> - FileStorage, InMemoryStorage, and storage management</li>
+<li><strong><a href="api/utilities.html">Utilities</a></strong> - Event logging, backup, watching, and performance tools</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="core-modules"><a class="header" href="#core-modules">Core Modules</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="storage-backends-1"><a class="header" href="#storage-backends-1">Storage Backends</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="utilities"><a class="header" href="#utilities">Utilities</a></h1>
 
                     </main>
 
