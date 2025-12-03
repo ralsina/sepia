@@ -14,6 +14,5 @@ example/lib/
 /book/book/
 /book/src/api/generated/
 
-# Compiled binaries
-sepia
-*.bin
+# Compiled binaries (only for examples)
+examples/*.bin
