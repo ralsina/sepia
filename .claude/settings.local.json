@@ -29,7 +29,9 @@
       "Bash(tar:*)",
       "Bash(gh pr create:*)",
       "Bash(mdbook:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(cat:*)",
+      "Bash(src/sepia/watcher_new.cr)"
     ],
     "deny": [],
     "ask": []

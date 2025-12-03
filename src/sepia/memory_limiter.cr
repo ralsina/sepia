@@ -256,7 +256,7 @@ module Sepia
     # ```
     def status_description : String
       @mutex.synchronize do
-        "#{@current_stats.to_s} - #{@current_pressure}"
+        "#{@current_stats.to_s} - #{@current_pressure}" # ameba:disable Lint/RedundantStringCoercion
       end
     end
 

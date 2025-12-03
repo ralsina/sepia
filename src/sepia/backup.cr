@@ -634,7 +634,7 @@ module Sepia
           flag: 2_u8, # Symlink flag
           name: backup_file.path,
           mode: backup_file.mode,
-          link_name: backup_file.symlink_target.not_nil!
+          link_name: backup_file.symlink_target || ""
         )
         tar.write_header(header)
       else

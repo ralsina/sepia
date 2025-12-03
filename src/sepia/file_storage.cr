@@ -155,18 +155,20 @@ module Sepia
     # storage.setup_watcher
     # ```
     private def setup_watcher
-      return if @watcher && @watcher.not_nil!.running?
+      return if @watcher.try(&.running?)
 
       begin
         @watcher = Watcher.new(self)
 
         # Set up automatic cache invalidation callback
-        @watcher.not_nil!.on_change do |_|
-          # Cache invalidation is handled automatically by the watcher
-          # This callback can be used for additional logging or custom logic
+        if watcher = @watcher
+          watcher.on_change do |_|
+            # Cache invalidation is handled automatically by the watcher
+            # This callback can be used for additional logging or custom logic
+          end
         end
 
-        @watcher.not_nil!.start
+        @watcher.try(&.start)
       rescue ex
         # Log error but don't fail storage initialization
         # The watcher is optional functionality
@@ -189,10 +191,10 @@ module Sepia
     # ```
     def start_watcher : Bool
       return false unless @watcher_config.enabled
-      return true if @watcher && @watcher.not_nil!.running?
+      return true if @watcher.try(&.running?)
 
       setup_watcher
-      @watcher && @watcher.not_nil!.running? || false
+      !!(@watcher.try(&.running?))
     end
 
     # Stops the file system watcher if it's running.
@@ -211,7 +213,7 @@ module Sepia
       return false unless @watcher
 
       begin
-        @watcher.not_nil!.stop
+        @watcher.try(&.stop)
         true
       rescue ex
         # Handle fswatch stop issues gracefully
@@ -233,7 +235,7 @@ module Sepia
     # puts storage.watcher_running? # => true
     # ```
     def watcher_running? : Bool
-      @watcher && @watcher.not_nil!.running? || false
+      !!(@watcher.try(&.running?))
     end
 
     # Registers a callback to be called when external file changes are detected.
@@ -253,7 +255,7 @@ module Sepia
     # ```
     def on_watcher_change(&block : Event ->)
       return unless @watcher
-      @watcher.not_nil!.on_change(&block)
+      @watcher.try(&.on_change(&block))
     end
 
     # Saves a Serializable object to the filesystem.

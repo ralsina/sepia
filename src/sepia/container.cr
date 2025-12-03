@@ -3,7 +3,6 @@ require "./event_logger"
 require "./watcher"
 
 module Sepia
-  # ameba:disable Naming/BlockParameterName
   # Module for objects that contain other Sepia objects.
   #
   # The `Container` module enables objects to contain nested Serializable or
@@ -164,14 +163,12 @@ module Sepia
     # # json = {"name":"Alice","age":30,"friends":[]}
     # ```
     def to_filtered_json : String
-      # ameba:disable Naming/BlockParameterName
       String.build do |io|
         JSON.build(io) do |json|
           json.object do
             {% for ivar in @type.instance_vars %}
               {% unless ivar.type < Sepia::Object ||
-                          # ameba:disable Naming/BlockParameterName
-                          (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) ||
+                          (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) || # ameba:disable Naming/BlockParameterName
                           (ivar.type.stringify.includes?("Array") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
                           (ivar.type.stringify.includes?("Set") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
                           (ivar.type.stringify.includes?("Hash") && ivar.type.type_vars.size > 1 && ivar.type.type_vars.last < Sepia::Object) ||
@@ -421,7 +418,6 @@ module Sepia
     # Loads all references (Serializable, Container, Enumerable of either)
     # from the container's path.
     def load_references(path : String)
-      # ameba:disable Naming/BlockParameterName
       {% for ivar in @type.instance_vars %}
         # For each instance variable, check if it's a Serializable or a Container.
         # Handle both direct Serializable types and nilable Serializables (unions)
@@ -544,11 +540,9 @@ module Sepia
           data = parser.parse
 
           if data_hash = data.as_h?
-            # ameba:disable Naming/BlockParameterName
             {% for ivar in @type.instance_vars %}
                 {% unless ivar.type < Sepia::Object ||
-                            # ameba:disable Naming/BlockParameterName
-                            (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) ||
+                            (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) || # ameba:disable Naming/BlockParameterName
                             (ivar.type.stringify.includes?("Array") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
                             (ivar.type.stringify.includes?("Set") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
                             (ivar.type.stringify.includes?("Hash") && ivar.type.type_vars.size > 1 && ivar.type.type_vars.last < Sepia::Object) ||
@@ -583,11 +577,9 @@ module Sepia
       data = parser.parse
 
       if data_hash = data.as_h?
-        # ameba:disable Naming/BlockParameterName
         {% for ivar in @type.instance_vars %}
           {% unless ivar.type < Sepia::Object ||
-                      # ameba:disable Naming/BlockParameterName
-                      (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) ||
+                      (ivar.type.union? && ivar.type.union_types.any? { |t| t < Sepia::Object }) || # ameba:disable Naming/BlockParameterName
                       (ivar.type.stringify.includes?("Array") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
                       (ivar.type.stringify.includes?("Set") && ivar.type.type_vars.size > 0 && ivar.type.type_vars.first < Sepia::Object) ||
                       (ivar.type.stringify.includes?("Hash") && ivar.type.type_vars.size > 1 && ivar.type.type_vars.last < Sepia::Object) ||
