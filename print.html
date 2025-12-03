@@ -781,6 +781,31 @@ new_obj.generation  # =&gt; 1
 <li><strong>Requirements</strong>: None (uses kernel inotify)</li>
 <li><strong>Use case</strong>: Production Linux servers, static builds</li>
 </ul>
+<h3 id="no_watching-disabled"><a class="header" href="#no_watching-disabled">no_watching (Disabled)</a></h3>
+<ul>
+<li><strong>Platforms</strong>: All platforms</li>
+<li><strong>Requirements</strong>: None</li>
+<li><strong>Use case</strong>: Applications without file watching needs, embedded systems, reduced dependencies</li>
+</ul>
+<h2 id="configuration-with-no_watching"><a class="header" href="#configuration-with-no_watching">Configuration with no_watching</a></h2>
+<p>When you don't need file system monitoring, you can completely disable it to reduce dependencies:</p>
+<pre><code class="language-crystal"># Compile without file watching
+crystal build your_app.cr -D no_watching
+
+# Or use it in your shard.yml for static builds
+dependencies:
+  sepia:
+    github: ralsina/sepia
+# no fswatch dependency needed when using -D no_watching
+</code></pre>
+<h2 id="benefits-of-no_watching"><a class="header" href="#benefits-of-no_watching">Benefits of no_watching</a></h2>
+<ul>
+<li><strong>Zero dependencies</strong>: No need for libfswatch or inotify.shards</li>
+<li><strong>Static compilation</strong>: Works in environments where fswatch can't be statically compiled</li>
+<li><strong>Reduced memory</strong>: No background threads or processes</li>
+<li><strong>Faster startup</strong>: No file system monitoring setup overhead</li>
+<li><strong>Cross-platform</strong>: Works everywhere without platform-specific dependencies</li>
+</ul>
 <h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
 <p>The file watcher is automatically configured based on the backend you selected when building your application.</p>
 <pre><code class="language-crystal"># No additional configuration needed - uses the compiled backend
