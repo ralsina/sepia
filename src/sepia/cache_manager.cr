@@ -448,14 +448,10 @@ module Sepia
     @@instance_mutex = Mutex.new
 
     def self.instance : CacheManager
-      if instance = @@instance
-        return instance
-      end
-
       @@instance_mutex.synchronize do
         @@instance ||= new
+        @@instance.as(CacheManager)
       end
-      @@instance.not_nil!
     end
 
     # Alias for convenience (thread-safe)
