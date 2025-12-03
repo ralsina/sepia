@@ -61,7 +61,9 @@ module Sepia
     # ```
     # Simple configuration class for file system watcher
     class WatcherConfig
+      # ameba:disable Naming/QueryBoolMethods
       property enabled : Bool
+      # ameba:disable Naming/QueryBoolMethods
       property recursive : Bool = true
       property latency : Float64 = 0.1
 

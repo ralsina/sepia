@@ -78,6 +78,7 @@ module Sepia
     property on_normal : Proc(Nil)?
 
     # Monitoring state
+    # ameba:disable Naming/QueryBoolMethods
     getter monitoring : Bool
 
     # Creates a new memory limiter.

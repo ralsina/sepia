@@ -41,6 +41,7 @@ module Sepia
     # Simple configuration options for backup creation
     struct Configuration
       # Basic backup behavior
+      # ameba:disable Naming/QueryBoolMethods
       property follow_symlinks : Bool = false # false preserves symlinks as-is
 
       def initialize
@@ -116,6 +117,7 @@ module Sepia
       property all_objects : Hash(String, Array(ObjectReference))
 
       def initialize(@root_objects = [] of ObjectReference)
+        # ameba:disable Naming/BlockParameterName
         @all_objects = Hash(String, Array(ObjectReference)).new { |h, k| h[k] = [] of ObjectReference }
       end
 
@@ -166,6 +168,7 @@ module Sepia
 
     # Result of backup verification
     struct BackupVerificationResult
+      # ameba:disable Naming/QueryBoolMethods
       property valid : Bool
       property errors : Array(String)
       property statistics : BackupStatistics
@@ -408,7 +411,7 @@ module Sepia
             expected_path = "objects/#{class_name}/#{obj_ref.object_id}"
             if obj_ref.object_type.container?
               # For containers, check if directory structure exists
-              container_files = backup_file_list.select { |file| file.starts_with?("#{expected_path}/") }
+              container_files = backup_file_list.select(&.starts_with?("#{expected_path}/"))
               if container_files.empty?
                 result.add_error("Missing container directory structure: #{expected_path}/")
               end
@@ -454,6 +457,7 @@ module Sepia
 
     # Private methods for backup implementation
     private def self.collect_all_objects(root_objects : Array(Sepia::Object)) : Hash(String, Set(String))
+      # ameba:disable Naming/BlockParameterName
       collected = Hash(String, Set(String)).new { |h, k| h[k] = Set(String).new }
 
       root_objects.each do |obj|
@@ -500,6 +504,7 @@ module Sepia
       end
     end
 
+    # ameba:disable Naming/AccessorMethodName
     private def self.get_storage_path : String?
       backend = Sepia::Storage.backend
       if backend.is_a?(Sepia::FileStorage)
