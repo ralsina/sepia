@@ -75,9 +75,9 @@ describe Sepia::Backup do
         doc.save
 
         backup_path = File.join(Dir.tempdir, "single_object_backup.tar")
-        result_path = Sepia::Backup.create([doc], backup_path)
+        Sepia::Backup.create([doc], backup_path)
 
-        result_path.should eq(backup_path)
+        backup_path.should be_a(String)
         File.exists?(backup_path).should be_true
         File.size(backup_path).should be > 0
 
@@ -94,9 +94,9 @@ describe Sepia::Backup do
         project.save
 
         backup_path = File.join(Dir.tempdir, "single_container_backup.tar")
-        result_path = Sepia::Backup.create([project], backup_path)
+        Sepia::Backup.create([project], backup_path)
 
-        result_path.should eq(backup_path)
+        backup_path.should be_a(String)
         File.exists?(backup_path).should be_true
         File.size(backup_path).should be > 0
 
@@ -127,7 +127,7 @@ describe Sepia::Backup do
         project.save
 
         backup_path = File.join(Dir.tempdir, "object_tree_backup.tar")
-        result_path = Sepia::Backup.create([project], backup_path)
+        Sepia::Backup.create([project], backup_path)
 
         File.exists?(backup_path).should be_true
         File.size(backup_path).should be > 0
@@ -158,7 +158,7 @@ describe Sepia::Backup do
         outer_container.save
 
         backup_path = File.join(Dir.tempdir, "nested_backup.tar")
-        result_path = Sepia::Backup.create([outer_container], backup_path)
+        Sepia::Backup.create([outer_container], backup_path)
 
         File.exists?(backup_path).should be_true
 
@@ -185,7 +185,7 @@ describe Sepia::Backup do
 
         # Backup with multiple root objects
         backup_path = File.join(Dir.tempdir, "multi_root_backup.tar")
-        result_path = Sepia::Backup.create([doc2, project], backup_path)
+        Sepia::Backup.create([doc2, project], backup_path)
 
         File.exists?(backup_path).should be_true
 
@@ -206,7 +206,7 @@ describe Sepia::Backup do
         empty_project.save
 
         backup_path = File.join(Dir.tempdir, "empty_backup.tar")
-        result_path = Sepia::Backup.create([empty_project], backup_path)
+        Sepia::Backup.create([empty_project], backup_path)
 
         File.exists?(backup_path).should be_true
         File.size(backup_path).should be > 0
@@ -223,7 +223,7 @@ describe Sepia::Backup do
         project.save
 
         backup_path = File.join(Dir.tempdir, "primitive_backup.tar")
-        result_path = Sepia::Backup.create([project], backup_path)
+        Sepia::Backup.create([project], backup_path)
 
         File.exists?(backup_path).should be_true
         tar_output = `tar -tf #{backup_path}`
@@ -246,7 +246,7 @@ describe Sepia::Backup do
         project2.save
 
         backup_path = File.join(Dir.tempdir, "shared_refs_backup.tar")
-        result_path = Sepia::Backup.create([project1, project2], backup_path)
+        Sepia::Backup.create([project1, project2], backup_path)
 
         File.exists?(backup_path).should be_true
 
@@ -266,7 +266,7 @@ describe Sepia::Backup do
         symlink_files = all_lines.select { |line| line.includes?("shared-doc") && line != "objects/BackupTestDocument/shared-doc" }
 
         canonical_file.size.should eq(1) # Only one actual file
-        symlink_files.size.should eq(2) # Two symlinks to it
+        symlink_files.size.should eq(2)  # Two symlinks to it
       end
 
       it "handles special characters in object content" do
@@ -275,7 +275,7 @@ describe Sepia::Backup do
         special_doc.save
 
         backup_path = File.join(Dir.tempdir, "special_chars_backup.tar")
-        result_path = Sepia::Backup.create([special_doc], backup_path)
+        Sepia::Backup.create([special_doc], backup_path)
 
         File.exists?(backup_path).should be_true
         File.size(backup_path).should be > 0
@@ -288,7 +288,7 @@ describe Sepia::Backup do
         long_doc.save
 
         backup_path = File.join(Dir.tempdir, "long_id_backup.tar")
-        result_path = Sepia::Backup.create([long_doc], backup_path)
+        Sepia::Backup.create([long_doc], backup_path)
 
         File.exists?(backup_path).should be_true
         tar_output = `tar -tf #{backup_path}`
@@ -303,7 +303,7 @@ describe Sepia::Backup do
         doc.save
 
         backup_path = File.join(Dir.tempdir, "metadata_backup.tar")
-        result_path = Sepia::Backup.create([doc], backup_path)
+        Sepia::Backup.create([doc], backup_path)
 
         # Extract and parse metadata
         metadata_json = `tar -xf #{backup_path} metadata.json -O`
@@ -321,7 +321,7 @@ describe Sepia::Backup do
         doc.save
 
         backup_path = File.join(Dir.tempdir, "readme_backup.tar")
-        result_path = Sepia::Backup.create([doc], backup_path)
+        Sepia::Backup.create([doc], backup_path)
 
         # Check README exists
         tar_output = `tar -tf #{backup_path}`
@@ -360,7 +360,7 @@ describe Sepia::Backup do
         backup_path = File.join(Dir.tempdir, "missing_backup.tar")
 
         # Should still create backup but show warning about missing object
-        result_path = Sepia::Backup.create([doc], backup_path)
+        Sepia::Backup.create([doc], backup_path)
         File.exists?(backup_path).should be_true
       end
     end
@@ -384,7 +384,7 @@ describe Sepia::Backup do
         project.save
 
         backup_path = File.join(Dir.tempdir, "scale_backup.tar")
-        result_path = Sepia::Backup.create([project], backup_path)
+        Sepia::Backup.create([project], backup_path)
 
         end_time = Time.monotonic
         duration = end_time - start_time

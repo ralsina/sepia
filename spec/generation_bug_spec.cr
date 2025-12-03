@@ -96,11 +96,11 @@ describe "Generation Bug Investigation" do
 
     # Create first generation
     doc.content = "version 2"
-    gen1_obj = doc.save(force_new_generation: true)
+    doc.save(force_new_generation: true)
 
     # Create second generation - need to modify original and save again
     doc.content = "version 3"
-    gen2_obj = doc.save(force_new_generation: true)
+    doc.save(force_new_generation: true)
 
     # Test loading different generations
     base_doc = GenTestDocument.load("test-doc3")
@@ -113,12 +113,12 @@ describe "Generation Bug Investigation" do
     puts "Gen 2 doc content: #{gen2_doc.content}"
     puts "Original doc content: #{doc.content}"
 
-    base_doc.content.should eq("version 3")  # Base returns latest generation (transparent)
+    base_doc.content.should eq("version 3") # Base returns latest generation (transparent)
     gen1_doc.content.should eq("version 2")
-    gen2_doc.content.should eq("version 3")  # Latest generation content
+    gen2_doc.content.should eq("version 3") # Latest generation content
 
     # Test generation properties
-    base_doc.generation.should eq(2)  # Transparent load returns latest generation
+    base_doc.generation.should eq(2) # Transparent load returns latest generation
     gen1_doc.generation.should eq(1)
     gen2_doc.generation.should eq(2)
 

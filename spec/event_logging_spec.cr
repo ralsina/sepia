@@ -696,14 +696,14 @@ describe "Sepia Event Logging" do
       events[0].generation.should eq(1)
 
       events[1].event_type.should eq(Sepia::LogEventType::Activity)
-      events[1].generation.should eq(1)  # Activity uses generation 1
+      events[1].generation.should eq(1) # Activity uses generation 1
       events[1].metadata["action"].should eq("highlighted")
 
       events[2].event_type.should eq(Sepia::LogEventType::Updated)
       events[2].generation.should eq(2)
 
       events[3].event_type.should eq(Sepia::LogEventType::Activity)
-      events[3].generation.should eq(2)  # Activity uses generation 2
+      events[3].generation.should eq(2) # Activity uses generation 2
       events[3].metadata["action"].should eq("shared")
     end
 
@@ -732,7 +732,7 @@ describe "Sepia Event Logging" do
       events[1].generation.should eq(2)
 
       events[2].event_type.should eq(Sepia::LogEventType::Deleted)
-      events[2].generation.should eq(2)  # Delete uses generation 2
+      events[2].generation.should eq(2) # Delete uses generation 2
       events[2].metadata["user"].should eq("admin")
       events[2].metadata["reason"].should eq("cleanup")
     end
@@ -758,7 +758,7 @@ describe "Sepia Event Logging" do
       events[0].metadata["action"].should eq("create")
 
       events[1].event_type.should eq(Sepia::LogEventType::Updated)
-      events[1].generation.should eq(1)  # First generation (save-api-test-123.1)
+      events[1].generation.should eq(1) # First generation (save-api-test-123.1)
       events[1].metadata["user"].should eq("bob")
       events[1].metadata["action"].should eq("force_update")
     end

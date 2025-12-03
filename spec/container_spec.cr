@@ -97,6 +97,7 @@ class PrimitiveOnlyBox < Sepia::Object
   property name : String
   property count : Int32
   property timestamp : Time
+  # ameba:disable Naming/QueryBoolMethods
   property flag : Bool
 
   def initialize
@@ -549,7 +550,7 @@ describe Sepia::Container do
 
       # Create container with references to objects
       box = MyBox.new
-      box.my_things.clear  # Remove default my_thing
+      box.my_things.clear # Remove default my_thing
       box.my_things << thing1 << thing2
       box.sepia_id = "test-box"
 
@@ -558,7 +559,7 @@ describe Sepia::Container do
 
       # Check that individual objects weren't saved again
       final_events = Sepia::Storage.object_events(MyThing, "thing1").size
-      final_events.should eq(initial_events)  # No duplicate saves
+      final_events.should eq(initial_events) # No duplicate saves
 
       # Verify container was saved and references exist
       loaded_box = MyBox.load("test-box").as(MyBox)

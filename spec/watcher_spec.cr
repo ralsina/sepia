@@ -366,54 +366,54 @@ describe Sepia::Watcher do
   end
 
   describe "End-to-End File System Monitoring" do
-      {% if flag?(:inotify) %}
-        it "detects real file changes with proper lifecycle management" do
-          # Setup temporary storage for testing
-          storage_dir = File.join(Dir.tempdir, "sepia_e2e_#{UUID.random}")
-          Dir.mkdir_p(storage_dir) unless Dir.exists?(storage_dir)
+    {% if flag?(:inotify) %}
+      it "detects real file changes with proper lifecycle management" do
+        # Setup temporary storage for testing
+        storage_dir = File.join(Dir.tempdir, "sepia_e2e_#{UUID.random}")
+        Dir.mkdir_p(storage_dir) unless Dir.exists?(storage_dir)
 
-          watcher = nil.as(Sepia::Watcher?)
+        watcher = nil.as(Sepia::Watcher?)
 
-          begin
-            # Step 1: Create watcher (not started yet)
-            test_storage = Sepia::FileStorage.new(storage_dir)
-            watcher = Sepia::Watcher.new(test_storage)
-            watcher.running?.should be_false
+        begin
+          # Step 1: Create watcher (not started yet)
+          test_storage = Sepia::FileStorage.new(storage_dir)
+          watcher = Sepia::Watcher.new(test_storage)
+          watcher.running?.should be_false
 
-            # Step 2: Setup event tracking (just to prove callback registration works)
-            received_events = [] of Sepia::Event
+          # Step 2: Setup event tracking (just to prove callback registration works)
+          received_events = [] of Sepia::Event
 
-            watcher.on_change do |event|
-              received_events << event
-            end
-
-            # Step 3: Start watching - this should not hang with inotify
-            watcher.start
-            watcher.running?.should be_true
-
-            # Step 4: Brief pause to prove watcher is running smoothly
-            sleep 0.1.seconds
-
-            # Step 5: Stop watching - this should work cleanly with inotify
-            watcher.stop
-            watcher.running?.should be_false
-
-            # Step 6: Test completed successfully - the main issue was that fswatch hangs
-            # in test environments, but inotify should work reliably
-            true.should be_true # Test passes if we get here without hanging
-          ensure
-            # Cleanup - ALWAYS stop the watcher
-            if watcher
-              watcher.stop
-            end
-            # Clean up test directory
-            FileUtils.rm_rf(storage_dir) if Dir.exists?(storage_dir)
+          watcher.on_change do |event|
+            received_events << event
           end
+
+          # Step 3: Start watching - this should not hang with inotify
+          watcher.start
+          watcher.running?.should be_true
+
+          # Step 4: Brief pause to prove watcher is running smoothly
+          sleep 0.1.seconds
+
+          # Step 5: Stop watching - this should work cleanly with inotify
+          watcher.stop
+          watcher.running?.should be_false
+
+          # Step 6: Test completed successfully - the main issue was that fswatch hangs
+          # in test environments, but inotify should work reliably
+          true.should be_true # Test passes if we get here without hanging
+        ensure
+          # Cleanup - ALWAYS stop the watcher
+          if watcher
+            watcher.stop
+          end
+          # Clean up test directory
+          FileUtils.rm_rf(storage_dir) if Dir.exists?(storage_dir)
         end
-      {% else %}
-        pending "detects real file changes with proper lifecycle management (fswatch issues in test environment)" do
-          # Test remains pending for fswatch backend due to test environment issues
-        end
-      {% end %}
-    end
+      end
+    {% else %}
+      pending "detects real file changes with proper lifecycle management (fswatch issues in test environment)" do
+        # Test remains pending for fswatch backend due to test environment issues
+      end
+    {% end %}
   end
+end
