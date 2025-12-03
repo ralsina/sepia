@@ -4,9 +4,15 @@ This section provides real-world examples of how to use Sepia in different types
 
 ## Available Examples
 
-- **[Document Management](document-management.md)** - Building a document management system with file storage and metadata
-- **[Configuration Management](configuration-management.md)** - Managing application configuration with versioning and rollback
-- **[Collaborative Applications](collaborative-apps.md)** - Building multi-user applications with event logging and conflict resolution
+Examples will be added here as they are developed. Each example will demonstrate specific patterns and best practices for working with Sepia's serialization and storage features.
+
+## Planned Examples
+
+Future examples may include:
+
+- **Document Management** - Building a document management system with file storage and metadata
+- **Configuration Management** - Managing application configuration with versioning and rollback
+- **Collaborative Applications** - Building multi-user applications with event logging and conflict resolution
 
 ## Key Concepts Demonstrated
 

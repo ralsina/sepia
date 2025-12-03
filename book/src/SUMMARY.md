@@ -18,6 +18,3 @@
     * [Performance Considerations](advanced/performance.md)
     * [Troubleshooting](advanced/troubleshooting.md)
 * [Examples](examples/README.md)
-    * [Document Management](examples/document-management.md)
-    * [Configuration Management](examples/configuration-management.md)
-    * [Collaborative Applications](examples/collaborative-apps.md)
