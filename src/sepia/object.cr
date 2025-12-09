@@ -241,6 +241,38 @@ module Sepia
     # ```
     def self.latest(base_id : String) : self?
       all_versions = versions(base_id)
+      all_versions.max_by?(&.generation)
+    end
+
+    # Find the latest version of an object by its base ID, throwing an exception if not found.
+    #
+    # This is an explicit variant that throws an exception when no versions exist.
+    # Use this when you expect the object to exist and want to fail loudly if it doesn't.
+    #
+    # ### Parameters
+    #
+    # - *base_id* : The base ID without generation suffix
+    #
+    # ### Returns
+    #
+    # Returns the latest object of type self.
+    #
+    # ### Raises
+    #
+    # Raises `Enumerable::EmptyError` if no versions are found.
+    #
+    # ### Examples
+    #
+    # ```
+    # # Will throw if not found
+    # doc = Document.latest!("doc-id") # Raises if doc-id doesn't exist
+    #
+    # # Use when you expect the object to exist
+    # doc = Document.latest!("important-config")
+    # puts doc.content
+    # ```
+    def self.latest!(base_id : String) : self
+      all_versions = versions(base_id)
       all_versions.max_by(&.generation)
     end
 
@@ -321,6 +353,74 @@ module Sepia
       end
 
       versions.sort_by(&.generation)
+    end
+
+    # Count the number of generations for a given base ID.
+    #
+    # ### Parameters
+    #
+    # - *base_id* : The base ID without generation suffix
+    #
+    # ### Returns
+    #
+    # Returns the number of generations found (0 if none exist).
+    #
+    # ### Examples
+    #
+    # ```
+    # MyClass.count_generations("doc-id")       # => 3 (generations 0, 1, 2)
+    # MyClass.count_generations("non-existent") # => 0
+    # ```
+    def self.count_generations(base_id : String) : Int32
+      versions(base_id).size
+    end
+
+    # Check if any generations exist for a given base ID.
+    #
+    # ### Parameters
+    #
+    # - *base_id* : The base ID without generation suffix
+    #
+    # ### Returns
+    #
+    # Returns true if at least one generation exists, false otherwise.
+    #
+    # ### Examples
+    #
+    # ```
+    # MyClass.has_generations?("doc-id")       # => true
+    # MyClass.has_generations?("non-existent") # => false
+    # ```
+    def self.has_generations?(base_id : String) : Bool
+      count_generations(base_id) > 0
+    end
+
+    # Load any generation for a given base ID, preferring the latest.
+    #
+    # This is useful when you want to load an object but don't care about
+    # specific generations - you just want whatever exists.
+    #
+    # ### Parameters
+    #
+    # - *base_id* : The base ID without generation suffix
+    #
+    # ### Returns
+    #
+    # Returns the loaded object, or nil if no generations exist.
+    #
+    # ### Examples
+    #
+    # ```
+    # obj = MyClass.load_any?("doc-id")
+    # # Returns latest generation if available, or base object if no generations
+    # # Returns nil if nothing found
+    # ```
+    def self.load_any?(base_id : String) : self?
+      # Try latest generation first, fall back to base object
+      latest(base_id) || begin
+        # Try loading base object (generation 0) directly
+        Sepia::Storage.load?(self, base_id)
+      end
     end
 
     # Check if an object with the given ID exists in storage.

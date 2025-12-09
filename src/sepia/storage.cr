@@ -378,6 +378,77 @@ module Sepia
       end
     end
 
+    # Load an object from storage, returning nil if not found instead of throwing an exception.
+    #
+    # This is a safe variant of `load` that follows Crystal conventions for methods
+    # that may not succeed. Use this when you expect the object might not exist.
+    #
+    # ### Parameters
+    #
+    # - *object_class* : The class of the object to load (must be Serializable or Container)
+    # - *id* : The unique identifier of the object
+    # - *path* : Optional custom path override (for testing or special cases)
+    # - *cache* : Whether to use the cache (default: true)
+    #
+    # ### Returns
+    #
+    # Returns the loaded object of type T, or nil if not found.
+    #
+    # ### Examples
+    #
+    # ```
+    # # Safe loading that returns nil instead of throwing
+    # doc = storage.load?(MyDocument, "doc-id")
+    # if doc
+    #   puts "Found document: #{doc.title}"
+    # else
+    #   puts "Document not found"
+    # end
+    #
+    # # Chainable operations
+    # title = storage.load?(MyDocument, "doc-id").try(&.title) || "Default"
+    # ```
+    def load?(object_class : T.class, id : String, path : String? = nil, cache : Bool = true) : T? forall T
+      load(object_class, id, path, cache)
+    rescue
+      nil
+    end
+
+    # Load an object from storage with explicit exception behavior.
+    #
+    # This is an explicit variant that indicates through naming that it will
+    # throw an exception if the object is not found. It's identical to the
+    # standard `load` method but follows Crystal conventions for explicit behavior.
+    #
+    # ### Parameters
+    #
+    # - *object_class* : The class of the object to load (must be Serializable or Container)
+    # - *id* : The unique identifier of the object
+    # - *path* : Optional custom path override (for testing or special cases)
+    # - *cache* : Whether to use the cache (default: true)
+    #
+    # ### Returns
+    #
+    # Returns the loaded object of type T.
+    #
+    # ### Raises
+    #
+    # Raises an exception if the object is not found.
+    #
+    # ### Examples
+    #
+    # ```
+    # # Explicit loading that will throw if not found
+    # doc = storage.load!(MyDocument, "doc-id") # Throws if not found
+    #
+    # # Use when you expect the object to exist
+    # config = storage.load!(AppConfig, "main-config")
+    # puts config.settings
+    # ```
+    def load!(object_class : T.class, id : String, path : String? = nil, cache : Bool = true) : T forall T
+      load(object_class, id, path, cache)
+    end
+
     def delete(object : Serializable | Container, cache : Bool = true, metadata = nil)
       # Log deletion event before actual deletion (if enabled)
       if EventLogger.should_log?(object.class)
@@ -423,6 +494,77 @@ module Sepia
 
     def self.load(object_class : T.class, id : String, path : String? = nil, cache : Bool = true) : T forall T
       INSTANCE.load(object_class, id, path, cache)
+    end
+
+    # Load an object from storage, returning nil if not found instead of throwing an exception.
+    #
+    # This is a safe variant of `load` that follows Crystal conventions for methods
+    # that may not succeed. Use this when you expect the object might not exist.
+    #
+    # ### Parameters
+    #
+    # - *object_class* : The class of the object to load (must be Serializable or Container)
+    # - *id* : The unique identifier of the object
+    # - *path* : Optional custom path override (for testing or special cases)
+    # - *cache* : Whether to use the cache (default: true)
+    #
+    # ### Returns
+    #
+    # Returns the loaded object of type T, or nil if not found.
+    #
+    # ### Examples
+    #
+    # ```
+    # # Safe loading that returns nil instead of throwing
+    # doc = Sepia::Storage.load?(MyDocument, "doc-id")
+    # if doc
+    #   puts "Found document: #{doc.title}"
+    # else
+    #   puts "Document not found"
+    # end
+    #
+    # # Chainable operations
+    # title = Sepia::Storage.load?(MyDocument, "doc-id").try(&.title) || "Default"
+    # ```
+    def self.load?(object_class : T.class, id : String, path : String? = nil, cache : Bool = true) : T? forall T
+      load(object_class, id, path, cache)
+    rescue
+      nil
+    end
+
+    # Load an object from storage with explicit exception behavior.
+    #
+    # This is an explicit variant that indicates through naming that it will
+    # throw an exception if the object is not found. It's identical to the
+    # standard `load` method but follows Crystal conventions for explicit behavior.
+    #
+    # ### Parameters
+    #
+    # - *object_class* : The class of the object to load (must be Serializable or Container)
+    # - *id* : The unique identifier of the object
+    # - *path* : Optional custom path override (for testing or special cases)
+    # - *cache* : Whether to use the cache (default: true)
+    #
+    # ### Returns
+    #
+    # Returns the loaded object of type T.
+    #
+    # ### Raises
+    #
+    # Raises an exception if the object is not found.
+    #
+    # ### Examples
+    #
+    # ```
+    # # Explicit loading that will throw if not found
+    # doc = Sepia::Storage.load!(MyDocument, "doc-id") # Throws if not found
+    #
+    # # Use when you expect the object to exist
+    # config = Sepia::Storage.load!(AppConfig, "main-config")
+    # puts config.settings
+    # ```
+    def self.load!(object_class : T.class, id : String, path : String? = nil, cache : Bool = true) : T forall T
+      load(object_class, id, path, cache)
     end
 
     def self.delete(object : Serializable | Container, cache : Bool = true, metadata = nil)
